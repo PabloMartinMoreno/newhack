@@ -67,9 +67,9 @@ Sintaxis de cada uno en [[XSS contextos - matriz de referencia]].
 3. [[XSS - reflejado]] — el caso más simple, fija el modelo
 4. [[XSS - almacenado]] — cambia el impacto: le llega a otros, persiste
 5. [[XSS - DOM-based]] → [[XSS sources y sinks - matriz de referencia]] — el modelo cliente-only
-6. Evasión de filtros
-7. [[XSS - CSP]] y su bypass — el obstáculo del XSS moderno
-8. Impacto: qué hacés con la ejecución
+6. [[XSS evasión - matriz de referencia]] — cuando el filtro bloquea el payload básico
+7. [[XSS - CSP]] y su [[XSS bypass de CSP - matriz de referencia]] — el obstáculo del XSS moderno
+8. [[XSS impacto - matriz de referencia]] — qué hacés con la ejecución
 
 ## Cara azul
 
@@ -80,6 +80,7 @@ Sintaxis de cada uno en [[XSS contextos - matriz de referencia]].
 
 ## Huecos conocidos
 
-- [ ] Los tres tipos, contextos, sinks, evasión, CSP, impacto — en construcción
+- [x] Tres tipos + contextos + sinks + evasión + CSP + impacto
 - [ ] mXSS (mutation XSS) y XSS en SVG/MathML
+- [ ] Dangling markup injection (exfil sin ejecución de JS)
 - [ ] Telemetría propia: reporte de violación de CSP como artefacto en `550-telemetria/`

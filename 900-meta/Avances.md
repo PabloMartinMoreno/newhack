@@ -76,6 +76,22 @@ Se quitaron los dos campos de todas las notas, plantillas, el esquema y el `cons
 - **`creado:`** — redundante: git guarda la fecha de creación con más precisión y sin mantenerla a mano. Ninguna consulta lo usaba.
 - **`visibilidad:`** — existía para un export filtrado a alumnos que se descartó. El repo es privado y uniforme, así que el campo no hacía nada. Cae la regla 5 del `CLAUDE.md`. Revierte la decisión de la fundación ("visibilidad desde la primera nota"); el argumento "barato ahora, caro después" no se sostiene si el export nunca sucede.
 
+### 2026-08-06 — Dominio XSS
+
+Taxonomía fijada por brainstorming antes de escribir (regla del vault). Cinco ejes ortogonales, paralelos a SQLi:
+
+| Eje | Valores |
+|---|---|
+| Tipo / entrega | reflejado · almacenado · DOM-based |
+| Contexto de salida | HTML body · atributo · `<script>` · URL · CSS ← el eje clave |
+| Sink (solo DOM) | innerHTML · document.write · eval · location · setAttribute |
+| Obstáculo | filtro chars/tags · WAF · CSP |
+| Impacto | robo de sesión · keylogger · CSRF-vía-XSS · account takeover · worm |
+
+Decisión: el sink de DOM va en **matriz propia** (no sub-sección), siguiendo el principio del usuario "ante la duda, más notas atómicas". CSP es obstáculo pero por su peso en XSS moderno tiene nota de criterio + matriz de bypass propias.
+
+Escrito: [[CWE-79 - Cross-site Scripting]], [[MOC - Cross-site scripting]] (dos árboles + índice de cheatsheets), tres tipos como tradecraft, [[XSS - CSP]], y seis matrices (contextos, sources/sinks, evasión, bypass CSP, impacto). Pendiente: mXSS, dangling markup, telemetría de violación de CSP.
+
 ## Pendientes
 
 ### Inmediatos
