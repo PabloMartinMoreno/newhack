@@ -92,6 +92,15 @@ Decisión: el sink de DOM va en **matriz propia** (no sub-sección), siguiendo e
 
 Escrito: [[CWE-79 - Cross-site Scripting]], [[MOC - Cross-site scripting]] (dos árboles + índice de cheatsheets), tres tipos como tradecraft, [[XSS - CSP]], y seis matrices (contextos, sources/sinks, evasión, bypass CSP, impacto). Pendiente: mXSS, dangling markup, telemetría de violación de CSP.
 
+### 2026-08-06 — Dominios File inclusion + File upload
+
+El usuario pidió "file upload / inclusion". Se **separó en dos dominios** (CWE y ejes distintos, no comparten taxonomía) que se **encadenan** (LFI + upload = RCE):
+
+- **File inclusion** (CWE-98 / CWE-22). Ejes: tipo (path traversal · LFI · RFI) × wrapper PHP × vía a RCE × obstáculo. Distinción clave: traversal **lee**, inclusion **ejecuta**.
+- **File upload** (CWE-434) — siguiente.
+
+Escrito (inclusion): [[CWE-98 - File Inclusion]], [[MOC - File inclusion]] (dos árboles + índice), tradecraft [[Path traversal]] · [[LFI - inclusión local]] · [[LFI - de lectura a RCE]] · [[RFI - inclusión remota]], y tres matrices (path traversal, wrappers, LFI a RCE). El MOC linkea a `MOC - File upload` (aún inexistente: roadmap del combo).
+
 ## Pendientes
 
 ### Inmediatos
