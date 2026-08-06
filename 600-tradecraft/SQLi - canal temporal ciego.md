@@ -49,4 +49,4 @@ Aproximadamente **un bit por petición**. Extraer un hash de 32 caracteres son c
 - Distribución de latencias **bimodal** — el sello del canal, y lo que lo hace detectable sin inspeccionar el payload.
 - [[MySQL - slow query log]] si `long_query_time` está por debajo del retardo usado.
 
-La sintaxis por motor está en [[Dialectos SQL - matriz de referencia]].
+La lógica de extracción y los payloads de retardo por motor están en [[SQLi ciego - matriz de referencia]]; la sintaxis de `sleep` por motor, en [[Dialectos SQL - matriz de referencia]].

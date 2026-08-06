@@ -67,11 +67,19 @@ Secuencia por dependencia conceptual. Este es el temario del módulo.
 
 ## Cara azul
 
-Qué emite cada canal y qué lo ve: [[MySQL - slow query log]], logs de aplicación, anomalía de latencia en WAF, resolución DNS saliente desde el servidor de base de datos.
+Qué emite cada canal y qué lo ve:
+
+| Canal | Telemetría | Firma |
+|---|---|---|
+| UNION / error-based | [[Log de acceso del servidor web]] | `UNION SELECT` / `extractvalue` en la URL; ráfaga de `500` en error-based |
+| Booleano ciego | [[Log de acceso del servidor web]] | Payloads casi idénticos que solo cambian un carácter; dos tamaños de respuesta |
+| Temporal ciego | [[MySQL - slow query log]] | Distribución de latencias bimodal |
+| Fuera de banda | [[Consulta DNS saliente]] | Resolución externa desde la IP del servidor de BD |
 
 ## Huecos conocidos
 
-- [ ] Contexto `ORDER BY` y `LIMIT`
+- [x] Los cinco canales de extracción — completos
+- [ ] Contexto `ORDER BY` y `LIMIT` (contexto numérico y string, pendientes)
 - [ ] Segundo orden
-- [ ] Evasión de WAF (¿nota por producto o nota por primitiva? — por primitiva)
-- [ ] Mapear cada canal a su nota de telemetría en `550-telemetria/`
+- [ ] Evasiones: sin comillas / sin espacios / palabras clave / WAF (nota por primitiva)
+- [ ] Impacto: lectura de archivos en MySQL, stacked queries en MSSQL
