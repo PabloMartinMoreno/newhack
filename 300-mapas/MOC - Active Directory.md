@@ -1,8 +1,6 @@
 ---
 tipo: moc
 dominio: ad
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - MOC AD
 tags:

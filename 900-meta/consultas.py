@@ -36,7 +36,6 @@ EXCLUIDAS = ("999-plantillas", ".obsidian", ".git")
 ENUMS = {
     "opsec": {"limpio", "ruidoso", "requiere-bypass", "quemado"},
     "estado": {"idea", "borrador", "produccion", "retirada"},
-    "visibilidad": {"publica", "privada"},
     "coste": {"bajo", "medio", "alto"},
     "severidad": {"critica", "alta", "media", "baja", "informativa"},
     "fidelidad": {"alta", "media", "baja"},
@@ -274,8 +273,6 @@ def higiene(vault, _):
             continue
         if not n.tipo:
             filas.append((n.rel, "falta tipo"))
-        if "visibilidad" not in n.fm:
-            filas.append((n.rel, "falta visibilidad"))
         for campo, validos in ENUMS.items():
             v = n.fm.get(campo)
             if v not in (None, "") and str(v) not in validos:

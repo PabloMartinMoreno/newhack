@@ -1,7 +1,5 @@
 ---
 tipo: meta
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Consultas
   - consultas.py
@@ -140,15 +138,7 @@ SORT length(file.inlinks) ASC
 
 ### 7. Higiene
 
-Notas sin `visibilidad:` — el campo más caro de agregar tarde.
-
-````
-```dataview
-LIST
-FROM "" AND !"999-plantillas" AND !"000-inbox"
-WHERE !visibilidad
-```
-````
+Frontmatter inválido y enlaces rotos: lo resuelve `consultas.py higiene`.
 
 Inbox estancado:
 

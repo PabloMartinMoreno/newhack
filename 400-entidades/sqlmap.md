@@ -2,8 +2,6 @@
 tipo: entidad
 clase-entidad: herramienta
 tecnicas: ["[[CWE-89 - SQL Injection]]"]
-visibilidad: publica
-creado: 2026-08-05
 aliases: []
 tags:
   - dominio/web

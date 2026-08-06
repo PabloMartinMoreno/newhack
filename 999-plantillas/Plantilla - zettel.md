@@ -1,8 +1,6 @@
 ---
 tipo: zettel
 relacionadas: []
-visibilidad: publica
-creado: {{date}}
 aliases: []
 tags: []
 ---

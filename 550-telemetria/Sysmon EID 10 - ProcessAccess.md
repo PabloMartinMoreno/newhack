@@ -5,8 +5,6 @@ producto: Sysmon
 identificador: "EID 10"
 por-defecto: false
 coste: alto
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Sysmon EID 10
   - ProcessAccess

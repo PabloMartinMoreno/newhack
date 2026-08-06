@@ -10,8 +10,6 @@ coste: alto
 alternativas: ["[[SQLi - canal fuera de banda]]", "[[SQLi - canal booleano ciego]]"]
 probado: 2026-06-02
 contexto: [mysql8, mssql2019]
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - SQLi temporal ciego
   - time-based blind

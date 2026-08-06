@@ -3,8 +3,6 @@ tipo: tecnica
 taxonomia: 
 identificador: ""
 tacticas: []
-visibilidad: publica
-creado: {{date}}
 aliases: []
 tags: []
 ---

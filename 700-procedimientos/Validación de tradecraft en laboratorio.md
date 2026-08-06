@@ -1,8 +1,6 @@
 ---
 tipo: procedimiento
 fase: mantenimiento-del-vault
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Ciclo de validación
   - El ciclo

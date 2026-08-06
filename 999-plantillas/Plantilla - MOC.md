@@ -1,8 +1,6 @@
 ---
 tipo: moc
 dominio: 
-visibilidad: publica
-creado: {{date}}
 aliases: []
 tags: []
 ---

@@ -10,8 +10,6 @@ coste: bajo
 alternativas: ["[[SQLi - canal booleano ciego]]", "[[SQLi - canal temporal ciego]]"]
 probado: 2026-08-06
 contexto: [mssql2019]
-visibilidad: publica
-creado: 2026-08-06
 aliases:
   - SQLi out-of-band
   - OOB

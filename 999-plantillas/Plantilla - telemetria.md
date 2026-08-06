@@ -5,8 +5,6 @@ producto:
 identificador: ""
 por-defecto: false
 coste: 
-visibilidad: publica
-creado: {{date}}
 aliases: []
 tags: []
 ---

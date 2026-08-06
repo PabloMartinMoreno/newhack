@@ -4,8 +4,6 @@ autor: ""
 url: ""
 formato: 
 leido: 
-visibilidad: publica
-creado: {{date}}
 aliases: []
 tags: []
 ---

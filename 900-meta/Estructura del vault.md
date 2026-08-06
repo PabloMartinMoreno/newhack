@@ -1,7 +1,5 @@
 ---
 tipo: meta
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Estructura
   - Carpetas

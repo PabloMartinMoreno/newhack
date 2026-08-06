@@ -10,8 +10,6 @@ coste: medio
 alternativas: ["[[SQLi - canal basado en errores]]", "[[SQLi - canal temporal ciego]]"]
 probado: 2026-08-06
 contexto: [mysql8]
-visibilidad: publica
-creado: 2026-08-06
 aliases:
   - SQLi boolean blind
   - boolean-based blind

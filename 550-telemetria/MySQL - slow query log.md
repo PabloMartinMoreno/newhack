@@ -5,8 +5,6 @@ producto: MySQL
 identificador: "slow_query_log"
 por-defecto: false
 coste: bajo
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - slow_query_log
   - Registro de consultas lentas de MySQL

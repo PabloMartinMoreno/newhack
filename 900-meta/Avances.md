@@ -1,7 +1,5 @@
 ---
 tipo: meta
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Progreso
   - Bitácora
@@ -71,6 +69,13 @@ Renombres aplicados, con el nombre en español convertido en alias:
 
 `SQLi - canal temporal ciego` **no** se renombró: "canal de extracción" es descomposición propia por ejes, no terminología de PortSwigger.
 
+### 2026-08-06 — Fuera `visibilidad:` y `creado:`
+
+Se quitaron los dos campos de todas las notas, plantillas, el esquema y el `consultas.py`.
+
+- **`creado:`** — redundante: git guarda la fecha de creación con más precisión y sin mantenerla a mano. Ninguna consulta lo usaba.
+- **`visibilidad:`** — existía para un export filtrado a alumnos que se descartó. El repo es privado y uniforme, así que el campo no hacía nada. Cae la regla 5 del `CLAUDE.md`. Revierte la decisión de la fundación ("visibilidad desde la primera nota"); el argumento "barato ahora, caro después" no se sostiene si el export nunca sucede.
+
 ## Pendientes
 
 ### Inmediatos
@@ -91,4 +96,4 @@ Renombres aplicados, con el nombre en español convertido en alias:
 - **Cuál se usa día a día.** Sin decidir. `Hack` **se queda como está** — no se toca, no se migra en bloque. Los dos modelos son incompatibles por diseño: acá los cheatsheets **no** son notas.
   - Postura recomendada: NewHack como vault de conocimiento; `Hack` congelado como capa de comandos que se consulta y no se edita. Cuando se trabaja un tema acá, se destila de `Hack` lo que corresponda — la decisión al zettel, la sintaxis a una matriz de `900-meta/`. Migración por demanda, nunca big-bang.
   - Lo que `Hack` gana: velocidad de recall durante un examen o engagement. Lo que NewHack gana: escala, caducidad modelada, consultas cruzadas y temario para clase.
-- **Publicación para alumnos.** Si se hace, el filtro es `visibilidad: publica`. Falta decidir el mecanismo (Obsidian Publish, Quartz, export propio).
+- **Publicación para alumnos.** Descartada (2026-08-06). No hay plan de export, así que se quitó el campo `visibilidad:` de todas las notas — ver la entrada de bitácora de esa fecha.

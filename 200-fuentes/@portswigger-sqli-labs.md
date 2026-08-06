@@ -4,8 +4,6 @@ autor: "PortSwigger"
 url: "https://portswigger.net/web-security/sql-injection"
 formato: curso
 leido: 
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - PortSwigger SQLi
 tags:

@@ -5,8 +5,6 @@ cvss:
 vector-cvss: ""
 clase: "[[]]"
 esfuerzo-remediacion: 
-visibilidad: privada
-creado: {{date}}
 aliases: []
 tags: []
 ---

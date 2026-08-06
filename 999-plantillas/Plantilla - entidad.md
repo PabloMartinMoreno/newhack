@@ -2,8 +2,6 @@
 tipo: entidad
 clase-entidad: 
 tecnicas: []
-visibilidad: publica
-creado: {{date}}
 aliases: []
 tags: []
 ---

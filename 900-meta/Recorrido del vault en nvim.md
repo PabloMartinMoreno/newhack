@@ -1,7 +1,5 @@
 ---
 tipo: meta
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Atajos
   - Cómo me muevo
@@ -129,7 +127,7 @@ Si estás trabajando desde un MOC al que volvés todo el tiempo, fijalo y limpi�
 
 ## 5. Escribir
 
-`<leader>on` crea una nota desde plantilla: pide cuál y el nombre, y completa `creado:` solo.
+`<leader>on` crea una nota desde plantilla: pide cuál y el nombre.
 
 - Escribí `[[` y el autocompletado ofrece las notas existentes — así no nacen enlaces rotos
 - `gsab` envuelve en `**negrita**`, `gsac` en `` `código` ``; `gsd` borra el delimitador y `gsr` lo reemplaza

@@ -4,8 +4,6 @@ taxonomia: cwe
 identificador: CWE-89
 wstg: WSTG-INPV-05
 tacticas: []
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - CWE-89
   - SQLi

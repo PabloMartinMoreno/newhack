@@ -1,8 +1,6 @@
 ---
 tipo: zettel
 relacionadas: ["[[SQLi - canal temporal ciego]]"]
-visibilidad: publica
-creado: 2026-08-05
 aliases: []
 tags: []
 ---

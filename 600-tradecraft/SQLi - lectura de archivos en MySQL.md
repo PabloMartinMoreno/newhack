@@ -10,8 +10,6 @@ coste: bajo
 alternativas: ["[[SQLi - stacked queries en MSSQL]]"]
 probado: 2026-08-06
 contexto: [mysql8]
-visibilidad: publica
-creado: 2026-08-06
 aliases:
   - SQLi file read MySQL
 tags:

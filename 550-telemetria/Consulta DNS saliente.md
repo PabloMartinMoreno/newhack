@@ -5,8 +5,6 @@ producto: DNS resolver / Zeek dns.log
 identificador: "dns.log"
 por-defecto: false
 coste: medio
-visibilidad: publica
-creado: 2026-08-06
 aliases:
   - dns.log
   - egress DNS

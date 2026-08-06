@@ -3,8 +3,6 @@ tipo: superficie
 plataforma: [windows]
 tecnicas: ["[[T1003.001 - LSASS Memory]]"]
 telemetria: ["[[Sysmon EID 10 - ProcessAccess]]"]
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - AD
 tags:

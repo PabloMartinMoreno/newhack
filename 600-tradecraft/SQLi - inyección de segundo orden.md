@@ -10,8 +10,6 @@ coste: medio
 alternativas: []
 probado: 2026-08-06
 contexto: [mysql8]
-visibilidad: publica
-creado: 2026-08-06
 aliases:
   - SQLi segundo orden
   - second-order SQLi

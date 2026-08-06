@@ -10,8 +10,6 @@ coste:
 alternativas: []
 probado: 
 contexto: []
-visibilidad: privada
-creado: {{date}}
 aliases: []
 tags: []
 ---

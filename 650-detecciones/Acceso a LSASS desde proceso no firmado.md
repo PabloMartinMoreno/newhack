@@ -6,8 +6,6 @@ estado: borrador
 fidelidad: media
 logica: sigma
 validada: 2026-06-02
-visibilidad: privada
-creado: 2026-08-05
 aliases: []
 tags:
   - plataforma/windows

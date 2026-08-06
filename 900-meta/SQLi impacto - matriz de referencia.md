@@ -1,7 +1,5 @@
 ---
 tipo: meta
-visibilidad: publica
-creado: 2026-08-06
 aliases:
   - Payloads impacto SQLi
   - SQLi RCE

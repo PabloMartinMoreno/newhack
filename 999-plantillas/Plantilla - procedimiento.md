@@ -1,8 +1,6 @@
 ---
 tipo: procedimiento
 fase: 
-visibilidad: privada
-creado: {{date}}
 aliases: []
 tags: []
 ---

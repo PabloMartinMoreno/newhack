@@ -25,11 +25,12 @@ Si algo de este archivo contradice esas notas, **ganan esas notas** — se actua
 2. **Una nota por eje, no por combinación.** Las técnicas grandes son intersecciones de ejes ortogonales.
 3. **`telemetria:`** es el mismo campo en tradecraft y en detecciones. Es la bisagra operativa; sin ella la fusión es nominal.
 4. **`opsec:`, `probado:`, `contexto:`** en toda nota de tradecraft. El conocimiento rojo caduca; sin esos campos el vault miente.
-5. **`visibilidad:`** en toda nota, desde la primera.
-6. **Cero datos de cliente.** Hostnames, IPs, credenciales y evidencia van al vault de engagements, aparte y cifrado.
-7. **Nada organizado por herramienta.** La herramienta es una entidad en `400-entidades/`, nunca una carpeta.
-8. **Idioma — la regla del corpus externo.** Si el término aparece literal en una fuente externa (ATT&CK, CWE, WSTG, docs de vendor, Sigma), el nombre va en **inglés**; si lo escribiste vos, en **español**. `500-tecnicas/` usa el nombre oficial en inglés sin excepción. El término del otro idioma va siempre como alias.
-9. **Los MOCs son árboles de decisión**, no listas de enlaces. Se escriben ordenados por dependencia conceptual porque también son temario de clase.
+5. **Cero datos de cliente.** Hostnames, IPs, credenciales y evidencia van al vault de engagements, aparte y cifrado.
+6. **Nada organizado por herramienta.** La herramienta es una entidad en `400-entidades/`, nunca una carpeta.
+7. **Idioma — la regla del corpus externo.** Si el término aparece literal en una fuente externa (ATT&CK, CWE, WSTG, docs de vendor, Sigma), el nombre va en **inglés**; si lo escribiste vos, en **español**. `500-tecnicas/` usa el nombre oficial en inglés sin excepción. El término del otro idioma va siempre como alias.
+8. **Los MOCs son árboles de decisión**, no listas de enlaces. Se escriben ordenados por dependencia conceptual porque también son temario de clase.
+
+Sin campos `visibilidad:` ni `creado:` en el frontmatter: el repo es privado y uniforme, y git ya guarda la fecha.
 
 ## Al crear notas
 

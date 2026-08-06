@@ -10,8 +10,6 @@ coste: bajo
 alternativas: ["[[SQLi - canal basado en errores]]", "[[SQLi - canal booleano ciego]]"]
 probado: 2026-08-05
 contexto: [mysql8]
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - SQLi UNION
   - union-based

@@ -5,8 +5,6 @@ producto: nginx / Apache / IIS
 identificador: "access.log"
 por-defecto: true
 coste: medio
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - access.log
   - log de acceso HTTP

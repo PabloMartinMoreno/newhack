@@ -6,8 +6,6 @@ estado: idea
 fidelidad: 
 logica: 
 validada: 
-visibilidad: privada
-creado: {{date}}
 aliases: []
 tags: []
 ---

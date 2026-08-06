@@ -1,8 +1,6 @@
 ---
 tipo: moc
 dominio: web
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - MOC SQLi
   - SQL injection

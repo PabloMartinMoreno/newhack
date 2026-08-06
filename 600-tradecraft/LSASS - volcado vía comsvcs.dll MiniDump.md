@@ -9,8 +9,6 @@ coste: bajo
 alternativas: []
 probado: 2025-11-20
 contexto: [win2019-defender, win11-defender]
-visibilidad: privada
-creado: 2026-08-05
 aliases:
   - comsvcs MiniDump
 tags:

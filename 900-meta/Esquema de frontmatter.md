@@ -1,7 +1,5 @@
 ---
 tipo: meta
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Frontmatter
   - Propiedades
@@ -21,18 +19,11 @@ Un solo esquema para todo el vault. La fusión rojo/azul depende de que **ambos 
 ```yaml
 tipo:          # zettel | tradecraft | deteccion | telemetria | tecnica
                # superficie | entidad | fuente | hallazgo | moc | procedimiento | meta
-visibilidad:   # publica | privada
-creado:        # YYYY-MM-DD
 aliases: []
 tags: []
 ```
 
-### `visibilidad:` desde el día uno
-
-Un grafo con tradecraft anotado por estado de OPSEC y cobertura de EDR es **inteligencia sobre vos**. Si alguna vez se publica una versión para alumnos, esto ya está separado. Es mucho más barato poner el campo ahora que auditar 400 notas después.
-
-- `privada` por defecto en `600-tradecraft/`, `650-detecciones/` y `750-hallazgos/`.
-- `publica` para zettels conceptuales, técnicas, telemetría y MOCs.
+No hay campos `visibilidad:` ni `creado:`. El repo es privado y uniforme, así que no hay export filtrado que justifique `visibilidad`; la fecha de creación la guarda git con más precisión y sin mantenerla a mano.
 
 ## Por tipo
 
@@ -51,7 +42,6 @@ coste: medio                                 # bajo | medio | alto
 alternativas: ["[[SQLi - canal fuera de banda]]"]
 probado: 2026-02-14
 contexto: [win11-defender, win2019-crowdstrike]
-visibilidad: privada
 ---
 ```
 
@@ -70,7 +60,6 @@ estado: produccion            # idea | borrador | produccion | retirada
 fidelidad: media              # alta | media | baja
 logica: sigma                 # sigma | kql | spl | eql | yara | suricata
 validada: 2026-06-02
-visibilidad: privada
 ---
 ```
 
@@ -86,7 +75,6 @@ producto: Sysmon
 identificador: "EID 10"
 por-defecto: false            # ¿viene activado sin configurar nada?
 coste: alto                   # volumen/ingesta: bajo | medio | alto
-visibilidad: publica
 ---
 ```
 
@@ -100,7 +88,6 @@ tipo: tecnica
 taxonomia: attack             # attack | cwe | wstg | capec
 identificador: T1003.001
 tacticas: [credential-access]
-visibilidad: publica
 ---
 ```
 
@@ -119,7 +106,6 @@ cvss: 8.8
 vector-cvss: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
 clase: "[[CWE-89 - SQL Injection]]"
 esfuerzo-remediacion: medio   # bajo | medio | alto
-visibilidad: privada
 ---
 ```
 

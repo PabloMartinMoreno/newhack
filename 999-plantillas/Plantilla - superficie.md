@@ -3,8 +3,6 @@ tipo: superficie
 plataforma: []
 tecnicas: []
 telemetria: []
-visibilidad: publica
-creado: {{date}}
 aliases: []
 tags: []
 ---

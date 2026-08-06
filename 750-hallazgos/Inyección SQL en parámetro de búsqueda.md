@@ -5,8 +5,6 @@ cvss: 9.8
 vector-cvss: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
 clase: "[[CWE-89 - SQL Injection]]"
 esfuerzo-remediacion: medio
-visibilidad: privada
-creado: 2026-08-05
 aliases: []
 tags: []
 ---

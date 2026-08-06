@@ -1,7 +1,5 @@
 ---
 tipo: meta
-visibilidad: publica
-creado: 2026-08-05
 aliases:
   - Plugins
   - Setup
@@ -68,8 +66,6 @@ Además: tablas con borde redondeado y celdas alineadas (el vault es mayormente 
 
 Completado de wikilinks: por LSP in-process, sin registrar source en `blink.cmp`.
 
-Las plantillas traen `creado: {{date}}`, que resuelven tanto `obsidian.nvim` como el plugin Templates de Obsidian.
-
 ### Búsqueda directa
 
 El esquema de [[Esquema de frontmatter]] no depende de ningún plugin — son claves YAML planas justamente para que `rg` alcance:
@@ -96,7 +92,7 @@ rg -l 'Sysmon EID 10' 600-tradecraft/ 650-detecciones/
 | Plugin | Para qué | Sin él |
 |---|---|---|
 | **Dataview** | Todas las consultas de [[Consultas del vault]]. | El vault pierde la caducidad y las cuatro consultas de fusión. |
-| **Templater** | Fecha automática en `creado:`/`probado:`, prompts al crear nota. | Se completa a mano. |
+| **Templater** | Prompts al crear nota; fecha automática en `probado:`. | Se completa a mano. |
 
 ## Opcionales que valen
 
@@ -121,7 +117,7 @@ Ese grafo es el que hay que mirar: si los nodos de telemetría no tienen aristas
 
 ## Sincronización
 
-- Este vault: sincronizable/publicable con cuidado — filtrar por `visibilidad: privada` antes de exportar.
+- Este vault: repo privado. Es tradecraft anotado por OPSEC — no se publica.
 - Vault de engagements: **nunca** en el mismo remoto, cifrado en disco.
 
 ## Relacionadas

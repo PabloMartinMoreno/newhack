@@ -10,8 +10,6 @@ coste: bajo
 alternativas: ["[[SQLi - lectura de archivos en MySQL]]"]
 probado: 2026-08-06
 contexto: [mssql2019]
-visibilidad: publica
-creado: 2026-08-06
 aliases:
   - SQLi stacked MSSQL
   - xp_cmdshell
