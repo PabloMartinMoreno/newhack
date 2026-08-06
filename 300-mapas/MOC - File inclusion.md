@@ -74,4 +74,4 @@ Intersección de ejes ortogonales. Una nota por valor de eje.
 
 - [ ] Los tres tipos + wrappers + vías a RCE — en construcción
 - [ ] `phar://` deserialization como vía propia
-- [ ] Combo LFI + upload — depende de [[MOC - File upload]]
+- [x] Combo LFI + upload — [[File upload + LFI]]

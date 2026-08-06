@@ -97,9 +97,11 @@ Escrito: [[CWE-79 - Cross-site Scripting]], [[MOC - Cross-site scripting]] (dos 
 El usuario pidió "file upload / inclusion". Se **separó en dos dominios** (CWE y ejes distintos, no comparten taxonomía) que se **encadenan** (LFI + upload = RCE):
 
 - **File inclusion** (CWE-98 / CWE-22). Ejes: tipo (path traversal · LFI · RFI) × wrapper PHP × vía a RCE × obstáculo. Distinción clave: traversal **lee**, inclusion **ejecuta**.
-- **File upload** (CWE-434) — siguiente.
+- **File upload** (CWE-434). Ejes: validación evadida (extensión/MIME/magic bytes/contenido) × ejecución × payload × impacto.
 
-Escrito (inclusion): [[CWE-98 - File Inclusion]], [[MOC - File inclusion]] (dos árboles + índice), tradecraft [[Path traversal]] · [[LFI - inclusión local]] · [[LFI - de lectura a RCE]] · [[RFI - inclusión remota]], y tres matrices (path traversal, wrappers, LFI a RCE). El MOC linkea a `MOC - File upload` (aún inexistente: roadmap del combo).
+Escrito (inclusion): [[CWE-98 - File Inclusion]], [[MOC - File inclusion]] (dos árboles + índice), tradecraft [[Path traversal]] · [[LFI - inclusión local]] · [[LFI - de lectura a RCE]] · [[RFI - inclusión remota]], y tres matrices (path traversal, wrappers, LFI a RCE).
+
+Escrito (upload): [[CWE-434 - Unrestricted File Upload]], [[MOC - File upload]] (dos árboles + índice), tradecraft [[File upload - bypass de validación]] · [[Webshell]] · [[File upload + LFI]], y dos matrices (bypass de validación, webshells). El **combo** [[File upload + LFI]] es el nodo que une los dos dominios: cada MOC referencia al otro. Pendiente en upload: SVG-XSS y XXE vía archivo.
 
 ## Pendientes
 
