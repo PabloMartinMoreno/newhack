@@ -42,12 +42,14 @@ El orden no es arbitrario: es el orden de **coste creciente**. El temporal ciego
 
 ## Árbol de decisión — obstáculos
 
+Las primitivas se combinan; todas viven en [[SQLi evasión - matriz de referencia]], una sección por obstáculo.
+
 ```
 ¿Qué te está bloqueando?
-├─ Comillas filtradas/escapadas → [[SQLi - evasión sin comillas]]
-├─ Espacios filtrados           → [[SQLi - evasión sin espacios]]
-├─ Palabras clave bloqueadas    → [[SQLi - evasión de palabras clave]]
-└─ WAF con firma                → [[SQLi - evasión de WAF]]
+├─ Comillas filtradas/escapadas → hex / char()          → § Sin comillas
+├─ Espacios filtrados           → comentarios / %09 %0a → § Sin espacios
+├─ Palabras clave bloqueadas    → case / anidado / /*! */→ § Palabras clave
+└─ WAF con firma                → doble encode / versión → § Evasión de WAF
 ```
 
 ## Orden de aprendizaje
@@ -79,7 +81,7 @@ Qué emite cada canal y qué lo ve:
 ## Huecos conocidos
 
 - [x] Los cinco canales de extracción — completos
-- [ ] Contexto `ORDER BY` y `LIMIT` (contexto numérico y string, pendientes)
+- [x] Evasiones — en [[SQLi evasión - matriz de referencia]]
+- [x] Impacto — [[SQLi - lectura de archivos en MySQL]] y [[SQLi - stacked queries en MSSQL]]
+- [ ] Contexto de inyección: numérico, string, `ORDER BY`, `LIMIT`, `INSERT`
 - [ ] Segundo orden
-- [ ] Evasiones: sin comillas / sin espacios / palabras clave / WAF (nota por primitiva)
-- [ ] Impacto: lectura de archivos en MySQL, stacked queries en MSSQL
