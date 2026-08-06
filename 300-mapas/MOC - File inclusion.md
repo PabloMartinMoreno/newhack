@@ -72,6 +72,6 @@ Intersección de ejes ortogonales. Una nota por valor de eje.
 
 ## Huecos conocidos
 
-- [ ] Los tres tipos + wrappers + vías a RCE — en construcción
-- [ ] `phar://` deserialization como vía propia
+- [x] Los tres tipos + wrappers + vías a RCE
+- [x] `phar://` deserialization — [[LFI - phar deserialization]]
 - [x] Combo LFI + upload — [[File upload + LFI]]

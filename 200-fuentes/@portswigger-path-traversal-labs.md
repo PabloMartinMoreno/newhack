@@ -21,7 +21,7 @@ Academy de PortSwigger, módulos de **File path traversal** y (complementario) *
 - [x] Destilar → [[Path traversal]]
 - [x] Destilar → [[LFI - inclusión local]]
 - [x] Destilar → [[LFI - de lectura a RCE]]
-- [ ] Destilar → dominio [[MOC - File upload]] (siguiente)
+- [x] Destilar → dominio [[MOC - File upload]]
 
 ## Notas
 

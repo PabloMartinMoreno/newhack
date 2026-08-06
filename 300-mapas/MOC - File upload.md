@@ -64,8 +64,18 @@ Subí una webshell .php simple. ¿Qué la rechaza?
 | Subida maliciosa | [[Log de acceso del servidor web]] | `POST` multipart con extensión ejecutable o doble extensión |
 | Ejecución de la webshell | [[Log de acceso del servidor web]] | `GET` al archivo subido con parámetro de comando; hijo de proceso del web server |
 
+## Impacto más allá de RCE
+
+Cuando la subida no da ejecución de código, sigue habiendo impacto según qué archivo acepta:
+
+- [[File upload - SVG y XSS almacenado]] — SVG con script servido inline = XSS almacenado.
+- [[File upload - XXE por archivo]] — SVG/DOCX/XML parseado en el server = lectura de archivos, SSRF.
+- [[File upload - sobrescritura por nombre]] — `../` en el nombre para elegir dónde cae o qué pisa.
+
+Payloads de SVG/XXE en [[File upload - archivos maliciosos - matriz de referencia]].
+
 ## Huecos conocidos
 
-- [ ] Bypass + webshell + combo — en construcción
-- [ ] SVG-XSS y XXE vía archivo (DOCX/SVG) como impacto propio
-- [ ] Sobrescritura de archivos por path traversal en el nombre
+- [x] Bypass + webshell + combo
+- [x] SVG-XSS, XXE por archivo, sobrescritura por nombre — arriba
+- [ ] XXE completo (CWE-611: parámetro directo, blind, XInclude) — **dominio aparte**, sin modelar

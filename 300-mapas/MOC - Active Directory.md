@@ -42,8 +42,9 @@ Superficie: [[Active Directory]].
 
 Cada rama del árbol debe terminar enlazando su artefacto en `550-telemetria/`: [[Sysmon EID 10 - ProcessAccess]], `4768/4769` de Kerberos, `4662` de acceso a objetos del directorio, `5145` de acceso a recursos compartidos.
 
-## Huecos conocidos
+## Estado
 
-- [ ] Todo el bloque de delegaciones (constrained, unconstrained, RBCD)
-- [ ] ADCS (ESC1-ESC13)
-- [ ] Telemetría de Kerberos: una nota por EID
+> [!note] Dominio semilla, sin desarrollar
+> AD es un dominio **de infra** que arrancó como semilla para demostrar el ciclo rojo↔azul (LSASS). No es parte del sprint web ni está incompleto por descuido: está pendiente de desarrollo como esfuerzo propio, cuando se decida abrir infra.
+
+Por desarrollar: delegaciones (constrained, unconstrained, RBCD) · ADCS (ESC1-ESC13) · telemetría de Kerberos (una nota por EID: `4768`/`4769`/`4662`/`5145`).

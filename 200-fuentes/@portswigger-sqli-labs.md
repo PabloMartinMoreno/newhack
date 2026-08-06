@@ -21,10 +21,10 @@ Sirve como **banco de pruebas de los ejes**: cada laboratorio aísla una variabl
 ## Qué me llevo
 
 - [x] Destilar → [[SQLi - canal temporal ciego]]
-- [ ] Destilar → [[SQLi - canal UNION]]
-- [ ] Destilar → [[SQLi - canal fuera de banda]]
-- [ ] Destilar → [[SQLi - inyección de segundo orden]]
-- [ ] Destilar → [[SQLi - evasión de WAF]]
+- [x] Destilar → [[SQLi - canal UNION]]
+- [x] Destilar → [[SQLi - canal fuera de banda]]
+- [x] Destilar → [[SQLi - inyección de segundo orden]]
+- [x] Evasión (incl. WAF) → [[SQLi evasión - matriz de referencia]]
 
 ## Notas
 

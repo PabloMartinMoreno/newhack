@@ -22,8 +22,8 @@ Academy de PortSwigger, módulo de XSS. Laboratorios por tipo, por contexto de s
 - [x] Destilar → [[XSS - almacenado]]
 - [x] Destilar → [[XSS - DOM-based]]
 - [x] Destilar → [[XSS - CSP]]
-- [ ] mXSS (mutation XSS) — pendiente
-- [ ] Dangling markup injection — pendiente
+- [x] Destilar → [[XSS - mutation XSS]]
+- [x] Destilar → [[XSS - dangling markup injection]]
 
 ## Notas
 

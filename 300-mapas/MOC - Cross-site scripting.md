@@ -84,4 +84,4 @@ Sintaxis de cada uno en [[XSS contextos - matriz de referencia]].
 - [x] Tres tipos + contextos + sinks + evasión + CSP + impacto
 - [x] [[XSS - mutation XSS]] (bypass de sanitizador)
 - [x] [[XSS - dangling markup injection]] (exfil sin ejecución de JS)
-- [ ] Telemetría propia: reporte de violación de CSP como artefacto en `550-telemetria/`
+- Lado rojo completo. Pendiente **lado azul** (reporte de violación de CSP como telemetría) — diferido con el resto del blue, no es un hueco rojo.
