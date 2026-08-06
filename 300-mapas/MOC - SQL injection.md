@@ -64,6 +64,7 @@ Cuando ya sabés qué hacer y solo querés la sintaxis, sin pasar por las notas 
 | [[SQLi fuera de banda - matriz de referencia]] | Primitiva de red por motor, exfil por DNS, herramientas |
 | [[SQLi evasión - matriz de referencia]] | Sin comillas / sin espacios / palabras clave / WAF |
 | [[SQLi impacto - matriz de referencia]] | Lectura y escritura de archivos, stacked queries → RCE |
+| [[SQLi contextos - matriz de referencia]] | Cómo romper según dónde cae el input: numérico, string, `ORDER BY`, `LIMIT`, `INSERT` |
 | [[Dialectos SQL - matriz de referencia]] | Diferencias de sintaxis entre los 5 motores |
 
 ## Orden de aprendizaje
@@ -71,7 +72,7 @@ Cuando ya sabés qué hacer y solo querés la sintaxis, sin pasar por las notas 
 Secuencia por dependencia conceptual. Este es el temario del módulo.
 
 1. [[CWE-89 - SQL Injection]] — qué es y por qué existe
-2. [[SQLi - contexto numérico]] y contexto string — dónde cae la inyección
+2. [[SQLi contextos - matriz de referencia]] — dónde cae la inyección y cómo romper
 3. [[SQLi - canal UNION]] — el caso feliz, fija el modelo mental
 4. [[SQLi - canal basado en errores]]
 5. [[La latencia como canal de datos]] — el concepto antes de la técnica
@@ -97,5 +98,5 @@ Qué emite cada canal y qué lo ve:
 - [x] Los cinco canales de extracción — completos
 - [x] Evasiones — en [[SQLi evasión - matriz de referencia]]
 - [x] Impacto — [[SQLi - lectura de archivos en MySQL]] y [[SQLi - stacked queries en MSSQL]]
-- [ ] Contexto de inyección: numérico, string, `ORDER BY`, `LIMIT`, `INSERT`
-- [ ] Segundo orden
+- [x] Contexto de inyección — [[SQLi contextos - matriz de referencia]]
+- [x] Segundo orden — [[SQLi - inyección de segundo orden]]
