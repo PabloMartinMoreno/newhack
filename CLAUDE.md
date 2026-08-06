@@ -39,3 +39,5 @@ Plantillas en `999-plantillas/`. El cuerpo de tradecraft tiene cuatro secciones 
 Enlaces por wikilink siempre; referencias a bloques por `^block-id`, nunca por `#Heading`.
 
 Registrar decisiones de estructura en [900-meta/Avances.md](900-meta/Avances.md). Cambios de contenido, no.
+
+Al cerrar un dominio nuevo (MOC nuevo), **agregar su MOC a la lista de Mapas de [Inicio.md](Inicio.md)** — es el índice manual de dominios, no se actualiza solo.

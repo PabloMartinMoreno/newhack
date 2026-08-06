@@ -11,8 +11,16 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 
 ## Mapas
 
-- [[MOC - SQL injection]]
-- [[MOC - Active Directory]]
+**Web**
+- [[MOC - SQL injection]] — inyección SQL
+- [[MOC - Cross-site scripting]] — XSS
+- [[MOC - File inclusion]] — LFI / RFI / path traversal
+- [[MOC - File upload]] — subida de archivos → RCE
+
+**Infra**
+- [[MOC - Active Directory]] — semilla, sin desarrollar
+
+> Al cerrar un dominio nuevo, agregar su MOC acá.
 
 ## Estado del vault
 
