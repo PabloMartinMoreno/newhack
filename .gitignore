@@ -1,0 +1,15 @@
+# Estado de UI de Obsidian: cambia en cada movimiento de panel, puro ruido.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+
+# Tooling de Claude Code, no es contenido del vault.
+.claude/
+
+# Datos de cliente: NUNCA versionar acá. Van a un vault aparte, cifrado.
+# (esta línea es defensa en profundidad; no debería existir la carpeta)
+800-engagements/
+
+# Adjuntos binarios pesados y temporales
+*.tmp
