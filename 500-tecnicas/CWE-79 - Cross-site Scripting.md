@@ -7,7 +7,6 @@ tacticas: []
 aliases:
   - CWE-79
   - XSS
-  - Cross-site Scripting
 tags:
   - dominio/web
 ---

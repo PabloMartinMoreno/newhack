@@ -1,7 +1,6 @@
 ---
 tipo: meta
 aliases:
-  - Command injection ciego
   - Payloads ciego de comandos
 tags:
   - meta/referencia

@@ -6,8 +6,8 @@ wstg: [WSTG-BUSL-09]
 tacticas: []
 aliases:
   - CWE-434
-  - File Upload
   - Unrestricted File Upload
+  - Subida de archivos sin restricción
 tags:
   - dominio/web
 ---
