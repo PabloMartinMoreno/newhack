@@ -56,6 +56,8 @@ Cuerpo: cuatro secciones fijas — **Cuándo lo elijo · Por qué funciona · C�
 tipo: deteccion
 tecnicas: ["[[T1003.001 - LSASS Memory]]"]
 telemetria: ["[[Sysmon EID 10 - ProcessAccess]]"]
+forma: evento                 # evento | correlacion | agregado | invariante
+ventana: ""                   # obligatoria si forma es agregado o invariante
 estado: produccion            # idea | borrador | produccion | retirada
 fidelidad: media              # alta | media | baja
 logica: sigma                 # sigma | kql | spl | eql | yara | suricata
@@ -64,6 +66,24 @@ validada: 2026-06-02
 ```
 
 Cuerpo: **Qué detecta · Lógica · Falsos positivos conocidos · Evasiones conocidas · Cómo se prueba**.
+
+> [!important] `forma:` no es metadato decorativo
+> Se agregó en 2026-08-08, después de que cuatro dominios web seguidos pidieran detecciones que **no son una regla sobre un evento suelto** — que era lo único que el esquema original contemplaba. Sin este campo, escribir esas detecciones obligaba a mentir sobre su naturaleza o a no escribirlas.
+
+| Valor | Qué evalúa | Ejemplo |
+|---|---|---|
+| `evento` | Un solo registro, en aislamiento | Un proceso `sh` hijo de `php-fpm` |
+| `correlacion` | Dos o más registros que hay que unir | Actor distinto del dueño del objeto |
+| `agregado` | Una función sobre una ventana: tasa, cardinalidad, proporción | Fallos de acceso contra cuentas inexistentes por minuto |
+| `invariante` | Una condición que nunca debería violarse sobre una secuencia | Actividad de sesión después de su cierre |
+
+La distinción tiene consecuencias prácticas, no es taxonómica:
+
+- **Cambia el lenguaje.** Sigma expresa bien `evento` y con esfuerzo `agregado`; `correlacion` e `invariante` piden el lenguaje de consulta del SIEM. Que `logica: sigma` no alcance para una regla es información útil de antemano.
+- **Cambia el coste.** Una regla de evento se evalúa al vuelo; una de agregado necesita estado y ventana; una de invariante necesita reconstruir secuencias.
+- **Cambia cómo se prueba.** Un disparador único valida una regla de evento y no dice nada de una de agregado, que necesita volumen y línea base.
+
+`ventana:` acompaña a `agregado` e `invariante` con la unidad de tiempo o de secuencia sobre la que se evalúa — `"5m"`, `"1h"`, `"por sesión"`.
 
 ### `telemetria` — la bisagra operativa
 

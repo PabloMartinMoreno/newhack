@@ -2,6 +2,8 @@
 tipo: deteccion
 tecnicas: ["[[T1003.001 - LSASS Memory]]"]
 telemetria: ["[[Sysmon EID 10 - ProcessAccess]]"]
+forma: evento
+ventana: 
 estado: borrador
 fidelidad: media
 logica: sigma

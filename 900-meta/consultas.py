@@ -39,6 +39,7 @@ ENUMS = {
     "coste": {"bajo", "medio", "alto"},
     "severidad": {"critica", "alta", "media", "baja", "informativa"},
     "fidelidad": {"alta", "media", "baja"},
+    "forma": {"evento", "correlacion", "agregado", "invariante"},
 }
 
 
@@ -281,6 +282,12 @@ def higiene(vault, _):
             for campo in ("opsec", "probado", "contexto"):
                 if not n.fm.get(campo):
                     filas.append((n.rel, f"tradecraft sin {campo}"))
+        if n.tipo == "deteccion":
+            forma = n.fm.get("forma")
+            if not forma:
+                filas.append((n.rel, "deteccion sin forma"))
+            elif forma in ("agregado", "invariante") and not n.fm.get("ventana"):
+                filas.append((n.rel, f"forma={forma} sin ventana"))
     tabla(["Nota", "Problema"], filas, "frontmatter limpio")
 
     print("  Enlaces rotos en frontmatter (rompen el índice en silencio):")
