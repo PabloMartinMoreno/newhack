@@ -19,7 +19,9 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido real | Sin empezar |
+| Contenido rojo — web | Cinco dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection |
+| Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
+| Contenido azul | **Una sola detección, y es de Windows.** Cero del lado web — ver Pendientes |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos |
 | Vault de engagements | Sin crear |
@@ -103,6 +105,31 @@ Escrito (inclusion): [[CWE-98 - File Inclusion]], [[MOC - File inclusion]] (dos 
 
 Escrito (upload): [[CWE-434 - Unrestricted File Upload]], [[MOC - File upload]] (dos árboles + índice), tradecraft [[File upload - bypass de validación]] · [[Webshell]] · [[File upload + LFI]], y dos matrices (bypass de validación, webshells). El **combo** [[File upload + LFI]] es el nodo que une los dos dominios: cada MOC referencia al otro. Pendiente en upload: SVG-XSS y XXE vía archivo.
 
+### 2026-08-06 — Dominio Command injection
+
+Taxonomía fijada antes de escribir. Cinco ejes, paralelos a SQLi donde el paralelo es real:
+
+| Eje | Valores |
+|---|---|
+| Canal de extracción | directo · ciego · temporal · fuera de banda |
+| Ruptura del contexto | separador · sustitución · newline · escape de comillas · sin ruptura |
+| Shell | `sh`/`bash` · `cmd` · PowerShell · sin shell |
+| Obstáculo | espacios · barras · palabras clave · lista blanca · WAF |
+| Impacto | lectura · shell interactiva · webshell · pivote |
+
+**Decisión: dos CWE en un MOC.** [[CWE-78 - OS Command Injection]] y [[CWE-88 - Argument Injection]] comparten [[MOC - Command injection]] porque la misma pregunta las separa —¿hay shell?— y esa pregunta es el nodo raíz del árbol de decisión. Separarlas en dos MOC obligaría a duplicar ese nodo en ambos y a que cada uno terminara mandando al otro. Es el mismo criterio que unió upload e inclusion por [[File upload + LFI]], pero más fuerte: acá no es un combo, es una bifurcación.
+
+**Divergencias deliberadas respecto de SQLi**, no descuidos:
+
+- **No hay eje de canal `UNION`/error.** El shell no devuelve datos estructurados: o hay `stdout` o no hay nada. El canal directo absorbe ambos.
+- **`2>&1` es un nodo del árbol de canales, no un truco de la matriz.** Mueve casos enteros de ciego a directo sin cambiar nada más, y es lo más barato del árbol.
+- **El canal temporal puede dar falso negativo.** Con ejecución asíncrona no hay retardo aunque haya ejecución; fuera de banda es el único canal que cubre ese caso. En SQLi el problema no se plantea.
+- **La ruptura del contexto no genera notas de tradecraft**, igual que el contexto de inyección en SQLi: va entera a matriz. La única excepción es el valor "sin ruptura", que **es** [[Argument injection - abuso de flags]].
+
+**Telemetría: primer artefacto web granular.** [[Proceso hijo del servidor web]]. Hasta ahora todo el lado web colgaba de [[Log de acceso del servidor web]], que no ve el cuerpo de la petición ni lo que el servidor ejecuta — o sea, no veía este dominio en absoluto. Es el primer paso para deshacer el problema de fondo: veinte variantes de tradecraft apuntando a un único artefacto genérico no son una bisagra, son una etiqueta.
+
+**Hueco declarado:** [[Argument injection - abuso de flags]] es la única variante del vault cuya huella en el árbol de procesos es **indistinguible de la operación normal**. Está anotada como tal en el MOC y en la nota de telemetría; detectarla exige línea base por aplicación, no una regla portable.
+
 ## Pendientes
 
 ### Inmediatos
@@ -113,8 +140,10 @@ Escrito (upload): [[CWE-434 - Unrestricted File Upload]], [[MOC - File upload]] 
 
 ### Contenido
 
+- [ ] **Cara azul de web — el pendiente de fondo.** Veinte variantes de tradecraft emiten [[Log de acceso del servidor web]] y ninguna detección lo consume: `consultas.py huecos` lo canta. Dos trabajos distintos: granular la telemetría web (empezado con [[Proceso hijo del servidor web]]; faltan log de errores, log de queries, WAF, `report-uri` de CSP, auditoría de escritura en la raíz web) y escribir las detecciones. Mientras esto no exista, la regla 3 del `CLAUDE.md` no se cumple y el vault fusionado no rinde más que dos separados
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Telemetría web: una nota por artefacto que emiten los canales de SQLi — hoy solo existe [[MySQL - slow query log]]
+- [ ] Dominios web que siguen, por orden: SSRF → XXE → control de acceso/IDOR → autenticación y sesión → deserialización → CSRF → SSTI
+- [ ] **Deuda taxonómica:** [[File upload - XXE por archivo]] cuelga de `CWE-434` y [[LFI - phar deserialization]] de `CWE-98`. En ambos casos la `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrigen a `CWE-611` y `CWE-502` cuando existan esos dominios
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`
 
