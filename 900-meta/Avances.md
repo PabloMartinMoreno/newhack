@@ -19,7 +19,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Diez dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión |
+| Contenido rojo — web | Once dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
 | Contenido azul | 16 detecciones sobre 12 artefactos. `huecos` da **cero**. Todas en `estado: idea`, ninguna validada en laboratorio |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -249,6 +249,20 @@ El vacío era honesto, además, y ahí está lo interesante: **XSS DOM-based no 
 
 [[Puntaje de anomalía alto sin bloqueo]] apunta a algo que se lee mal todo el tiempo: un WAF en modo detección produce **los mismos registros** que uno que bloquea. Sin distinguir el campo de acción, se leen como ataques frustrados cosas que llegaron enteras a la aplicación.
 
+### 2026-08-08 — Dominio Deserialización
+
+Cierra [[CWE-502 - Deserialization of Untrusted Data]], que había quedado como paraguas sin MOC al saldar la deuda del `phar`.
+
+**El formato va a matriz, no a eje.** Decidido por precedente y sin brainstorming: es el mismo criterio que el motor en [[MOC - SQL injection]] y la shell en [[MOC - Command injection]]. PHP, Java, `pickle`, Ruby y .NET cambian el formato, las cadenas y la herramienta — no cambian ninguna decisión. Lo que decide es si hay gadget, si hay firma, y si alcanza con manipular sin ejecutar.
+
+**El árbol está ordenado contra la fama del dominio.** "Deserialización" evoca `ysoserial` y RCE, y esa asociación hace descartar casos explotables. La rama que más veces resuelve —[[Deserialización - manipulación de objeto]]— no necesita ninguna cadena: un objeto de sesión con un campo de rol adentro es escalada completa. Por eso [[Deserialización - cadena de gadgets]] va **última** en el orden de aprendizaje, al revés de como suele enseñarse.
+
+**Tres formatos ejecutan por diseño** —`pickle`, YAML con cargador inseguro, `node-serialize`— y no necesitan que ninguna biblioteca sea vulnerable. Buscar cadenas ahí es perder el tiempo, y está marcado en el árbol.
+
+**Segundo dominio que se cierra sin escribir una sola detección.** [[Intérprete de comandos como hijo del servidor web]] lo detecta sin saber que hubo deserialización de por medio, y [[Cambio de privilegio fuera del flujo administrativo]] cubre la manipulación. Es la mejor evidencia acumulada de que detectar **efecto** en vez de firma paga: las reglas cubren técnicas que no existían cuando se escribieron.
+
+Y una inversión incómoda para el defensor, anotada en el MOC: **lo fallido es más visible que lo exitoso**. Una cadena que no funciona lanza excepción; la que funciona, no. La ráfaga de excepciones de deserialización precede al intento que sale bien, y es la ventana de detección real.
+
 ## Pendientes
 
 ### Inmediatos
@@ -263,7 +277,7 @@ El vacío era honesto, además, y ahí está lo interesante: **XSS DOM-based no 
 - [ ] **Validar las 16 detecciones en laboratorio.** Todas están en `estado: idea` y sin `validada:`. Las de `forma: evento` se validan con un disparo; las de `agregado` necesitan volumen **y línea base**, que es el trabajo caro. Pasar a `borrador` lo que se pruebe
 - [x] ~~Telemetría web que falta~~ — [[Registro del WAF]], [[Informe de violación de CSP]] y [[Escritura de archivo en la raíz web]], escritos el 2026-08-08
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Dominios web que siguen, por orden: deserialización → CSRF → SSTI → OAuth/OIDC
+- [ ] Dominios web que siguen, por orden: CSRF → SSTI → OAuth/OIDC → prototype pollution (`CWE-1321`)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS

@@ -15,7 +15,7 @@ tags:
 # CWE-502 - Deserialization of Untrusted Data
 
 > [!note] Nota paraguas
-> Sin contenido operativo. La única variante escrita hoy es [[LFI - phar deserialization]], que llega acá por el vector de [[MOC - File inclusion]]. **El dominio propio todavía no está modelado** — ver [[Avances]] § Pendientes.
+> Sin contenido operativo. La decisión vive en [[MOC - Deserialización]]; las variantes en `600-tradecraft/`; identificar el formato, en [[Deserialización - matriz de identificación]].
 
 ## Qué es
 

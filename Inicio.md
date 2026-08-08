@@ -22,6 +22,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - Broken access control]] — IDOR, escalada vertical, mass assignment
 - [[MOC - Autenticación]] — enumeración, credenciales, MFA, recuperación
 - [[MOC - Gestión de sesión]] — tokens, fijación, expiración, JWT
+- [[MOC - Deserialización]] — manipulación de objeto, gadgets, firma
 
 **Infra**
 - [[MOC - Active Directory]] — semilla, sin desarrollar

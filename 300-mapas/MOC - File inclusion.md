@@ -79,5 +79,5 @@ Intersección de ejes ortogonales. Una nota por valor de eje.
 
 - [x] Los tres tipos + wrappers + vías a RCE
 - [x] `phar://` deserialization — [[LFI - phar deserialization]]. La `clase:` de esa nota es [[CWE-502 - Deserialization of Untrusted Data]], no `CWE-98`: acá el wrapper es el **vector**, la vulnerabilidad es la deserialización. Este MOC la sigue indexando porque se llega por acá
-- [ ] El dominio de deserialización en sí — `CWE-502` existe como nota paraguas y no tiene MOC propio todavía
+- [x] El dominio de deserialización — [[MOC - Deserialización]]
 - [x] Combo LFI + upload — [[File upload + LFI]]
