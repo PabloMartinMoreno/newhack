@@ -15,7 +15,7 @@ Comandos:
     contradicciones  tradecraft 'limpio' con detección propia en producción
     spof             telemetría ordenada por detecciones que dependen de ella
     cobertura        técnicas y cuántas caras tiene cada una
-    higiene          frontmatter inválido, enlaces rotos, inbox estancado
+    higiene          frontmatter, enlaces rotos, alias duplicados, MOC sin indexar, inbox
     todo             todas las anteriores
 """
 
@@ -286,6 +286,31 @@ def higiene(vault, _):
     print("  Enlaces rotos en frontmatter (rompen el índice en silencio):")
     tabla(["Origen", "Destino inexistente"],
           [(n.rel, d) for n, d in vault.rotos], "ninguno")
+
+    dueños = {}
+    for n in vault.notas:
+        for a in n.aliases:
+            dueños.setdefault(a.lower(), []).append(n.nombre)
+    nombres = {n.nombre.lower() for n in vault.notas}
+    choques = []
+    for alias, notas in sorted(dueños.items()):
+        if len(notas) > 1:
+            choques.append((alias, " · ".join(notas)))
+        elif alias in nombres and notas[0].lower() != alias:
+            choques.append((alias, f"{notas[0]} · choca con la nota homónima"))
+    print("  Alias en más de una nota (Obsidian resuelve al azar):")
+    tabla(["Alias", "Notas que lo declaran"], choques, "un alias, una dueña")
+
+    try:
+        with open(os.path.join(vault.raiz, "Inicio.md"), encoding="utf-8") as f:
+            inicio = f.read()
+    except OSError:
+        inicio = ""
+    sin_indexar = [(n.nombre, n.fm.get("dominio", "—"))
+                   for n in vault.notas
+                   if n.tipo == "moc" and f"[[{n.nombre}]]" not in inicio]
+    print("  MOC no indexados en Inicio.md:")
+    tabla(["MOC", "Dominio"], sin_indexar, "todos los dominios indexados")
 
     corte = datetime.date.today() - datetime.timedelta(days=14)
     viejas = []
