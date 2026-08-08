@@ -24,6 +24,9 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - Gestión de sesión]] — tokens, fijación, expiración, JWT
 - [[MOC - Deserialización]] — manipulación de objeto, gadgets, firma
 
+**Azul**
+- [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**
+
 **Infra**
 - [[MOC - Active Directory]] — semilla, sin desarrollar
 
