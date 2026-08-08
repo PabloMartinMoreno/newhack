@@ -19,7 +19,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Nueve dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación |
+| Contenido rojo — web | Diez dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
 | Contenido azul | **Una sola detección, y es de Windows.** Cero del lado web — ver Pendientes |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -188,6 +188,20 @@ Cuatro CWE, cada una con tradecraft propio: [[CWE-204 - Observable Response Disc
 
 Y un detalle que no encaja en ninguna tabla: en [[Autenticación - abuso de recuperación de contraseña]] el mejor detector **no es un artefacto de telemetría**, es una persona avisando que recibió un correo que no pidió. Es el único caso así en el vault.
 
+### 2026-08-08 — Dominio Gestión de sesión
+
+Cierra el par con [[MOC - Autenticación]]. Cinco CWE: [[CWE-384 - Session Fixation]], [[CWE-330 - Use of Insufficiently Random Values]], [[CWE-613 - Insufficient Session Expiration]], [[CWE-522 - Insufficiently Protected Credentials]], [[CWE-347 - Improper Verification of Cryptographic Signature]].
+
+**El árbol se ordena por independencia de la víctima**, no por impacto ni por coste. Es el criterio que decide la viabilidad real: falsificar un JWT y predecir un token no necesitan a nadie —y el primero da cualquier cuenta, incluidas las administrativas—; robar necesita otra vulnerabilidad; fijar necesita que la víctima se autentique después, lo que implica ingeniería social y una ventana de tiempo. Ordenarlo por impacto habría puesto el robo primero, que es justo el que menos se sostiene solo.
+
+**Segundo árbol, y no da acceso: da permanencia.** La rama de expiración se prueba siempre aunque el acceso venga de otro lado, porque responde una pregunta distinta — si el compromiso sobrevive a la reacción de la víctima. El caso del cambio de contraseña que no invalida sesiones es el que hay que destacar en un informe: anula la acción defensiva más elemental **en silencio**.
+
+**Sin telemetría nueva, y eso es una señal buena.** Es el primer dominio que se cierra reutilizando artefactos existentes: todo cuelga de [[Log de autenticación de la aplicación]]. La contracara es que lo vuelve el punto único de fallo defensivo más claro del vault — vale correr `consultas.py spof` cuando existan las detecciones.
+
+**Cuarto caso de detección que no es una regla sobre un evento.** [[Sesión - expiración insuficiente]] necesita verificar un invariante: ninguna sesión activa después del evento que la termina. Con cuatro casos en cinco dominios, revisar el esquema de `deteccion` deja de ser opcional y pasa a bloquear la primera detección web.
+
+Y una asimetría que conviene recordar: en [[Sesión - token predecible]] la recolección es ruidosa y el uso es **invisible** — un token predicho es indistinguible de uno legítimo. Si la detección no está sobre la fase de pedir muchas sesiones, no está en ningún lado.
+
 ## Pendientes
 
 ### Inmediatos
@@ -200,8 +214,8 @@ Y un detalle que no encaja en ninguna tabla: en [[Autenticación - abuso de recu
 
 - [ ] **Cara azul de web — el pendiente de fondo.** Veinte variantes de tradecraft emiten [[Log de acceso del servidor web]] y ninguna detección lo consume: `consultas.py huecos` lo canta. Dos trabajos distintos: granular la telemetría web (empezado con [[Proceso hijo del servidor web]]; faltan log de errores, log de queries, WAF, `report-uri` de CSP, auditoría de escritura en la raíz web) y escribir las detecciones. Mientras esto no exista, la regla 3 del `CLAUDE.md` no se cumple y el vault fusionado no rinde más que dos separados
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Dominios web que siguen, por orden: gestión de sesión → deserialización → CSRF → SSTI
-- [ ] **Revisar el esquema de `deteccion`.** Tres dominios seguidos pidieron detecciones que no son una regla sobre un evento: invariantes sobre secuencias ([[Control de acceso - salto de contexto]]) y funciones sobre ventana ([[MOC - Autenticación]], todo el dominio). El esquema actual asume una regla sobre un artefacto. Decidir si hace falta un campo que lo distinga antes de escribir la primera detección web
+- [ ] Dominios web que siguen, por orden: deserialización → CSRF → SSTI → OAuth/OIDC
+- [ ] **Revisar el esquema de `deteccion`.** Tres dominios seguidos pidieron detecciones que no son una regla sobre un evento: invariantes sobre secuencias ([[Control de acceso - salto de contexto]]) y funciones sobre ventana ([[MOC - Autenticación]], todo el dominio). El esquema actual asume una regla sobre un artefacto. **Ya son cuatro casos en cinco dominios** — sumando [[Sesión - expiración insuficiente]]. Deja de ser opcional: bloquea la primera detección web
 - [ ] **Deuda taxonómica:** [[LFI - phar deserialization]] cuelga de `CWE-98` y le corresponde `CWE-502`. La `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrige cuando exista el dominio de deserialización. La mitad de XXE ya está saldada
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`
