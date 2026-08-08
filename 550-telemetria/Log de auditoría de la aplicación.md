@@ -59,4 +59,4 @@ En productos comerciales suele existir con nombre propio y hay que pedirlo expl�
 ## Quién lo emite / quién lo consume
 
 Rojo: [[Control de acceso - IDOR]] · [[Control de acceso - escalada vertical]] · [[Control de acceso - mass assignment]] · [[Control de acceso - salto de contexto]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Acceso a un objeto de otro usuario]] · [[Cambio de privilegio fuera del flujo administrativo]]

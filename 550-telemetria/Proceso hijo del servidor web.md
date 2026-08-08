@@ -51,4 +51,4 @@ Alto. Un servidor con despliegues, cron y scripts de mantenimiento genera muchí
 ## Quién lo emite / quién lo consume
 
 Rojo: [[Command injection - canal directo]] · [[Command injection - canal ciego]] · [[Command injection - canal temporal]] · [[Argument injection - abuso de flags]] · [[Command injection - a shell interactiva]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Intérprete de comandos como hijo del servidor web]]

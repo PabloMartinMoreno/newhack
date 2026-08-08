@@ -45,4 +45,4 @@ Ya está. Lo que casi nunca está es **enviado al SIEM**, ni con el tiempo de re
 ## Quién lo emite / quién lo consume
 
 Rojo: [[SQLi - canal UNION]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Barrido de puertos internos desde el servidor de aplicación]] · [[Latencia bimodal en un endpoint]] · [[Misma sesión desde dos orígenes]] · [[Payload de inyección en parámetros de la URL]] · [[Ráfaga de errores del servidor desde un mismo origen]]

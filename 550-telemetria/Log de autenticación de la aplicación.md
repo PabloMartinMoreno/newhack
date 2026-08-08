@@ -56,4 +56,4 @@ Bajo en volumen. Su problema es de **agregación**, no de coste: los eventos ind
 ## Quién lo emite / quién lo consume
 
 Rojo: [[Autenticación - enumeración de usuarios]] · [[Autenticación - password spraying]] · [[Autenticación - credential stuffing]] · [[Autenticación - bypass de segundo factor]] · [[Autenticación - abuso de recuperación de contraseña]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Accesos exitosos contra muchas cuentas desde un origen]] · [[Actividad de sesión posterior a su cierre]] · [[Fallos de acceso contra cuentas inexistentes]] · [[Misma sesión desde dos orígenes]]

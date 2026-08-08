@@ -53,4 +53,4 @@ Alto. Un servidor de aplicación abre muchísimas conexiones legítimas: base de
 ## Quién lo emite / quién lo consume
 
 Rojo: [[SSRF - canal directo]] · [[SSRF - canal ciego]] · [[SSRF - escaneo de la red interna]] · [[SSRF - metadatos de instancia cloud]] · [[SSRF - gopher a servicio interno]] · [[RFI - inclusión remota]] · [[Command injection - a shell interactiva]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Barrido de puertos internos desde el servidor de aplicación]] · [[Petición al servicio de metadatos de instancia]]

@@ -44,4 +44,4 @@ No viene por defecto. Requiere un sensor de red (Zeek, un resolver con logging) 
 ## Quién lo emite / quién lo consume
 
 Rojo: [[SQLi - canal fuera de banda]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Exfiltración por subdominios de alta entropía]]

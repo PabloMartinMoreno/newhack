@@ -51,4 +51,4 @@ Cuidado con la contracara: los errores detallados son útiles para el defensor *
 ## Quién lo emite / quién lo consume
 
 Rojo: [[XXE - canal por error]] · [[SQLi - canal basado en errores]] · [[SSRF - canal ciego]] · [[Path traversal]] · [[File upload - bypass de validación]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Ráfaga de errores del servidor desde un mismo origen]]

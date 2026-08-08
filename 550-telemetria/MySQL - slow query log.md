@@ -44,4 +44,4 @@ Bajo si `long_query_time` está bien calibrado. Si se baja a un valor pequeño p
 ## Quién lo emite / quién lo consume
 
 Rojo: [[SQLi - canal temporal ciego]]
-Azul: pendiente — ver [[Consultas del vault]] § Huecos defensivos propios
+Azul: [[Latencia bimodal en un endpoint]]

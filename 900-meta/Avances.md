@@ -21,9 +21,9 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Diez dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
-| Contenido azul | **Una sola detección, y es de Windows.** Cero del lado web — ver Pendientes |
+| Contenido azul | 12 detecciones. `huecos` da **cero**: todo artefacto que emite tradecraft tiene detección. Todas en `estado: idea`, ninguna validada en laboratorio |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
-| Consultas cruzadas | `900-meta/consultas.py`, siete comandos |
+| Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
 
 ## Bitácora
@@ -202,6 +202,33 @@ Cierra el par con [[MOC - Autenticación]]. Cinco CWE: [[CWE-384 - Session Fixat
 
 Y una asimetría que conviene recordar: en [[Sesión - token predecible]] la recolección es ruidosa y el uso es **invisible** — un token predicho es indistinguible de uno legítimo. Si la detección no está sobre la fase de pedir muchas sesiones, no está en ningún lado.
 
+### 2026-08-08 — La cara azul de web, y el campo que la desbloqueó
+
+`consultas.py huecos` daba **cero detecciones contra treinta emisores** al abrir la sesión. Ahora da `sin huecos`. Es el pendiente que estuvo arriba de todo desde la fundación, porque era el único que ponía en duda la fusión del vault.
+
+**Primero hubo que arreglar el esquema.** Cuatro dominios seguidos —control de acceso, autenticación, sesión, y el agregado de todo el lado web— pidieron detecciones que no son una regla sobre un evento suelto, que era lo único que `deteccion` contemplaba. Se agregó `forma:` con cuatro valores y `ventana:` para los dos que la necesitan:
+
+| Valor | Qué evalúa |
+|---|---|
+| `evento` | un registro en aislamiento |
+| `correlacion` | dos o más registros que hay que unir |
+| `agregado` | una función sobre una ventana: tasa, cardinalidad, proporción |
+| `invariante` | una condición que nunca debería violarse sobre una secuencia |
+
+No es taxonomía: cambia el lenguaje (Sigma alcanza para `evento`, no para `correlacion` ni `invariante`), cambia el coste (una ventana necesita estado) y cambia cómo se valida — **un disparo único valida una regla de `evento` y no dice nada de una de `agregado`**, que necesita volumen y línea base. `higiene` ahora lo verifica.
+
+**Once detecciones nuevas**, cubriendo los siete artefactos web y las cuatro formas.
+
+Lo que se aprendió escribiéndolas, y vale más que las reglas:
+
+**Las detecciones que valen son de efecto, no de firma.** [[Intérprete de comandos como hijo del servidor web]] y [[Petición al servicio de metadatos de instancia]] son de altísima fidelidad porque anclan en una relación que no tiene explicación legítima. [[Payload de inyección en parámetros de la URL]] es la única de firma del vault, tiene `fidelidad: baja` declarada, y su propia nota dice que **no se despliega para alertar sino para cazar hacia atrás** — cualquier evasión de las matrices la anula, y mandar el payload por POST la evade sin saber nada.
+
+**Tres reglas dependen de un campo que casi nunca está instrumentado.** [[Acceso a un objeto de otro usuario]] necesita el dueño del objeto; [[Cambio de privilegio fuera del flujo administrativo]] necesita los campos modificados; [[Fallos de acceso contra cuentas inexistentes]] necesita el motivo del fallo. Sin ellos las reglas no son difíciles: **son imposibles de escribir**. Las tres notas lo dicen en una sección propia, porque la recomendación defensiva de mayor retorno no es la regla sino instrumentar el campo.
+
+**Dos técnicas rojas quedan sin detección posible y está declarado.** [[Argument injection - abuso de flags]] no produce ninguna anomalía en el árbol de procesos, y un XXE de lectura local con `file://` no emite absolutamente nada. No son huecos de contenido: son límites de las fuentes disponibles.
+
+Todas quedan en `estado: idea` y sin `validada:`. Ninguna se probó en laboratorio, y eso es lo que ese campo significa.
+
 ## Pendientes
 
 ### Inmediatos
@@ -212,10 +239,12 @@ Y una asimetría que conviene recordar: en [[Sesión - token predecible]] la rec
 
 ### Contenido
 
-- [ ] **Cara azul de web — el pendiente de fondo.** Veinte variantes de tradecraft emiten [[Log de acceso del servidor web]] y ninguna detección lo consume: `consultas.py huecos` lo canta. Dos trabajos distintos: granular la telemetría web (empezado con [[Proceso hijo del servidor web]]; faltan log de errores, log de queries, WAF, `report-uri` de CSP, auditoría de escritura en la raíz web) y escribir las detecciones. Mientras esto no exista, la regla 3 del `CLAUDE.md` no se cumple y el vault fusionado no rinde más que dos separados
+- [x] ~~Cara azul de web~~ — cerrada el 2026-08-08. `huecos` da `sin huecos`. La regla 3 del `CLAUDE.md` se cumple y la fusión del vault se justifica
+- [ ] **Validar las 12 detecciones en laboratorio.** Todas están en `estado: idea` y sin `validada:`. Las de `forma: evento` se validan con un disparo; las de `agregado` necesitan volumen **y línea base**, que es el trabajo caro. Pasar a `borrador` lo que se pruebe
+- [ ] **Telemetría web que todavía falta:** WAF, `report-uri` de CSP, auditoría de escritura en la raíz web. Ninguna bloquea nada hoy, pero [[XSS - CSP]] y [[Webshell]] no tienen artefacto propio
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
 - [ ] Dominios web que siguen, por orden: deserialización → CSRF → SSTI → OAuth/OIDC
-- [ ] **Revisar el esquema de `deteccion`.** Tres dominios seguidos pidieron detecciones que no son una regla sobre un evento: invariantes sobre secuencias ([[Control de acceso - salto de contexto]]) y funciones sobre ventana ([[MOC - Autenticación]], todo el dominio). El esquema actual asume una regla sobre un artefacto. **Ya son cuatro casos en cinco dominios** — sumando [[Sesión - expiración insuficiente]]. Deja de ser opcional: bloquea la primera detección web
+- [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`
