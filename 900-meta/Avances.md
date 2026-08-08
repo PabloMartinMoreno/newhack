@@ -216,7 +216,7 @@ Y una asimetría que conviene recordar: en [[Sesión - token predecible]] la rec
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
 - [ ] Dominios web que siguen, por orden: deserialización → CSRF → SSTI → OAuth/OIDC
 - [ ] **Revisar el esquema de `deteccion`.** Tres dominios seguidos pidieron detecciones que no son una regla sobre un evento: invariantes sobre secuencias ([[Control de acceso - salto de contexto]]) y funciones sobre ventana ([[MOC - Autenticación]], todo el dominio). El esquema actual asume una regla sobre un artefacto. **Ya son cuatro casos en cinco dominios** — sumando [[Sesión - expiración insuficiente]]. Deja de ser opcional: bloquea la primera detección web
-- [ ] **Deuda taxonómica:** [[LFI - phar deserialization]] cuelga de `CWE-98` y le corresponde `CWE-502`. La `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrige cuando exista el dominio de deserialización. La mitad de XXE ya está saldada
+- [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`
 

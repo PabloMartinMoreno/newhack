@@ -1,7 +1,7 @@
 ---
 tipo: tradecraft
-clase: "[[CWE-98 - File Inclusion]]"
-eje: via-a-rce
+clase: "[[CWE-502 - Deserialization of Untrusted Data]]"
+eje: vector
 implementacion: "phar:// dispara unserialize sobre los metadatos del archivo"
 opsec: ruidoso
 telemetria: ["[[Log de acceso del servidor web]]"]
