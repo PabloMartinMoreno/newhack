@@ -19,7 +19,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Ocho dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso |
+| Contenido rojo — web | Nueve dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
 | Contenido azul | **Una sola detección, y es de Windows.** Cero del lado web — ver Pendientes |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -172,6 +172,22 @@ Tres CWE en un MOC: [[CWE-639 - Authorization Bypass Through User-Controlled Key
 
 **Hueco de tipo nuevo, otra vez.** [[Control de acceso - salto de contexto]] no se detecta con una regla sobre un evento sino verificando un invariante sobre una **secuencia** de eventos. El vault no modela ese tipo de detección: el esquema de `deteccion` asume una regla sobre un artefacto. Queda anotado; si aparece un segundo caso, habrá que revisar el esquema.
 
+### 2026-08-08 — Dominio Autenticación
+
+Se separó de **Gestión de sesión** en dos dominios encadenados, mismo precedente que file inclusion / file upload. Los ejes no se solapan: uno va de credenciales, el otro de tokens, y juntos serían un MOC de veinte notas con dos juegos de ejes que no se cruzan. Autenticación termina en el momento en que se emite la sesión; ahí empieza el otro.
+
+**Organizado por fase del ciclo de vida, no por técnica.** Las fases se encadenan —lo que da una es el insumo de la siguiente— y saltearse la primera multiplica el costo de todas. Por eso el árbol raíz es una secuencia numerada y no una bifurcación, cosa que ningún otro MOC del vault hace.
+
+Cuatro CWE, cada una con tradecraft propio: [[CWE-204 - Observable Response Discrepancy]], [[CWE-307 - Improper Restriction of Excessive Authentication Attempts]], [[CWE-287 - Improper Authentication]], [[CWE-640 - Weak Password Recovery Mechanism for Forgotten Password]].
+
+**Spraying y stuffing son valores distintos del eje vector, no sinónimos.** La elección entre ellos depende de un solo dato —si hay corpus de credenciales filtradas— y las huellas son opuestas: spraying genera cientos de fallos, stuffing acierta a la primera y no genera ninguno. Esa oposición es lo que justifica dos notas en vez de una.
+
+**Telemetría:** [[Log de autenticación de la aplicación]], quinto artefacto web. A diferencia de [[Log de auditoría de la aplicación]], este casi siempre existe; el problema es que nadie lo agrega.
+
+**Tercer caso de detección sobre agregados.** Acá la señal no está nunca en el evento: un fallo de acceso no es nada, y la proporción de fallos contra cuentas inexistentes lo es todo. Sumado a [[Control de acceso - salto de contexto]] —que necesita invariantes sobre secuencias— ya son suficientes casos para decidir si el esquema de `deteccion` necesita distinguir reglas puntuales de funciones sobre ventana. Pendiente explícito, ver abajo.
+
+Y un detalle que no encaja en ninguna tabla: en [[Autenticación - abuso de recuperación de contraseña]] el mejor detector **no es un artefacto de telemetría**, es una persona avisando que recibió un correo que no pidió. Es el único caso así en el vault.
+
 ## Pendientes
 
 ### Inmediatos
@@ -184,7 +200,8 @@ Tres CWE en un MOC: [[CWE-639 - Authorization Bypass Through User-Controlled Key
 
 - [ ] **Cara azul de web — el pendiente de fondo.** Veinte variantes de tradecraft emiten [[Log de acceso del servidor web]] y ninguna detección lo consume: `consultas.py huecos` lo canta. Dos trabajos distintos: granular la telemetría web (empezado con [[Proceso hijo del servidor web]]; faltan log de errores, log de queries, WAF, `report-uri` de CSP, auditoría de escritura en la raíz web) y escribir las detecciones. Mientras esto no exista, la regla 3 del `CLAUDE.md` no se cumple y el vault fusionado no rinde más que dos separados
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Dominios web que siguen, por orden: autenticación y sesión → deserialización → CSRF → SSTI
+- [ ] Dominios web que siguen, por orden: gestión de sesión → deserialización → CSRF → SSTI
+- [ ] **Revisar el esquema de `deteccion`.** Tres dominios seguidos pidieron detecciones que no son una regla sobre un evento: invariantes sobre secuencias ([[Control de acceso - salto de contexto]]) y funciones sobre ventana ([[MOC - Autenticación]], todo el dominio). El esquema actual asume una regla sobre un artefacto. Decidir si hace falta un campo que lo distinga antes de escribir la primera detección web
 - [ ] **Deuda taxonómica:** [[LFI - phar deserialization]] cuelga de `CWE-98` y le corresponde `CWE-502`. La `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrige cuando exista el dominio de deserialización. La mitad de XXE ya está saldada
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`
