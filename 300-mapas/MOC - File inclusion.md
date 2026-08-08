@@ -63,6 +63,11 @@ Intersección de ejes ortogonales. Una nota por valor de eje.
 6. [[RFI - inclusión remota]] — el caso fácil, cuando `allow_url_include` está On
 7. El combo con upload: [[MOC - File upload]]
 
+## Relación con otros dominios
+
+- [[MOC - File upload]] — el combo [[File upload + LFI]] es el nodo que une ambos.
+- [[MOC - SSRF]] — **[[RFI - inclusión remota]] es un SSRF** cuyo resultado, además de traerse, se ejecuta. La diferencia está en qué hace la app con la respuesta, no en la petición. Si `allow_url_include` está Off pero la app igual trae la URL, sigue habiendo SSRF aunque no haya RFI: ahí el dominio cambia, no el hallazgo.
+
 ## Cara azul
 
 | Tipo | Telemetría | Firma |

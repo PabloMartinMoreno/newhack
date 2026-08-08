@@ -19,7 +19,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Cinco dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection |
+| Contenido rojo — web | Seis dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
 | Contenido azul | **Una sola detección, y es de Windows.** Cero del lado web — ver Pendientes |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -130,6 +130,22 @@ Taxonomía fijada antes de escribir. Cinco ejes, paralelos a SQLi donde el paral
 
 **Hueco declarado:** [[Argument injection - abuso de flags]] es la única variante del vault cuya huella en el árbol de procesos es **indistinguible de la operación normal**. Está anotada como tal en el MOC y en la nota de telemetría; detectarla exige línea base por aplicación, no una regla portable.
 
+### 2026-08-06 — Dominio SSRF
+
+Cinco ejes: retorno × destino × esquema × bypass del filtro × impacto.
+
+**Decisión: la superficie no es eje, es matriz.** Dónde nace el SSRF —parámetro, cabecera, webhook, renderizador de PDF, descubrimiento de OAuth— se evaluó como sexto eje y se rechazó: es catálogo de reconocimiento, no criterio de decisión. Subirlo a eje habría multiplicado notas por combinación, que es lo que prohíbe la regla 2. Vive entero en [[SSRF superficies - matriz de referencia]].
+
+**Decisión: el árbol de destino va antes que el de canal.** Es el único dominio del vault donde se invierte el orden, y el motivo es de rentabilidad, no de taxonomía: [[SSRF - metadatos de instancia cloud]] cuesta una petición y termina el trabajo, mientras que [[SSRF - escaneo de la red interna]] cuesta cientos y devuelve topología. Barrer antes de probar `169.254.169.254` es el error caro del dominio, y el MOC lo dice explícito.
+
+**Decisión: la nube no se separa.** Se evaluó sacar los metadatos de instancia a un dominio propio —los tres proveedores tienen endpoints, defensas y cadenas de escalada distintas— y se descartó: partiría el impacto más jugoso fuera del MOC que lo produce. Las diferencias por proveedor son sintaxis, y la sintaxis va a matriz. La escalada **posterior** con las credenciales sí es otro dominio, y queda anotada como hueco.
+
+**Ciego no implica bajo impacto**, al revés que en SQLi y command injection. Con `gopher`, un SSRF sin retorno llega a RCE: escribir en Redis no necesita ver la respuesta. Está marcado en los dos árboles porque contradice la intuición que dejan los dominios anteriores.
+
+**Telemetría:** [[Conexión saliente del servidor de aplicación]], segundo artefacto web granular. Cubre el punto que [[Consulta DNS saliente]] no ve — el SSRF a destino interno no genera consulta DNS ni cruza el perímetro, así que la telemetría de borde es ciega justo para el caso más grave.
+
+**Deuda declarada:** el MOC enlaza `CWE-611 - XML External Entity`, que todavía no existe. Es enlace roto a propósito, igual que `T1558.003 - Kerberoasting` en el MOC de AD: marca el hueco en el grafo en vez de esconderlo.
+
 ## Pendientes
 
 ### Inmediatos
@@ -142,7 +158,7 @@ Taxonomía fijada antes de escribir. Cinco ejes, paralelos a SQLi donde el paral
 
 - [ ] **Cara azul de web — el pendiente de fondo.** Veinte variantes de tradecraft emiten [[Log de acceso del servidor web]] y ninguna detección lo consume: `consultas.py huecos` lo canta. Dos trabajos distintos: granular la telemetría web (empezado con [[Proceso hijo del servidor web]]; faltan log de errores, log de queries, WAF, `report-uri` de CSP, auditoría de escritura en la raíz web) y escribir las detecciones. Mientras esto no exista, la regla 3 del `CLAUDE.md` no se cumple y el vault fusionado no rinde más que dos separados
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Dominios web que siguen, por orden: SSRF → XXE → control de acceso/IDOR → autenticación y sesión → deserialización → CSRF → SSTI
+- [ ] Dominios web que siguen, por orden: XXE → control de acceso/IDOR → autenticación y sesión → deserialización → CSRF → SSTI
 - [ ] **Deuda taxonómica:** [[File upload - XXE por archivo]] cuelga de `CWE-434` y [[LFI - phar deserialization]] de `CWE-98`. En ambos casos la `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrigen a `CWE-611` y `CWE-502` cuando existan esos dominios
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`

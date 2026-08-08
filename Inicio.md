@@ -17,6 +17,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - File inclusion]] — LFI / RFI / path traversal
 - [[MOC - File upload]] — subida de archivos → RCE
 - [[MOC - Command injection]] — comandos de SO y argument injection
+- [[MOC - SSRF]] — petición forzada desde el servidor
 
 **Infra**
 - [[MOC - Active Directory]] — semilla, sin desarrollar
