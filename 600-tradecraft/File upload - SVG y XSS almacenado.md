@@ -4,7 +4,7 @@ clase: "[[CWE-434 - Unrestricted File Upload]]"
 eje: impacto
 implementacion: "Subir un SVG con script; al servirse ejecuta como XSS almacenado"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Informe de violación de CSP]]"]
 requisitos: [acepta-svg, se-sirve-inline]
 coste: bajo
 alternativas: ["[[File upload + LFI]]"]

@@ -4,7 +4,7 @@ clase: "[[CWE-88 - Argument Injection]]"
 eje: ruptura-del-contexto
 implementacion: "Sin escapar del argumento: se inyectan flags que cambian el comportamiento del binario"
 opsec: limpio
-telemetria: ["[[Proceso hijo del servidor web]]"]
+telemetria: ["[[Proceso hijo del servidor web]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [argumento-controlado, binario-con-flags-abusables]
 coste: medio
 alternativas: ["[[Command injection - canal directo]]"]

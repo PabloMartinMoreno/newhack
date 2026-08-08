@@ -4,7 +4,7 @@ clase: "[[CWE-79 - Cross-site Scripting]]"
 eje: obstaculo
 implementacion: "Ejecutar pese a una Content-Security-Policy, o esquivarla"
 opsec: requiere-bypass
-telemetria: []
+telemetria: ["[[Informe de violación de CSP]]"]
 requisitos: [csp-con-debilidad]
 coste: alto
 alternativas: []

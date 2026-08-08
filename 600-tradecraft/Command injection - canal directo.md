@@ -4,7 +4,7 @@ clase: "[[CWE-78 - OS Command Injection]]"
 eje: canal-de-extraccion
 implementacion: "La salida del comando inyectado vuelve dentro de la respuesta HTTP"
 opsec: ruidoso
-telemetria: ["[[Proceso hijo del servidor web]]", "[[Log de acceso del servidor web]]"]
+telemetria: ["[[Proceso hijo del servidor web]]", "[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [shell-invocada, salida-reflejada]
 coste: bajo
 alternativas: ["[[Command injection - canal ciego]]", "[[Command injection - canal fuera de banda]]"]

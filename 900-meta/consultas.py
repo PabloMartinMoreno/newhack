@@ -282,6 +282,8 @@ def higiene(vault, _):
             for campo in ("opsec", "probado", "contexto"):
                 if not n.fm.get(campo):
                     filas.append((n.rel, f"tradecraft sin {campo}"))
+            if not n.fm.get("telemetria"):
+                filas.append((n.rel, "tradecraft sin telemetria — regla 3, la bisagra"))
         if n.tipo == "deteccion":
             forma = n.fm.get("forma")
             if not forma:

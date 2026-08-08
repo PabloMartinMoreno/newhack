@@ -4,7 +4,7 @@ clase: "[[CWE-434 - Unrestricted File Upload]]"
 eje: validacion-evadida
 implementacion: "Evadir la capa de validación que rechaza el archivo peligroso"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la raíz web]]", "[[Registro del WAF]]"]
 requisitos: [funcion-de-subida, validacion-incompleta]
 coste: bajo
 alternativas: ["[[File upload + LFI]]"]

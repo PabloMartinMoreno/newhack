@@ -4,7 +4,7 @@ clase: "[[CWE-89 - SQL Injection]]"
 eje: canal-de-extraccion
 implementacion: "Forzar un error del motor que incluya el dato en el mensaje"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [errores-visibles, salida-no-reflejada]
 coste: bajo
 alternativas: ["[[SQLi - canal UNION]]", "[[SQLi - canal booleano ciego]]"]

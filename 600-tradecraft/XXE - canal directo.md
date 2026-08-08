@@ -4,7 +4,7 @@ clase: "[[CWE-611 - XML External Entity]]"
 eje: canal
 implementacion: "Entidad general externa cuyo valor se refleja en la respuesta"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]", "[[Conexión saliente del servidor de aplicación]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Conexión saliente del servidor de aplicación]]", "[[Registro del WAF]]"]
 requisitos: [dtd-habilitada, valor-reflejado]
 coste: bajo
 alternativas: ["[[XXE - canal fuera de banda]]", "[[XXE - canal por error]]"]

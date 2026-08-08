@@ -4,7 +4,7 @@ clase: "[[CWE-78 - OS Command Injection]]"
 eje: canal-de-extraccion
 implementacion: "El comando ejecuta pero su salida no vuelve; se infiere por efecto lateral observable"
 opsec: ruidoso
-telemetria: ["[[Proceso hijo del servidor web]]"]
+telemetria: ["[[Proceso hijo del servidor web]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [shell-invocada, sin-salida-reflejada]
 coste: medio
 alternativas: ["[[Command injection - canal fuera de banda]]", "[[Command injection - canal temporal]]"]

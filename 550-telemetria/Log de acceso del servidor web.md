@@ -45,4 +45,4 @@ Ya está. Lo que casi nunca está es **enviado al SIEM**, ni con el tiempo de re
 ## Quién lo emite / quién lo consume
 
 Rojo: [[SQLi - canal UNION]]
-Azul: [[Barrido de puertos internos desde el servidor de aplicación]] · [[Latencia bimodal en un endpoint]] · [[Misma sesión desde dos orígenes]] · [[Payload de inyección en parámetros de la URL]] · [[Ráfaga de errores del servidor desde un mismo origen]]
+Azul: [[Archivo creado y solicitado a los segundos]] · [[Barrido de puertos internos desde el servidor de aplicación]] · [[Latencia bimodal en un endpoint]] · [[Misma sesión desde dos orígenes]] · [[Payload de inyección en parámetros de la URL]] · [[Puntaje de anomalía alto sin bloqueo]] · [[Ráfaga de errores del servidor desde un mismo origen]]

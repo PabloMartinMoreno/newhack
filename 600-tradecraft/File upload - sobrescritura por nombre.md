@@ -4,7 +4,7 @@ clase: "[[CWE-434 - Unrestricted File Upload]]"
 eje: impacto
 implementacion: "Path traversal en el nombre del archivo para elegir dónde cae o qué sobrescribe"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [nombre-de-archivo-no-sanitizado]
 coste: bajo
 alternativas: ["[[File upload + LFI]]"]

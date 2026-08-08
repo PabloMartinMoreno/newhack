@@ -21,7 +21,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Diez dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
-| Contenido azul | 12 detecciones. `huecos` da **cero**: todo artefacto que emite tradecraft tiene detección. Todas en `estado: idea`, ninguna validada en laboratorio |
+| Contenido azul | 16 detecciones sobre 12 artefactos. `huecos` da **cero**. Todas en `estado: idea`, ninguna validada en laboratorio |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -229,6 +229,26 @@ Lo que se aprendió escribiéndolas, y vale más que las reglas:
 
 Todas quedan en `estado: idea` y sin `validada:`. Ninguna se probó en laboratorio, y eso es lo que ese campo significa.
 
+### 2026-08-08 — Los tres artefactos que faltaban, y el hueco que `huecos` no veía
+
+**Al ir a escribir la telemetría pendiente apareció un problema peor.** Tres notas de XSS —[[XSS - DOM-based]], [[XSS - mutation XSS]], [[XSS - CSP]]— tenían `telemetria: []` **vacío**. Es la regla 3 del `CLAUDE.md` incumplida, y `huecos` no lo veía por construcción: esa consulta recorre artefactos y pregunta quién los consume, así que una nota que no declara **ningún** artefacto es invisible para ella.
+
+`higiene` ahora falla si un tradecraft no declara telemetría. El check que faltaba no era una mejora: era el que verifica la bisagra.
+
+El vacío era honesto, además, y ahí está lo interesante: **XSS DOM-based no toca el servidor**. La carga viaja en el fragmento de la URL o se construye en el navegador, así que ninguna fuente del lado del servidor la ve. No había artefacto que declarar hasta ahora.
+
+**Tres artefactos nuevos:**
+
+- [[Informe de violación de CSP]] — el único del vault que **no lo emite un sistema propio** sino el navegador de la víctima. Es la única fuente que ve el lado del cliente, y por lo tanto la única que ve DOM-based y mXSS. Sus límites vienen de ahí: la emite un cliente no confiable, y el ruido de las extensiones del navegador puede sepultarla.
+- [[Escritura de archivo en la raíz web]] — el de mejor relación coste/valor del vault. Barato de encender y difícil de evadir, porque es el **efecto compartido** de seis técnicas que no comparten ni payload ni vector: webshell, upload, LFI a RCE, `INTO OUTFILE` de SQLi, gopher a Redis, y el canal ciego de command injection.
+- [[Registro del WAF]] — cubre el punto ciego estructural del lado web: [[Log de acceso del servidor web]] **no registra el cuerpo**, así que todo payload por POST era invisible. Es la única fuente que lo tapa sin instrumentar la aplicación. Vale como contexto, no como detección primaria: hereda todos los límites de las firmas.
+
+**Cuatro detecciones más**, hasta 16. Dos hallazgos de escribirlas:
+
+[[Archivo ejecutable nuevo en la raíz web]] cubre **seis técnicas con una sola regla** porque todas convergen en el mismo efecto. Es el mejor argumento del vault a favor de detectar efecto en vez de firma, y quedó escrito ahí.
+
+[[Puntaje de anomalía alto sin bloqueo]] apunta a algo que se lee mal todo el tiempo: un WAF en modo detección produce **los mismos registros** que uno que bloquea. Sin distinguir el campo de acción, se leen como ataques frustrados cosas que llegaron enteras a la aplicación.
+
 ## Pendientes
 
 ### Inmediatos
@@ -240,8 +260,8 @@ Todas quedan en `estado: idea` y sin `validada:`. Ninguna se probó en laborator
 ### Contenido
 
 - [x] ~~Cara azul de web~~ — cerrada el 2026-08-08. `huecos` da `sin huecos`. La regla 3 del `CLAUDE.md` se cumple y la fusión del vault se justifica
-- [ ] **Validar las 12 detecciones en laboratorio.** Todas están en `estado: idea` y sin `validada:`. Las de `forma: evento` se validan con un disparo; las de `agregado` necesitan volumen **y línea base**, que es el trabajo caro. Pasar a `borrador` lo que se pruebe
-- [ ] **Telemetría web que todavía falta:** WAF, `report-uri` de CSP, auditoría de escritura en la raíz web. Ninguna bloquea nada hoy, pero [[XSS - CSP]] y [[Webshell]] no tienen artefacto propio
+- [ ] **Validar las 16 detecciones en laboratorio.** Todas están en `estado: idea` y sin `validada:`. Las de `forma: evento` se validan con un disparo; las de `agregado` necesitan volumen **y línea base**, que es el trabajo caro. Pasar a `borrador` lo que se pruebe
+- [x] ~~Telemetría web que falta~~ — [[Registro del WAF]], [[Informe de violación de CSP]] y [[Escritura de archivo en la raíz web]], escritos el 2026-08-08
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
 - [ ] Dominios web que siguen, por orden: deserialización → CSRF → SSTI → OAuth/OIDC
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08

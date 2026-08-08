@@ -4,7 +4,7 @@ clase: "[[CWE-98 - File Inclusion]]"
 eje: tipo
 implementacion: "Salir del directorio previsto con ../ para leer archivos arbitrarios"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [ruta-de-archivo-controlable, lectura-sin-include]
 coste: bajo
 alternativas: ["[[LFI - inclusión local]]"]

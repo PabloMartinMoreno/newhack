@@ -4,7 +4,7 @@ clase: "[[CWE-79 - Cross-site Scripting]]"
 eje: tipo
 implementacion: "JS del cliente pasa una source controlada a un sink peligroso"
 opsec: limpio
-telemetria: []
+telemetria: ["[[Informe de violación de CSP]]"]
 requisitos: [source-controlable, sink-inseguro-en-el-JS]
 coste: medio
 alternativas: ["[[XSS - reflejado]]", "[[XSS - almacenado]]"]

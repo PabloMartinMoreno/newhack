@@ -4,7 +4,7 @@ clase: "[[CWE-89 - SQL Injection]]"
 eje: canal-de-extraccion
 implementacion: "UNION SELECT anexa filas propias al resultado que la aplicación ya muestra"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [salida-reflejada, cantidad-de-columnas-conocida, tipos-compatibles]
 coste: bajo
 alternativas: ["[[SQLi - canal basado en errores]]", "[[SQLi - canal booleano ciego]]"]

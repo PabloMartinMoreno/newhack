@@ -4,7 +4,7 @@ clase: "[[CWE-98 - File Inclusion]]"
 eje: tipo
 implementacion: "include/require de PHP sobre una ruta local controlada"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [ruta-local-controlable, include-o-require]
 coste: bajo
 alternativas: ["[[RFI - inclusión remota]]", "[[Path traversal - matriz de referencia]]"]

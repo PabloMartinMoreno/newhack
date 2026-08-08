@@ -4,7 +4,7 @@ clase: "[[CWE-98 - File Inclusion]]"
 eje: via-a-rce
 implementacion: "Envenenar un archivo que el server escribe, después incluirlo"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [lfi-que-ejecuta, archivo-envenenable]
 coste: medio
 alternativas: ["[[LFI wrappers - matriz de referencia]]"]

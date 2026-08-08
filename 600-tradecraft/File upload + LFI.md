@@ -4,7 +4,7 @@ clase: "[[CWE-434 - Unrestricted File Upload]]"
 eje: impacto
 implementacion: "Subir un archivo que no ejecuta y ejecutarlo vía LFI"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [subida-que-no-ejecuta, lfi-disponible]
 coste: medio
 alternativas: ["[[File upload - bypass de validación]]", "[[LFI - de lectura a RCE]]"]

@@ -4,7 +4,7 @@ clase: "[[CWE-79 - Cross-site Scripting]]"
 eje: tipo
 implementacion: "Payload guardado por la app y servido a cada visitante"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Informe de violación de CSP]]", "[[Registro del WAF]]"]
 requisitos: [input-persistido, servido-a-otros-usuarios]
 coste: bajo
 alternativas: ["[[XSS - reflejado]]", "[[XSS - DOM-based]]"]

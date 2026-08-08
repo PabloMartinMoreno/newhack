@@ -4,7 +4,7 @@ clase: "[[CWE-918 - Server-Side Request Forgery]]"
 eje: esquema
 implementacion: "Cambiar de esquema para hablar protocolos de texto arbitrarios contra un servicio interno"
 opsec: ruidoso
-telemetria: ["[[Conexión saliente del servidor de aplicación]]"]
+telemetria: ["[[Conexión saliente del servidor de aplicación]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [esquema-no-http-permitido, servicio-interno-sin-autenticacion]
 coste: medio
 alternativas: ["[[SSRF - escaneo de la red interna]]", "[[Command injection - canal directo]]"]

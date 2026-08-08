@@ -4,7 +4,7 @@ clase: "[[CWE-79 - Cross-site Scripting]]"
 eje: tipo
 implementacion: "Payload en la request, ejecutado en la respuesta del mismo request"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Informe de violación de CSP]]", "[[Registro del WAF]]"]
 requisitos: [input-reflejado-en-la-respuesta, victima-abre-el-enlace]
 coste: bajo
 alternativas: ["[[XSS - almacenado]]", "[[XSS - DOM-based]]"]

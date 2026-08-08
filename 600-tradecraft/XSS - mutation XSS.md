@@ -4,7 +4,7 @@ clase: "[[CWE-79 - Cross-site Scripting]]"
 eje: obstaculo
 implementacion: "El navegador muta HTML sanitizado hasta volverlo ejecutable"
 opsec: requiere-bypass
-telemetria: []
+telemetria: ["[[Informe de violación de CSP]]"]
 requisitos: [sanitizador-del-lado-cliente, reparse-del-html]
 coste: alto
 alternativas: ["[[XSS - DOM-based]]"]

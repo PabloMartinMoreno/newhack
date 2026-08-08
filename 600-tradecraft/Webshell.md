@@ -4,7 +4,7 @@ clase: "[[CWE-434 - Unrestricted File Upload]]"
 eje: payload
 implementacion: "Archivo con código que el server ejecuta, para comandos o reverse shell"
 opsec: quemado
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [ejecucion-del-archivo-subido]
 coste: bajo
 alternativas: []

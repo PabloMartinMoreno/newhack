@@ -4,7 +4,7 @@ clase: "[[CWE-89 - SQL Injection]]"
 eje: impacto
 implementacion: "LOAD_FILE / INTO OUTFILE desde la inyección"
 opsec: ruidoso
-telemetria: ["[[Log de acceso del servidor web]]"]
+telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la raíz web]]"]
 requisitos: [privilegio-FILE, secure_file_priv-permisivo]
 coste: bajo
 alternativas: ["[[SQLi - stacked queries en MSSQL]]"]
