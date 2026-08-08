@@ -21,7 +21,9 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Once dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
-| Contenido azul | 16 detecciones sobre 12 artefactos. `huecos` da **cero**. Todas en `estado: idea`, ninguna validada en laboratorio |
+| Contenido azul — web | 16 detecciones sobre 12 artefactos. `huecos` da **cero**. Todas en `estado: idea`, ninguna validada |
+| Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
+| Contenido azul — Windows | 14 artefactos + [[MOC - Telemetría de Windows]]. **Andamiaje**: sin emisores rojos ni detecciones todavía |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -262,6 +264,22 @@ Cierra [[CWE-502 - Deserialization of Untrusted Data]], que había quedado como 
 **Segundo dominio que se cierra sin escribir una sola detección.** [[Intérprete de comandos como hijo del servidor web]] lo detecta sin saber que hubo deserialización de por medio, y [[Cambio de privilegio fuera del flujo administrativo]] cubre la manipulación. Es la mejor evidencia acumulada de que detectar **efecto** en vez de firma paga: las reglas cubren técnicas que no existían cuando se escribieron.
 
 Y una inversión incómoda para el defensor, anotada en el MOC: **lo fallido es más visible que lo exitoso**. Una cadena que no funciona lanza excepción; la que funciona, no. La ráfaga de excepciones de deserialización precede al intento que sale bien, y es la ventana de detección real.
+
+### 2026-08-08 — Andamiaje azul: fundamentos y Windows
+
+Cambio de propósito respecto de todo lo anterior. Hasta acá cada nota azul nació como contracara de una técnica roja concreta. Estas nacieron **primero**, para que haya dónde colgar lo que se aprenda en un curso.
+
+**El diagnóstico que lo motivó:** el vault tenía once dominios web y dieciséis detecciones, y `100-notas/` tenía **una sola nota, de rojo**. No había ningún lugar para un concepto. `550-telemetria/` tenía doce artefactos y once eran web.
+
+**Ocho zettels de fundamentos.** Ninguno es resumen de material externo: cada uno está destilado de algo con lo que este vault se chocó al construirse. `forma:` existe porque cuatro dominios seguidos lo pidieron; [[Un log sin identidad es un historial, no una detección]] existe porque tres reglas resultaron imposibles de escribir por falta de un campo; [[Ausencia de alertas no es ausencia de ataque]] existe porque dos técnicas rojas quedaron declaradas como no detectables.
+
+**Catorce artefactos de Windows.** Sysmon (1, 3, 7, 8, 10, 11, 13, 22), Security (4624, 4625, 4688, 4768, 4769, 4662, 5145) y PowerShell 4104.
+
+**Están declarados como andamiaje, y el MOC lo dice en un callout.** El campo *Quién lo emite* está en pendiente en casi todas, porque el lado rojo de Windows sigue siendo una sola nota. La instrucción explícita es **no rellenarlo de memoria**: una nota de telemetría que declara emisores que nadie observó es la misma clase de mentira que `probado:` existe para evitar.
+
+**Dos MOC nuevos que no son de una tecnología ni de una clase de vulnerabilidad**, que es una forma que el vault no tenía: [[MOC - Fundamentos de detección]] ordena los conceptos como secuencia de lectura y da dos árboles —por dónde empezar a detectar algo, y qué revisar cuando una regla no sirve—; [[MOC - Telemetría de Windows]] ordena las fuentes por relación valor/coste y responde "quiero ver X, qué fuente".
+
+Un detalle que quedó anotado en el segundo y vale la pena: **el único ciclo rojo↔azul cerrado del vault sigue siendo el de LSASS**. Es el único lugar donde se puede seguir una técnica, ver qué artefacto emite y leer la detección que lo consume. Ese recorrido es el modelo del vault funcionando, y hay exactamente uno.
 
 ## Pendientes
 
