@@ -1,7 +1,7 @@
 ---
 tipo: tradecraft
-clase: "[[CWE-434 - Unrestricted File Upload]]"
-eje: impacto
+clase: "[[CWE-611 - XML External Entity]]"
+eje: formato-de-entrada
 implementacion: "Subir un archivo XML (SVG/DOCX) con entidad externa que el parser resuelve"
 opsec: requiere-bypass
 telemetria: ["[[Log de acceso del servidor web]]", "[[Consulta DNS saliente]]"]

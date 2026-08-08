@@ -19,7 +19,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Seis dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF |
+| Contenido rojo — web | Siete dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
 | Contenido azul | **Una sola detección, y es de Windows.** Cero del lado web — ver Pendientes |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -146,6 +146,20 @@ Cinco ejes: retorno × destino × esquema × bypass del filtro × impacto.
 
 **Deuda declarada:** el MOC enlaza `CWE-611 - XML External Entity`, que todavía no existe. Es enlace roto a propósito, igual que `T1558.003 - Kerberoasting` en el MOC de AD: marca el hueco en el grafo en vez de esconderlo.
 
+### 2026-08-06 — Dominio XXE
+
+Cuatro ejes: canal × mecanismo × obstáculo × impacto. El formato de entrada va a matriz, mismo criterio que la superficie en SSRF.
+
+**El mecanismo sí es eje, el formato no.** Entidad general, entidad de parámetro y XInclude no son sintaxis distinta de lo mismo: cambian qué se puede hacer y bajo qué condiciones. XInclude en particular funciona sin `DOCTYPE`, que es justo lo que queda cuando la app inserta la entrada en un XML propio, y por eso tiene nota de criterio propia. El formato de entrada —SOAP, SVG, OOXML, SAML— es catálogo de reconocimiento y va entero a matriz.
+
+**Deuda taxonómica saldada.** [[File upload - XXE por archivo]] pasó de `CWE-434` a [[CWE-611 - XML External Entity]]. Era el caso que hizo explícita la regla: **la `clase:` es la vulnerabilidad, no el vector de entrada**. La subida es cómo llega el XML; la vulnerabilidad es que el parser resuelve entidades. El MOC de upload lo sigue indexando —la navegación no depende de la taxonomía— y ahora ambos MOC se referencian.
+
+Queda la otra mitad de esa deuda: [[LFI - phar deserialization]] sigue colgando de `CWE-98` y le corresponde `CWE-502`, que necesita el dominio de deserialización.
+
+**Telemetría:** [[Log de errores del servidor web]], tercer artefacto web granular. Es el par complementario del log de acceso —uno registra qué se pidió, el otro qué se rompió— y es donde vive todo el reconocimiento fallido, que es la mayor parte de un ataque.
+
+**Hueco de fuente, no de contenido.** Un XXE de lectura local con `file://` **no emite nada**: sin conexión de red, sin proceso hijo, sin error. Ninguna fuente por defecto lo ve. Es el primer caso del vault donde el hueco defensivo no se cierra escribiendo una detección, porque no hay artefacto que consumir — haría falta inspección del cuerpo de la petición o instrumentación del parser. Anotado como tal en el MOC.
+
 ## Pendientes
 
 ### Inmediatos
@@ -158,8 +172,8 @@ Cinco ejes: retorno × destino × esquema × bypass del filtro × impacto.
 
 - [ ] **Cara azul de web — el pendiente de fondo.** Veinte variantes de tradecraft emiten [[Log de acceso del servidor web]] y ninguna detección lo consume: `consultas.py huecos` lo canta. Dos trabajos distintos: granular la telemetría web (empezado con [[Proceso hijo del servidor web]]; faltan log de errores, log de queries, WAF, `report-uri` de CSP, auditoría de escritura en la raíz web) y escribir las detecciones. Mientras esto no exista, la regla 3 del `CLAUDE.md` no se cumple y el vault fusionado no rinde más que dos separados
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Dominios web que siguen, por orden: XXE → control de acceso/IDOR → autenticación y sesión → deserialización → CSRF → SSTI
-- [ ] **Deuda taxonómica:** [[File upload - XXE por archivo]] cuelga de `CWE-434` y [[LFI - phar deserialization]] de `CWE-98`. En ambos casos la `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrigen a `CWE-611` y `CWE-502` cuando existan esos dominios
+- [ ] Dominios web que siguen, por orden: control de acceso/IDOR → autenticación y sesión → deserialización → CSRF → SSTI
+- [ ] **Deuda taxonómica:** [[LFI - phar deserialization]] cuelga de `CWE-98` y le corresponde `CWE-502`. La `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrige cuando exista el dominio de deserialización. La mitad de XXE ya está saldada
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`
 

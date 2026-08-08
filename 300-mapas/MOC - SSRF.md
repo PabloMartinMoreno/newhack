@@ -121,5 +121,5 @@ La fila de metadatos es la de mayor fidelidad de todo el vault del lado web: una
 - [x] Esquema — [[SSRF - gopher a servicio interno]] y su matriz
 - [x] Bypass del filtro — en [[SSRF evasión - matriz de referencia]]
 - [ ] **Cara azul sin escribir.** [[Conexión saliente del servidor de aplicación]] existe y ninguna detección lo consume
-- [ ] `CWE-611 - XML External Entity` no existe todavía: [[File upload - XXE por archivo]] sigue colgando de `CWE-434`
+- [x] XXE como vector de SSRF — [[MOC - XXE]], y [[File upload - XXE por archivo]] ya cuelga de su CWE correcta
 - [ ] Explotación posterior de credenciales de nube — es otro dominio, no de web

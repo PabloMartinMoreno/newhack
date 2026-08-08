@@ -69,13 +69,13 @@ Subí una webshell .php simple. ¿Qué la rechaza?
 Cuando la subida no da ejecución de código, sigue habiendo impacto según qué archivo acepta:
 
 - [[File upload - SVG y XSS almacenado]] — SVG con script servido inline = XSS almacenado.
-- [[File upload - XXE por archivo]] — SVG/DOCX/XML parseado en el server = lectura de archivos, SSRF.
+- [[File upload - XXE por archivo]] — SVG/DOCX/XML parseado en el server = lectura de archivos, SSRF. La subida es el vector; la vulnerabilidad es de [[MOC - XXE]], y ahí cuelga su `clase:`.
 - [[File upload - sobrescritura por nombre]] — `../` en el nombre para elegir dónde cae o qué pisa.
 
-Payloads de SVG/XXE en [[File upload - archivos maliciosos - matriz de referencia]].
+Payloads de SVG/XXE en [[File upload - archivos maliciosos - matriz de referencia]]; el dominio completo, en [[XXE formatos - matriz de referencia]].
 
 ## Huecos conocidos
 
 - [x] Bypass + webshell + combo
 - [x] SVG-XSS, XXE por archivo, sobrescritura por nombre — arriba
-- [ ] XXE completo (CWE-611: parámetro directo, blind, XInclude) — **dominio aparte**, sin modelar
+- [x] XXE completo — [[MOC - XXE]], dominio aparte, ya modelado
