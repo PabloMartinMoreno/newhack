@@ -2,7 +2,6 @@
 tipo: meta
 aliases:
   - Payloads path traversal
-  - directory traversal
 tags:
   - meta/referencia
   - dominio/web

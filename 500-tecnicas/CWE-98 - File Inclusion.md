@@ -7,9 +7,8 @@ tacticas: []
 aliases:
   - CWE-98
   - CWE-22
-  - LFI
-  - RFI
   - File Inclusion
+  - Inclusión de archivos
 tags:
   - dominio/web
 ---

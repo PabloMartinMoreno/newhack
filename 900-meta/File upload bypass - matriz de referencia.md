@@ -2,7 +2,7 @@
 tipo: meta
 aliases:
   - Payloads file upload
-  - upload bypass
+  - Payloads bypass de upload
 tags:
   - meta/referencia
   - dominio/web
