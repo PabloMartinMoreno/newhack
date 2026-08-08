@@ -19,7 +19,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Siete dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE |
+| Contenido rojo — web | Ocho dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso |
 | Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
 | Contenido azul | **Una sola detección, y es de Windows.** Cero del lado web — ver Pendientes |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -160,6 +160,18 @@ Queda la otra mitad de esa deuda: [[LFI - phar deserialization]] sigue colgando 
 
 **Hueco de fuente, no de contenido.** Un XXE de lectura local con `file://` **no emite nada**: sin conexión de red, sin proceso hijo, sin error. Ninguna fuente por defecto lo ve. Es el primer caso del vault donde el hueco defensivo no se cierra escribiendo una detección, porque no hay artefacto que consumir — haría falta inspección del cuerpo de la petición o instrumentación del parser. Anotado como tal en el MOC.
 
+### 2026-08-06 — Dominio Broken access control
+
+Tres CWE en un MOC: [[CWE-639 - Authorization Bypass Through User-Controlled Key]] (IDOR), [[CWE-862 - Missing Authorization]] (vertical y `forced browsing`) y [[CWE-915 - Improperly Controlled Modification of Dynamically-Determined Object Attributes]] (mass assignment). Comparten lo único que importa a efectos operativos: **el mismo método de prueba**. La matriz actor × objeto × operación las encuentra a las tres, y separarlas obligaría a repetir ese método en tres mapas.
+
+**El dominio no tiene payloads, y eso cambia la forma del MOC.** Es la primera divergencia estructural real desde que se fijó el patrón con SQLi. En los seis dominios anteriores la matriz principal es de sintaxis; acá es de **método**, porque no hay nada que romper: la petición es válida, la sesión legítima y la respuesta `200`. Lo único fuera de lugar es quién la manda. Consecuencia: [[Control de acceso - matriz de pruebas]] es la nota central del dominio y va antes que cualquier técnica en el orden de aprendizaje, al revés que en todos los demás.
+
+**Los identificadores no predecibles no son mitigación**, y está escrito explícito en el MOC y en la CWE. Es la confusión más común del dominio: si el hallazgo se cierra cambiando un entero por un UUID, no se cerró — el control sigue ausente y el identificador se filtra igual.
+
+**Telemetría:** [[Log de auditoría de la aplicación]], cuarto artefacto web y el primero que **no se activa: se construye**. Ninguna configuración lo enciende. Y hay un segundo problema encima: la mayoría de las implementaciones registran actor y acción pero no el **dueño del objeto** ni los **campos modificados**, que son justo los dos campos de los que depende toda la cara azul del dominio. Sin ellos queda un historial, no una detección.
+
+**Hueco de tipo nuevo, otra vez.** [[Control de acceso - salto de contexto]] no se detecta con una regla sobre un evento sino verificando un invariante sobre una **secuencia** de eventos. El vault no modela ese tipo de detección: el esquema de `deteccion` asume una regla sobre un artefacto. Queda anotado; si aparece un segundo caso, habrá que revisar el esquema.
+
 ## Pendientes
 
 ### Inmediatos
@@ -172,7 +184,7 @@ Queda la otra mitad de esa deuda: [[LFI - phar deserialization]] sigue colgando 
 
 - [ ] **Cara azul de web — el pendiente de fondo.** Veinte variantes de tradecraft emiten [[Log de acceso del servidor web]] y ninguna detección lo consume: `consultas.py huecos` lo canta. Dos trabajos distintos: granular la telemetría web (empezado con [[Proceso hijo del servidor web]]; faltan log de errores, log de queries, WAF, `report-uri` de CSP, auditoría de escritura en la raíz web) y escribir las detecciones. Mientras esto no exista, la regla 3 del `CLAUDE.md` no se cumple y el vault fusionado no rinde más que dos separados
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Dominios web que siguen, por orden: control de acceso/IDOR → autenticación y sesión → deserialización → CSRF → SSTI
+- [ ] Dominios web que siguen, por orden: autenticación y sesión → deserialización → CSRF → SSTI
 - [ ] **Deuda taxonómica:** [[LFI - phar deserialization]] cuelga de `CWE-98` y le corresponde `CWE-502`. La `clase:` apunta al vector de entrada, no a la vulnerabilidad. Se corrige cuando exista el dominio de deserialización. La mitad de XXE ya está saldada
 - [ ] [[MOC - Active Directory]]: delegaciones y ADCS
 - [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`

@@ -19,6 +19,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - Command injection]] — comandos de SO y argument injection
 - [[MOC - SSRF]] — petición forzada desde el servidor
 - [[MOC - XXE]] — entidades externas XML
+- [[MOC - Broken access control]] — IDOR, escalada vertical, mass assignment
 
 **Infra**
 - [[MOC - Active Directory]] — semilla, sin desarrollar
