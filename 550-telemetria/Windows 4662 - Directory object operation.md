@@ -63,5 +63,5 @@ Sin el paso 2 la directiva está encendida y no se registra nada útil. Es el er
 
 ## Quién lo emite / quién lo consume
 
-Rojo: pendiente — [[MOC - Active Directory]] está sin desarrollar
+Rojo: [[DCSync]]
 Azul: pendiente — ver [[MOC - Telemetría de Windows]]

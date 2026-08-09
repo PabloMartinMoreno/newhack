@@ -57,5 +57,5 @@ Auditoría de Kerberos habilitada en los controladores de dominio. Suele estar p
 
 ## Quién lo emite / quién lo consume
 
-Rojo: pendiente — [[MOC - Active Directory]] está sin desarrollar
+Rojo: [[AS-REP roasting]] · [[Golden ticket]] · [[ADCS - certificado con SAN arbitrario]]
 Azul: pendiente — ver [[MOC - Telemetría de Windows]]

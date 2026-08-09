@@ -49,5 +49,5 @@ Sección correspondiente de la configuración de Sysmon. Complementa con el even
 
 ## Quién lo emite / quién lo consume
 
-Rojo: pendiente — ver [[MOC - Telemetría de Windows]]
+Rojo: [[LSASS - volcado vía comsvcs.dll MiniDump]]
 Azul: pendiente

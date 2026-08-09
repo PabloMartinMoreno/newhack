@@ -45,5 +45,5 @@ Sysmon no viene instalado en Windows. Requiere despliegue y una configuración c
 
 ## Quién lo emite / quién lo consume
 
-Rojo: [[LSASS - volcado vía comsvcs.dll MiniDump]]
+Rojo: [[LSASS - volcado vía comsvcs.dll MiniDump]] · [[Pass-the-ticket]]
 Azul: [[Acceso a LSASS desde proceso no firmado]]

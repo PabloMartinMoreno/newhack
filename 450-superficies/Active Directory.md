@@ -1,8 +1,8 @@
 ---
 tipo: superficie
 plataforma: [windows]
-tecnicas: ["[[T1003.001 - LSASS Memory]]"]
-telemetria: ["[[Sysmon EID 10 - ProcessAccess]]"]
+tecnicas: ["[[T1087.002 - Domain Account Discovery]]", "[[T1558.004 - AS-REP Roasting]]", "[[T1558.003 - Kerberoasting]]", "[[T1003.001 - LSASS Memory]]", "[[T1550.002 - Pass the Hash]]", "[[T1550.003 - Pass the Ticket]]", "[[T1003.006 - DCSync]]", "[[T1558.001 - Golden Ticket]]", "[[T1649 - Steal or Forge Authentication Certificates]]"]
+telemetria: ["[[Sysmon EID 10 - ProcessAccess]]", "[[Windows 4768 - Kerberos TGT requested]]", "[[Windows 4769 - Kerberos service ticket requested]]", "[[Windows 4662 - Directory object operation]]", "[[Windows 4624 - Successful logon]]"]
 aliases:
   - AD
 tags:

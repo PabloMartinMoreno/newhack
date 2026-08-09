@@ -28,8 +28,8 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**
 - [[MOC - Telemetría de Windows]] — qué ve cada fuente, qué cuesta, qué no ve
 
-**Infra**
-- [[MOC - Active Directory]] — semilla, sin desarrollar
+**Infra / AD**
+- [[MOC - Active Directory]] — enumeración, roasting, movimiento lateral, persistencia. Cara azul en Telemetría de Windows
 
 > Al cerrar un dominio nuevo, agregar su MOC acá.
 

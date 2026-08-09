@@ -20,10 +20,10 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Once dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización |
-| Contenido rojo — infra | Sin empezar. [[MOC - Active Directory]] es semilla |
+| Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos. `huecos` da **cero**. Todas en `estado: idea`, ninguna validada |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 14 artefactos + [[MOC - Telemetría de Windows]]. **Andamiaje**: sin emisores rojos ni detecciones todavía |
+| Contenido azul — Windows | 14 artefactos. Los 9 que AD usa ya tienen emisores; faltan las detecciones |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -280,6 +280,24 @@ Cambio de propósito respecto de todo lo anterior. Hasta acá cada nota azul nac
 **Dos MOC nuevos que no son de una tecnología ni de una clase de vulnerabilidad**, que es una forma que el vault no tenía: [[MOC - Fundamentos de detección]] ordena los conceptos como secuencia de lectura y da dos árboles —por dónde empezar a detectar algo, y qué revisar cuando una regla no sirve—; [[MOC - Telemetría de Windows]] ordena las fuentes por relación valor/coste y responde "quiero ver X, qué fuente".
 
 Un detalle que quedó anotado en el segundo y vale la pena: **el único ciclo rojo↔azul cerrado del vault sigue siendo el de LSASS**. Es el único lugar donde se puede seguir una técnica, ver qué artefacto emite y leer la detección que lo consume. Ese recorrido es el modelo del vault funcionando, y hay exactamente uno.
+
+### 2026-08-08 — El lado rojo de Active Directory
+
+Corrección de rumbo pedida por el usuario: **no le toca a él completar campos**. El error fue tratar "qué técnica emite qué artefacto" como si fuera `probado:` —una observación personal que no se puede inventar— cuando en realidad es conocimiento documentado, o sea la nota que me toca escribir a mí. Lo que faltaba no eran campos para que él llene: era el **lado rojo de Windows** entero.
+
+Ocho técnicas ATT&CK y ocho tradecraft, organizados por **lo que tenés** —nada, una credencial, admin local, admin de dominio— y no por técnica, porque en AD cada nivel de acceso abre unas ramas y cierra otras.
+
+Con esto, [[Sysmon EID 10 - ProcessAccess]] deja de sostener una sola técnica: ahora los catorce artefactos de Windows que antes eran andamiaje tienen emisores reales declarados, escritos y no supuestos. El campo *Quién lo emite* se llenó solo al escribir el rojo, que es como tenía que ser.
+
+Tres lecciones del dominio quedaron en el MOC, y son las que más enseñan de detección:
+
+**Ataque fuera de línea → se detecta la petición, no el ataque.** Roasting rompe el material sin conexión; la única ventana es pedir los tickets.
+
+**Uso invisible → se detecta el paso anterior.** Pasar el ticket es Kerberos legítimo; lo que se ve es robarlo de memoria, que es el mismo acceso a LSASS que ya tiene detección. Es el mismo principio que en [[Sesión - token predecible]] del lado web.
+
+**Fidelidad altísima puede no dejar rastro si la fuente está mal configurada.** [[DCSync]] no emite nada si la auditoría no está sobre el objeto raíz del dominio — el segundo paso que nadie hace. Es el caso más claro de [[Ausencia de alertas no es ausencia de ataque]] en todo el vault.
+
+**`huecos` ahora marca los artefactos de Windows**, y está bien: el rojo de AD existe y las detecciones azules no. Es el mismo estado que tenía el web antes de escribir su cara azul, y el trabajo que HTB va a alimentar directamente.
 
 ## Pendientes
 

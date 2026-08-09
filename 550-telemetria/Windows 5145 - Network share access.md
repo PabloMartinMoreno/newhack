@@ -57,5 +57,5 @@ Auditoría detallada de recursos compartidos por directiva. **No viene por defec
 
 ## Quién lo emite / quién lo consume
 
-Rojo: pendiente — [[MOC - Active Directory]] está sin desarrollar
+Rojo: [[Pass-the-hash]]
 Azul: pendiente — ver [[MOC - Telemetría de Windows]]

@@ -59,5 +59,5 @@ La alternativa nativa es [[Windows 4688 - Process creation]], que no necesita in
 
 ## Quién lo emite / quién lo consume
 
-Rojo: pendiente — el lado rojo de Windows en este vault es solo [[LSASS - volcado vía comsvcs.dll MiniDump]]
+Rojo: [[LSASS - volcado vía comsvcs.dll MiniDump]]
 Azul: pendiente — ver [[MOC - Telemetría de Windows]]

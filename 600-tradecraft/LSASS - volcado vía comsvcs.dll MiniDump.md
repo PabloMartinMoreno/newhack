@@ -3,7 +3,7 @@ tipo: tradecraft
 clase: "[[T1003.001 - LSASS Memory]]"
 implementacion: "rundll32 comsvcs.dll,MiniDump — LOLBin, sin binario propio en disco"
 opsec: quemado
-telemetria: ["[[Sysmon EID 10 - ProcessAccess]]"]
+telemetria: ["[[Sysmon EID 10 - ProcessAccess]]", "[[Sysmon EID 1 - ProcessCreate]]", "[[Sysmon EID 11 - FileCreate]]"]
 requisitos: [admin-local, seDebugPrivilege]
 coste: bajo
 alternativas: []
