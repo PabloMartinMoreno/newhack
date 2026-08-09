@@ -17,6 +17,10 @@ Comandos:
     cobertura        técnicas y cuántas caras tiene cada una
     higiene          frontmatter, enlaces rotos, alias duplicados, MOC sin indexar, inbox
     todo             todas las anteriores
+
+`higiene` sale con código distinto de cero si encuentra algo que rompe el índice,
+para que sirva de pre-commit y de CI. No cuentan como error los enlaces rotos en
+`alternativas:` (roadmap declarado) ni el inbox estancado (recordatorio).
 """
 
 import os
@@ -63,7 +67,13 @@ class Nota:
         except yaml.YAMLError as e:
             self.error = f"YAML inválido: {str(e).splitlines()[0]}"
             return
-        self.enlaces = [t.strip() for t in WIKILINK.findall(m.group(1)) if t.strip()]
+        for campo, valor in self.fm.items():
+            for crudo in (valor if isinstance(valor, list) else [valor]):
+                if not isinstance(crudo, str):
+                    continue
+                for t in WIKILINK.findall(crudo):
+                    if t.strip():
+                        self.enlaces.append((campo, t.strip()))
 
     @property
     def tipo(self):
@@ -119,10 +129,10 @@ class Vault:
             for a in n.aliases:
                 indice.setdefault(a.lower(), n)
         for n in self.notas:
-            for destino in n.enlaces:
+            for campo, destino in n.enlaces:
                 d = indice.get(destino.lower())
                 if d is None:
-                    self.rotos.append((n, destino))
+                    self.rotos.append((n, campo, destino))
                 elif d is not n:
                     d.entrantes.append(n)
         self.indice = indice
@@ -292,9 +302,14 @@ def higiene(vault, _):
                 filas.append((n.rel, f"forma={forma} sin ventana"))
     tabla(["Nota", "Problema"], filas, "frontmatter limpio")
 
+    rompen = [(n.rel, campo, d) for n, campo, d in vault.rotos if campo != "alternativas"]
+    roadmap = [(n.rel, d) for n, campo, d in vault.rotos if campo == "alternativas"]
+
     print("  Enlaces rotos en frontmatter (rompen el índice en silencio):")
-    tabla(["Origen", "Destino inexistente"],
-          [(n.rel, d) for n, d in vault.rotos], "ninguno")
+    tabla(["Origen", "Campo", "Destino inexistente"], rompen, "ninguno")
+
+    print("  Roadmap en alternativas: (notas todavía no escritas, no es error):")
+    tabla(["Origen", "Destino pendiente"], roadmap, "ninguno")
 
     dueños = {}
     for n in vault.notas:
@@ -331,6 +346,8 @@ def higiene(vault, _):
             viejas.append((n.nombre, mtime.isoformat()))
     print("  Inbox estancado (> 14 días):")
     tabla(["Nota", "Modificada"], viejas, "inbox al día")
+
+    return len(filas) + len(rompen) + len(choques) + len(sin_indexar)
 
 
 COMANDOS = {
@@ -375,9 +392,12 @@ def main():
     vault = Vault(vault_dir)
     print(f"\033[2mvault: {vault.raiz} — {len(vault.notas)} notas\033[0m")
 
+    problemas = 0
     for fn in (COMANDOS.values() if comando == "todo" else [COMANDOS[comando]]):
-        fn(vault, meses)
-    return 0
+        problemas += fn(vault, meses) or 0
+    if problemas:
+        print(f"\033[1m{problemas} problema(s) de higiene — el índice está roto\033[0m")
+    return 1 if problemas else 0
 
 
 if __name__ == "__main__":

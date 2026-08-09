@@ -1,0 +1,24 @@
+#!/bin/sh
+# Higiene del vault antes de cada commit. Instalar con:
+#     ln -sf ../../900-meta/pre-commit .git/hooks/pre-commit
+#
+# Bloquea: frontmatter inválido, enums fuera de rango, tradecraft sin
+# opsec/probado/contexto/telemetria, detección sin forma o sin ventana,
+# enlaces rotos en frontmatter, alias duplicados, MOC sin indexar en Inicio.md.
+# No bloquea: roadmap en alternativas:, inbox estancado.
+#
+# Valida el árbol de trabajo, no el índice. A propósito: un enlace se rompe
+# contra las notas que existen en disco, no contra las que están en stage.
+#
+# Saltear en un commit puntual: git commit --no-verify
+
+git rev-parse --show-toplevel >/dev/null 2>&1 || exit 0
+raiz=$(git rev-parse --show-toplevel)
+
+git diff --cached --name-only --diff-filter=ACMR -- '*.md' | grep -q . || exit 0
+
+python3 "$raiz/900-meta/consultas.py" higiene --vault "$raiz" || {
+    echo
+    echo "Commit abortado: arreglar la higiene o usar git commit --no-verify"
+    exit 1
+}
