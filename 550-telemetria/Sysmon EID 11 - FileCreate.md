@@ -50,4 +50,4 @@ Sección correspondiente de la configuración de Sysmon. Complementa con el even
 ## Quién lo emite / quién lo consume
 
 Rojo: [[LSASS - volcado vía comsvcs.dll MiniDump]]
-Azul: pendiente
+Azul: [[Acceso a LSASS desde proceso no firmado]]

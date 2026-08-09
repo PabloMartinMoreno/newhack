@@ -69,4 +69,4 @@ Viene por defecto en la mayoría de las configuraciones. Lo que hay que verifica
 ## Quién lo emite / quién lo consume
 
 Rojo: [[Enumeración LDAP del directorio]] · [[Pass-the-hash]] · [[Pass-the-ticket]] · [[Golden ticket]]
-Azul: pendiente
+Azul: [[Autenticación NTLM donde el dominio usa Kerberos]]

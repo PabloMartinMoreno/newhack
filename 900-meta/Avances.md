@@ -21,9 +21,9 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Once dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
-| Contenido azul — web | 16 detecciones sobre 12 artefactos. `huecos` da **cero**. Todas en `estado: idea`, ninguna validada |
+| Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 14 artefactos. Los 9 que AD usa ya tienen emisores; faltan las detecciones |
+| Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -298,6 +298,22 @@ Tres lecciones del dominio quedaron en el MOC, y son las que más enseñan de de
 **Fidelidad altísima puede no dejar rastro si la fuente está mal configurada.** [[DCSync]] no emite nada si la auditoría no está sobre el objeto raíz del dominio — el segundo paso que nadie hace. Es el caso más claro de [[Ausencia de alertas no es ausencia de ataque]] en todo el vault.
 
 **`huecos` ahora marca los artefactos de Windows**, y está bien: el rojo de AD existe y las detecciones azules no. Es el mismo estado que tenía el web antes de escribir su cara azul, y el trabajo que HTB va a alimentar directamente.
+
+### 2026-08-08 — La cara azul de Active Directory
+
+Cerrada igual que la de web: escribir las detecciones que consumen los artefactos que el rojo de AD dejó emitiendo. `huecos` volvió a dar cero, ahora con AD dentro de la cuenta.
+
+Seis detecciones. Lo que enseñan sobre por qué las fuentes de Kerberos importan tanto:
+
+**Dos de alta fidelidad y forma `evento`**, porque su condición casi no ocurre legítimamente: [[Solicitud de TGT sin preautenticación]] (AS-REP roasting) y [[Replicación de directorio desde un origen no autorizado]] (DCSync). No se evaden bajando el volumen — no dependen del volumen.
+
+**La de DCSync tiene el requisito previo más severo del vault.** Depende de que la auditoría esté configurada **sobre el objeto raíz del dominio**, no solo habilitada. Sin ese segundo paso, la técnica de mayor fidelidad del dominio no emite nada. La nota lo pone en un callout: verificar que el evento se genera es el primer paso, no escribir la lógica.
+
+**La de golden ticket llega tarde por diseño**, y quedó escrito. Cuando el ticket forjado se usa, el compromiso que consiguió la clave ya ocurrió. La regla detecta el uso —un ticket de servicio sin ticket inicial previo, forma `invariante`— pero la prevención está aguas arriba, en el robo de la clave.
+
+Dos artefactos secundarios del volcado de LSASS —creación de proceso y del archivo de volcado— se cerraron **sin regla nueva**: se agregaron como telemetría corroborante a la detección de acceso a LSASS que ya existía, que es lo que son. Inventar dos reglas débiles habría sido peor que declarar la corroboración.
+
+Queda una técnica de AD sin detección **a propósito**: [[Enumeración LDAP del directorio]]. Es el punto ciego del dominio —tráfico legítimo indistinguible— y está declarado como hueco en el MOC, no escondido. Mismo criterio que argument injection y el XXE local del lado web: nombrar lo que no se detecta es parte del trabajo.
 
 ## Pendientes
 

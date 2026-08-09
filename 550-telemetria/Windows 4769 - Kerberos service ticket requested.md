@@ -63,4 +63,4 @@ Igual que 4768: auditoría de Kerberos en **todos** los controladores de dominio
 ## Quién lo emite / quién lo consume
 
 Rojo: [[Kerberoasting]] · [[Golden ticket]]
-Azul: pendiente — ver [[MOC - Telemetría de Windows]]
+Azul: [[Ticket de servicio sin ticket inicial previo]] · [[Tickets de servicio con cifrado débil en volumen]]

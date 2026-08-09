@@ -58,4 +58,4 @@ Auditoría detallada de recursos compartidos por directiva. **No viene por defec
 ## Quién lo emite / quién lo consume
 
 Rojo: [[Pass-the-hash]]
-Azul: pendiente — ver [[MOC - Telemetría de Windows]]
+Azul: [[Autenticación NTLM donde el dominio usa Kerberos]]

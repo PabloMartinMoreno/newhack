@@ -1,7 +1,7 @@
 ---
 tipo: deteccion
 tecnicas: ["[[T1003.001 - LSASS Memory]]"]
-telemetria: ["[[Sysmon EID 10 - ProcessAccess]]"]
+telemetria: ["[[Sysmon EID 10 - ProcessAccess]]", "[[Sysmon EID 1 - ProcessCreate]]", "[[Sysmon EID 11 - FileCreate]]"]
 forma: evento
 ventana: 
 estado: borrador

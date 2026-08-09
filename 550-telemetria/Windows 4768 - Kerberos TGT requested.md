@@ -58,4 +58,4 @@ Auditoría de Kerberos habilitada en los controladores de dominio. Suele estar p
 ## Quién lo emite / quién lo consume
 
 Rojo: [[AS-REP roasting]] · [[Golden ticket]] · [[ADCS - certificado con SAN arbitrario]]
-Azul: pendiente — ver [[MOC - Telemetría de Windows]]
+Azul: [[Solicitud de TGT sin preautenticación]] · [[Ticket de servicio sin ticket inicial previo]]

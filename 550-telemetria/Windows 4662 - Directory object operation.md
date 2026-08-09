@@ -64,4 +64,4 @@ Sin el paso 2 la directiva está encendida y no se registra nada útil. Es el er
 ## Quién lo emite / quién lo consume
 
 Rojo: [[DCSync]]
-Azul: pendiente — ver [[MOC - Telemetría de Windows]]
+Azul: [[Replicación de directorio desde un origen no autorizado]]
