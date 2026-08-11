@@ -19,11 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Once dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización |
+| Contenido rojo — web | Trece dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
+| Cheatsheets | 54 matrices: 45 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 76 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -315,6 +317,51 @@ Dos artefactos secundarios del volcado de LSASS —creación de proceso y del ar
 
 Queda una técnica de AD sin detección **a propósito**: [[Enumeración LDAP del directorio]]. Es el punto ciego del dominio —tráfico legítimo indistinguible— y está declarado como hueco en el MOC, no escondido. Mismo criterio que argument injection y el XXE local del lado web: nombrar lo que no se detecta es parte del trabajo.
 
+### 2026-08-10 — El campo que mentía, y los cheatsheets que faltaban
+
+Sesión de revisión, no de contenido nuevo. Salieron tres cosas y las tres eran de honestidad del vault, no de cobertura.
+
+**`probado:` mentía en 63 de 67 notas.** Cuarenta y dos decían `2026-08-06` y veintiuna `2026-08-08`: exactamente los días en que se escribieron. Ninguna técnica del vault se corrió nunca en un laboratorio. El campo existe para que el conocimiento caduco se vea, y relleno con la fecha de escritura hacía lo contrario — `revalidacion` daba "sin backlog" y en febrero de 2027 iba a escupir 63 falsos de golpe.
+
+Las 67 pasaron a `probado: nunca`, que es el valor honesto y ahora el que trae la plantilla. Tres consecuencias en la herramienta:
+
+- `higiene` rechaza un `probado:`/`validada:` que no sea `nunca` ni fecha ISO pasada. Sin ese control, una fecha mal escrita caía en el mismo hueco que "nunca probado" y no se distinguía de una nota recién nacida.
+- `revalidacion` **resume** las nunca probadas en una línea y las lista con `--nunca`. A 67 filas la consulta dejaba de leerse, y el backlog que exige trabajo es el de las que sí tienen fecha y venció.
+- Mientras `probado:` sea `nunca`, `contexto:` es el entorno **contra el que hay que probarla** — plan de laboratorio, no registro. Queda escrito en el esquema.
+
+**Doce checkboxes de "Huecos conocidos" estaban vencidos.** Seis MOCs web decían "Cara azul sin escribir" dos días después de escribirla; [[MOC - Active Directory]] decía que no había ninguna detección de AD cuando hay seis; [[MOC - Telemetría de Windows]] daba el lado rojo por inexistente. Es el mismo desfase que ya había tenido esta bitácora, ahora en la capa de navegación, que es peor: el MOC es lo primero que se lee. Barridos y reemplazados por lo que de verdad falta, que en casi todos los casos es **validación en laboratorio**, no contenido.
+
+**Los cheatsheets estaban repartidos mal.** Cuarenta y una matrices y **cuarenta eran de web**: cero de AD, cero del lado azul. El usuario aclaró que el producto que usa es la matriz, así que el desbalance no era cosmético — era la mitad de lo que usa, faltando.
+
+Nueve matrices nuevas. Cinco de AD, ordenadas por la misma pregunta que ordena su MOC —qué tengo—: [[AD enumeración - matriz de referencia]], [[AD roasting - matriz de referencia]], [[AD volcado de credenciales - matriz de referencia]], [[AD movimiento lateral - matriz de referencia]], [[AD persistencia - matriz de referencia]].
+
+Cuatro azules, que es la novedad de forma: **es la primera vez que el vault tiene sintaxis del lado defensivo**. [[Sigma - matriz de referencia]], [[KQL - matriz de referencia]], [[Sysmon - matriz de configuración]] y [[Detección por forma - matriz de referencia]].
+
+La última es la que importa y no existía en ningún corpus externo: traduce cada valor de `forma:` a una consulta concreta. Escribirla dejó explícito algo que estaba implícito desde que se agregó el campo — **Sigma no puede expresar `invariante`**. No hay tipo de correlación que diga "esto no debería existir sin aquello", y las tres reglas de esa forma van obligatoriamente en KQL con `leftanti`. Es la razón concreta por la que `logica:` es un campo por detección y no una constante del vault.
+
+### 2026-08-10 — Dominios CSRF y SSTI
+
+Los dos siguientes del roadmap de web. Ninguno necesitó telemetría ni detección nueva, y eso ya no es casualidad: son el tercero y el cuarto que se cierran reutilizando reglas existentes.
+
+**CSRF — el dominio que parece muerto y no lo está.** Lo que mató `SameSite` por defecto fue el `POST` de origen cruzado, que era la única forma que se enseñaba. Quedaron vivas cuatro, y son las que aparecen en aplicaciones modernas: acciones por `GET`, cookies con `SameSite=None` explícito, peticiones desde subdominios —que para las cookies no son otro sitio— y API con sesión por cookie.
+
+El eje que genera notas es **qué defensa hay que romper**, y solo ese. La entrega —`GET`, autoenvío, `text/plain`, multipart— va entera a matriz por el mismo criterio que la shell en command injection: cambia el HTML, no cambia la decisión. Cinco tradecraft, uno por defensa.
+
+Dos cosas que quedaron escritas en el MOC y valen más que las técnicas:
+
+- **La primera pregunta descarta el dominio entero.** Si la sesión viaja en una cabecera y no en una cookie, el navegador no adjunta nada solo y no hay CSRF. Una petición para saberlo.
+- **La severidad va de informativa a crítica con la misma vulnerabilidad.** Es el dominio donde esa distancia es mayor, y por eso tiene un segundo árbol que no es de técnica sino de impacto. El CSRF de inicio de sesión es el que más se pasa por alto: no le saca nada a la víctima, la deja operando en la cuenta del atacante.
+
+**SSTI — se enseña al revés.** La imagen de "SSTI igual a RCE" produce dos errores caros: tirar payloads antes de identificar el motor, y abandonar el hallazgo cuando no se llega a ejecutar. El árbol está ordenado contra las dos: identificar es obligatorio y **pedir el contexto va antes que escalar**, porque cuesta una petición y devuelve la clave de firma con frecuencia suficiente. Con la clave se falsifican sesiones sin tocar el sistema operativo — o sea que la rama "sin ejecución" es toma de cuenta, no un consuelo.
+
+El eje es la **capacidad del motor** —ejecución directa, entorno restringido, sin lógica, del lado del cliente—, no el motor. Fue la decisión más difícil del dominio: el motor cambia el payload por completo, que es justo el argumento que lo haría parecer eje. No lo es, porque no cambia la decisión; lo que decide es qué capacidad expone. Mismo precedente que el motor de base de datos en [[MOC - SQL injection]].
+
+**Una ventaja defensiva rara, anotada en el MOC.** En casi todos los dominios el atacante puede saltear el reconocimiento si ya sabe lo que busca. En SSTI no: identificar el motor exige provocar errores, y cada payload equivocado deja una excepción con el nombre de la plantilla. La ventana de detección es **anterior** al ataque exitoso, no simultánea — y la cubre [[Ráfaga de errores del servidor desde un mismo origen]], que ya existía.
+
+**Un límite de fuente nuevo:** [[SSTI - lectura sin ejecución]] no emite absolutamente nada. No nace proceso, no sale conexión, no hay excepción. Es el tercer caso del vault —con el XXE local y [[Argument injection - abuso de flags]]— donde el hueco no se cierra escribiendo una detección porque no hay artefacto que consumir.
+
+Cuatro matrices nuevas: [[CSRF entrega - matriz de referencia]], [[CSRF bypass - matriz de referencia]], [[SSTI - matriz de identificación]] y [[SSTI payloads - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -326,14 +373,17 @@ Queda una técnica de AD sin detección **a propósito**: [[Enumeración LDAP de
 ### Contenido
 
 - [x] ~~Cara azul de web~~ — cerrada el 2026-08-08. `huecos` da `sin huecos`. La regla 3 del `CLAUDE.md` se cumple y la fusión del vault se justifica
-- [ ] **Validar las 16 detecciones en laboratorio.** Todas están en `estado: idea` y sin `validada:`. Las de `forma: evento` se validan con un disparo; las de `agregado` necesitan volumen **y línea base**, que es el trabajo caro. Pasar a `borrador` lo que se pruebe
+- [ ] **Laboratorio — el cuello de botella, y ahora el único.** 67 tradecraft en `probado: nunca` y 22 detecciones en `estado: idea`. Empezar por las **7 detecciones de `forma: evento`**: se validan con un disparo. Las 10 de `agregado` necesitan volumen **y línea base**, que es el trabajo caro, y las 3 de `invariante` necesitan reproducir una secuencia entera. Pasar a `borrador` y poner `validada:` lo que se pruebe
 - [x] ~~Telemetría web que falta~~ — [[Registro del WAF]], [[Informe de violación de CSP]] y [[Escritura de archivo en la raíz web]], escritos el 2026-08-08
+- [x] ~~Cheatsheets de AD y del lado azul~~ — nueve matrices el 2026-08-10. Era el desbalance más grande del vault: 40 de 41 matrices eran de web
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
-- [ ] Dominios web que siguen, por orden: CSRF → SSTI → OAuth/OIDC → prototype pollution (`CWE-1321`)
+- [x] ~~CSRF y SSTI~~ — cerrados el 2026-08-10, sin telemetría ni detección nueva
+- [ ] Dominios web que siguen, por orden: OAuth/OIDC → prototype pollution (`CWE-1321`) → CORS mal configurado → Expression Language de Java
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
-- [ ] [[MOC - Active Directory]]: delegaciones y ADCS
-- [ ] Telemetría de Kerberos: `4768`, `4769`, `4662`, `5145`
+- [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
+- [ ] Ocho artefactos de Windows siguen sin emisor ni detección: Sysmon 3, 7, 8, 13, 22, PowerShell 4104, Windows 4625 y 4688
+- [ ] **Carpetas que existen y no se usan**: `750-hallazgos/` (1 nota, y es la de mayor retorno en un engagement), `400-entidades/` (1, mientras ysoserial, BloodHound, mimikatz y responder aparecen 20 veces como texto plano), `450-superficies/` (1, ninguna web), `200-fuentes/` (3, todas de un mismo sitio)
 
 ### Decisiones abiertas
 
