@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Catorce dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth |
+| Contenido rojo — web | Quince dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 57 matrices: 48 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 82 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 59 matrices: 50 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 85 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -386,6 +386,20 @@ Y una vuelta de tuerca sobre [[Un log sin identidad es un historial, no una dete
 
 Quinto dominio consecutivo que se cierra sin telemetría ni detección nueva. Tres matrices: [[OAuth - matriz de reconocimiento]], [[OAuth redirect_uri - matriz de referencia]] y [[OAuth tokens - matriz de referencia]].
 
+### 2026-08-11 — Dominio Prototype pollution
+
+El siguiente del roadmap, y el que había quedado anotado como hueco en [[MOC - Deserialización]] desde que se cerró aquel dominio. Es deserialización-adyacente pero con ejes propios, así que fue MOC aparte, no una rama.
+
+**El lado es el eje raíz, no el gadget.** Fue la decisión de taxonomía del dominio. Servidor y cliente comparten el mecanismo de contaminación y divergen en todo lo demás —qué gadget existe, qué impacto se alcanza, qué fuente lo ve—. Un XSS por contaminación del cliente no tiene nada que ver operativamente con un `NODE_OPTIONS` del servidor, aunque la primera petición se parezca. El gadget, el vector y la clave (`__proto__` contra `constructor.prototype`) van a matriz.
+
+**El reparto contaminación/gadget es el mismo que en deserialización.** Contaminar es la mitad barata; convertirlo en algo requiere un gadget, que es un lugar del código que lee una propiedad que normalmente no existe. Y por eso los dos dominios se enseñan al revés: la fama del caso caro —la cadena a RCE— tapa el caso frecuente. Acá el caso frecuente es [[Prototype pollution - propiedad que gobierna una decisión]], que no necesita gadget ni conocer la pila: contamina un lote de banderas de autorización y mira qué cambia. Es [[Control de acceso - mass assignment]] por otro camino, con la misma lista de campos.
+
+**El agravante que lo separa de mass assignment es el alcance.** Aquel escribe en un objeto; esto escribe en todos los del proceso, incluidos los de otros usuarios. Una contaminación de baja severidad aparente puede estar afectando peticiones ajenas, y eso va en el informe.
+
+**El dominio donde la firma sí funciona, y es la única excepción del vault.** Todo lo demás insiste en detectar efecto y no firma. Acá las cadenas `__proto__` y `constructor[prototype]` no aparecen en tráfico legítimo casi nunca, así que [[Payload de inyección en parámetros de la URL]] —la única detección de firma del vault, con `fidelidad: baja` declarada— rinde mejor en este dominio que en ningún otro. Quedó escrito en el MOC como la excepción que confirma la regla, con la letra chica de siempre: el payload por `POST` solo lo ve el WAF, y el del fragmento no lo ve nadie del lado del servidor.
+
+Sexto dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matrices: [[Prototype pollution - matriz de identificación]] y [[Prototype pollution gadgets - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -403,7 +417,8 @@ Quinto dominio consecutivo que se cierra sin telemetría ni detección nueva. Tr
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
 - [x] ~~CSRF y SSTI~~ — cerrados el 2026-08-10, sin telemetría ni detección nueva
 - [x] ~~OAuth/OIDC~~ — cerrado el 2026-08-11. Primer dominio sin CWE propia: cada nota cuelga de su clase real
-- [ ] Dominios web que siguen, por orden: prototype pollution (`CWE-1321`) → CORS mal configurado → SAML → Expression Language de Java
+- [x] ~~Prototype pollution (`CWE-1321`)~~ — cerrado el 2026-08-11. El eje raíz es el lado (servidor/cliente); el dominio donde la firma sí rinde
+- [ ] Dominios web que siguen, por orden: CORS mal configurado → SAML → Expression Language de Java
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
