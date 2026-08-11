@@ -25,6 +25,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - Deserialización]] — manipulación de objeto, gadgets, firma
 - [[MOC - CSRF]] — token, `SameSite`, doble envío, API con sesión por cookie
 - [[MOC - SSTI]] — inyección de plantillas del lado del servidor y del cliente
+- [[MOC - OAuth]] — `redirect_uri`, `state`, `id_token`, PKCE, registro dinámico
 
 **Azul**
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**

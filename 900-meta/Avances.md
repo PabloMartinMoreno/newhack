@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Trece dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI |
+| Contenido rojo — web | Catorce dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 54 matrices: 45 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 76 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 57 matrices: 48 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 82 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -362,6 +362,30 @@ El eje es la **capacidad del motor** —ejecución directa, entorno restringido,
 
 Cuatro matrices nuevas: [[CSRF entrega - matriz de referencia]], [[CSRF bypass - matriz de referencia]], [[SSTI - matriz de identificación]] y [[SSTI payloads - matriz de referencia]].
 
+### 2026-08-11 — Dominio OAuth, y el primero sin CWE propia
+
+El siguiente del roadmap, y el que puso a prueba la regla 7 del `CLAUDE.md` de verdad.
+
+**OAuth no es una vulnerabilidad, así que no tiene nota paraguas.** Es un protocolo con seis puntos donde se rompen cosas distintas, y cada nota cuelga de la clase que le corresponde: `CWE-601` la redirección, `CWE-352` la falta de `state`, `CWE-287` el flujo implícito y PKCE, `CWE-347` el `id_token`, `CWE-918` el registro dinámico. **Cinco de las seis ya existían** por otros dominios; hubo que escribir una sola técnica nueva.
+
+Es el mejor caso acumulado a favor de que la `clase:` sea la vulnerabilidad y no el vector. La navegación no sufre —se llega por el MOC— y a cambio `cobertura` sigue diciendo la verdad: no aparecen seis técnicas nuevas con una nota cada una, aparecen seis notas más colgando de clases que ya tenían contenido.
+
+**El eje es la fase del flujo que se rompe.** El flujo en sí —código, implícito, híbrido— va a matriz por el mismo criterio que el motor en SQLi: cambia qué parámetros hay y por dónde vuelven los datos, no cambia qué se decide.
+
+**El árbol se ordena por requisito, no por impacto**, y es la primera vez que se hace así. Las ramas que no necesitan víctima —flujo implícito, y el SSRF contra el proveedor— van antes que las de mayor impacto, porque las que dependen de que alguien abra un enlace tienen un techo de severidad que hay que reflejar en el informe. Ordenar por impacto lleva a construir cadenas que después no se pueden demostrar.
+
+Tres cosas que quedaron escritas y valen más que las técnicas:
+
+**PKCE no protege lo que la gente cree.** Protege el código en tránsito, no la dirección a la que se manda. Sin una primitiva previa para ver el código, esa rama es teórica — y por eso va última con una condición explícita.
+
+**La redirección abierta del propio cliente vale tanto como una validación laxa de `redirect_uri`.** El código llega a la dirección registrada y el cliente lo reenvía. Nadie la busca porque no está en la implementación de OAuth, y en aplicaciones grandes es la vía que más veces resuelve.
+
+**Primer dominio donde la mejor telemetría pertenece a un tercero.** Cuatro de las siete firmas viven en el registro del proveedor de identidad, que casi nunca es el sistema auditado. Sin acceso a esos registros, la mitad del dominio es ciega por construcción, y el informe tiene que decirlo en vez de recomendar una regla que nadie puede desplegar.
+
+Y una vuelta de tuerca sobre [[Un log sin identidad es un historial, no una detección]]: tres ramas se detectarían registrando el sujeto del token junto al usuario autenticado. Si la aplicación distinguiera esos dos valores **no sería vulnerable** — la ausencia del campo es a la vez la vulnerabilidad y el motivo por el que no se detecta. Es la forma más pura de ese zettel que apareció hasta ahora.
+
+Quinto dominio consecutivo que se cierra sin telemetría ni detección nueva. Tres matrices: [[OAuth - matriz de reconocimiento]], [[OAuth redirect_uri - matriz de referencia]] y [[OAuth tokens - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -378,7 +402,8 @@ Cuatro matrices nuevas: [[CSRF entrega - matriz de referencia]], [[CSRF bypass -
 - [x] ~~Cheatsheets de AD y del lado azul~~ — nueve matrices el 2026-08-10. Era el desbalance más grande del vault: 40 de 41 matrices eran de web
 - [ ] Completar los ejes de SQLi que faltan (ver huecos en [[MOC - SQL injection]])
 - [x] ~~CSRF y SSTI~~ — cerrados el 2026-08-10, sin telemetría ni detección nueva
-- [ ] Dominios web que siguen, por orden: OAuth/OIDC → prototype pollution (`CWE-1321`) → CORS mal configurado → Expression Language de Java
+- [x] ~~OAuth/OIDC~~ — cerrado el 2026-08-11. Primer dominio sin CWE propia: cada nota cuelga de su clase real
+- [ ] Dominios web que siguen, por orden: prototype pollution (`CWE-1321`) → CORS mal configurado → SAML → Expression Language de Java
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
