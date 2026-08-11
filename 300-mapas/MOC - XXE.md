@@ -115,6 +115,6 @@ La cuarta fila compensa: el canal por error es de los indicadores más limpios q
 - [x] Mecanismo — entidades generales, de parámetro y [[XXE - XInclude]]
 - [x] Formatos de entrada — en [[XXE formatos - matriz de referencia]]
 - [x] Obstáculos — en [[XXE evasión - matriz de referencia]]
-- [ ] **Cara azul sin escribir.** Tres artefactos de telemetría existen y ninguna detección los consume
+- [x] Cara azul — [[Exfiltración por subdominios de alta entropía]] cubre el canal fuera de banda y [[Ráfaga de errores del servidor desde un mismo origen]] el canal de error
 - [ ] **Lectura local sin telemetría.** El hueco no es de contenido, es de fuente: no existe artefacto que vea un XXE con `file://`. Requeriría inspección del cuerpo de la petición o instrumentación del parser
 - [ ] DoS por expansión de entidades — documentado como riesgo en [[XXE payloads - matriz de referencia]], sin nota propia por estar fuera de alcance en la práctica

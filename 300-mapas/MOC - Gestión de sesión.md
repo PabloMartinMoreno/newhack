@@ -124,7 +124,8 @@ Dos observaciones que valen más que la tabla:
 - [x] Los cinco fallos del ciclo de vida
 - [x] JWT — [[Sesión - falsificación de JWT]] y su matriz
 - [x] Atributos y vectores de robo — en [[Sesión - matriz de referencia]]
-- [ ] **Cara azul sin escribir**, y todo el dominio depende de un único artefacto
-- [ ] **Cuarto caso de detección que no es una regla sobre un evento.** [[Sesión - expiración insuficiente]] necesita verificar un invariante: ninguna sesión activa después del evento que la termina. Junto con los tres anteriores, el pendiente de revisar el esquema de `deteccion` deja de ser opcional
+- [x] Cara azul — [[Misma sesión desde dos orígenes]] (`correlacion`) y [[Actividad de sesión posterior a su cierre]] (`invariante`)
+- [x] Cuarto caso de detección que no es una regla sobre un evento — resuelto con `forma:` e implementado en [[Actividad de sesión posterior a su cierre]]
+- [ ] **Todo el dominio sigue colgando de [[Log de autenticación de la aplicación]].** Es el punto único de fallo defensivo más claro del vault: si el cliente no lo recolecta, el dominio entero se apaga. Correr `consultas.py spof`
 - [ ] OAuth y OIDC como mecanismo de sesión — tokens de refresco, alcances, `redirect_uri`. Dominio propio, sin modelar
 - [ ] Sesión en aplicaciones de página única y en móvil: dónde vive el token cuando no hay cookie

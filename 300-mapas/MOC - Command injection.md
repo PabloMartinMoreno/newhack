@@ -126,5 +126,5 @@ La última fila es el hueco real del dominio: la telemetría lo captura y ningun
 - [x] Argument injection — [[Argument injection - abuso de flags]] y su matriz
 - [x] Evasiones — en [[Command injection evasión - matriz de referencia]]
 - [x] Impacto — [[Command injection - a shell interactiva]] y [[Webshell]]
-- [ ] **Cara azul sin escribir.** [[Proceso hijo del servidor web]] existe como artefacto pero ninguna detección lo consume todavía
+- [x] Cara azul — [[Intérprete de comandos como hijo del servidor web]], la detección de mayor fidelidad del lado web: ancla en la relación padre-hijo, que ninguna evasión de la matriz toca
 - [ ] Ejecución sin proceso — `eval` de PHP, SSTI y deserialización no emiten `execve`. Son dominios propios y hoy no existen

@@ -113,7 +113,8 @@ Y la fila de recuperación es la única del vault donde el mejor detector no es 
 - [x] Las cuatro fases del ciclo de vida
 - [x] Spraying y stuffing como valores distintos del eje vector
 - [x] MFA — [[Autenticación - bypass de segundo factor]] y su matriz
-- [ ] **Cara azul sin escribir.** [[Log de autenticación de la aplicación]] existe y ninguna detección lo consume
-- [ ] **Detección sobre agregados.** Es el tercer caso donde la detección natural no es una regla sobre un evento sino una función sobre una ventana. Junto con [[Control de acceso - salto de contexto]], ya son suficientes para revisar si el esquema de `deteccion` necesita el campo
+- [x] Cara azul — [[Fallos de acceso contra cuentas inexistentes]] y [[Accesos exitosos contra muchas cuentas desde un origen]], las dos sobre [[Log de autenticación de la aplicación]]
+- [x] Detección sobre agregados — resuelto con `forma:` y `ventana:` en el esquema de `deteccion`. Las dos detecciones del dominio son `forma: agregado`, que es lo que este hueco predijo
+- [ ] Ninguna de las dos está validada en laboratorio. Un agregado no se valida con un disparo: necesita volumen **y** línea base
 - [ ] SSO, OAuth y SAML como superficie de autenticación — dominio propio, sin modelar
 - [ ] WebAuthn y llaves de acceso: qué cambia cuando el factor no es un secreto compartido

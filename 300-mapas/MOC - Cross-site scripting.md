@@ -84,4 +84,5 @@ Sintaxis de cada uno en [[XSS contextos - matriz de referencia]].
 - [x] Tres tipos + contextos + sinks + evasión + CSP + impacto
 - [x] [[XSS - mutation XSS]] (bypass de sanitizador)
 - [x] [[XSS - dangling markup injection]] (exfil sin ejecución de JS)
-- Lado rojo completo. Pendiente **lado azul** (reporte de violación de CSP como telemetría) — diferido con el resto del blue, no es un hueco rojo.
+- [x] Cara azul — [[Violación de CSP por script inline]] sobre [[Informe de violación de CSP]], la única fuente del vault que ve el lado del cliente y por lo tanto la única que ve DOM-based y mXSS
+- [ ] **[[Payload de inyección en parámetros de la URL]] es la única detección de firma del vault**, con `fidelidad: baja` declarada. No se despliega para alertar sino para cazar hacia atrás: mandar el payload por POST la evade sin saber nada de ella

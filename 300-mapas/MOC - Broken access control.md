@@ -117,6 +117,7 @@ Esa es la recomendación defensiva de mayor retorno de todo el dominio web, y no
 - [x] Vector — identificador, ruta, campo de más, orden de peticiones
 - [x] Método de prueba — en [[Control de acceso - matriz de pruebas]]
 - [x] Bypass de `403` — en [[Control de acceso bypass - matriz de referencia]]
-- [ ] **Cara azul sin escribir**, y acá el artefacto además hay que instrumentarlo antes
-- [ ] **Detección sobre secuencias.** [[Control de acceso - salto de contexto]] no se detecta con una regla sobre un evento sino verificando un invariante sobre una serie de eventos. El vault no modela ese tipo de detección todavía
+- [x] Cara azul — [[Acceso a un objeto de otro usuario]] (`correlacion`) y [[Cambio de privilegio fuera del flujo administrativo]] (`invariante`), las dos sobre [[Log de auditoría de la aplicación]]
+- [x] Detección sobre secuencias — resuelto con `forma: invariante` en el esquema de `deteccion`
+- [ ] **El artefacto sigue habiendo que instrumentarlo.** Las dos reglas dependen de campos que la mayoría de las aplicaciones no registra: el dueño del objeto y los campos modificados. Sin ellos no son difíciles de escribir, son imposibles
 - [ ] Autorización en GraphQL y en arquitecturas de microservicios — mismo dominio, superficie distinta
