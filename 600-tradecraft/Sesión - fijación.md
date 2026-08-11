@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]"]
 requisitos: [sin-rotacion-al-autenticar, via-para-fijar-el-token]
 coste: medio
 alternativas: ["[[Sesión - robo de token]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - fijar el identificador

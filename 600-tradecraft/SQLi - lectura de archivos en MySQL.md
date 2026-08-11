@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la
 requisitos: [privilegio-FILE, secure_file_priv-permisivo]
 coste: bajo
 alternativas: ["[[SQLi - stacked queries en MSSQL]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [mysql8]
 aliases:
   - SQLi file read MySQL

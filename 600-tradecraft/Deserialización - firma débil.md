@@ -8,7 +8,7 @@ telemetria: ["[[Log de errores del servidor web]]", "[[Log de acceso del servido
 requisitos: [blob-firmado, clave-recuperable]
 coste: alto
 alternativas: ["[[Deserialización - manipulación de objeto]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - clave de firma filtrada

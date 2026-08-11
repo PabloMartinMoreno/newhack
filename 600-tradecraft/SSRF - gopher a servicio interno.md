@@ -8,7 +8,7 @@ telemetria: ["[[Conexión saliente del servidor de aplicación]]", "[[Escritura 
 requisitos: [esquema-no-http-permitido, servicio-interno-sin-autenticacion]
 coste: medio
 alternativas: ["[[SSRF - escaneo de la red interna]]", "[[Command injection - canal directo]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - gopher SSRF

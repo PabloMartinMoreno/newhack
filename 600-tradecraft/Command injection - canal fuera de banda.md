@@ -8,7 +8,7 @@ telemetria: ["[[Consulta DNS saliente]]", "[[Proceso hijo del servidor web]]"]
 requisitos: [shell-invocada, egress-de-red]
 coste: bajo
 alternativas: ["[[Command injection - canal ciego]]", "[[Command injection - canal temporal]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - command injection OOB

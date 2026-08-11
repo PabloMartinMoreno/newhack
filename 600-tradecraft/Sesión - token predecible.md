@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]"]
 requisitos: [manejo-de-sesion-propio, muestras-de-tokens]
 coste: alto
 alternativas: ["[[Sesión - robo de token]]", "[[Sesión - fijación]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - predicción de sesión

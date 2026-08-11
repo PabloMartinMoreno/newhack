@@ -32,14 +32,14 @@ Funciona desde cualquier directorio (resuelve el vault relativo al propio script
 
 - Indexa **solo enlaces del frontmatter**, no del cuerpo. Una mención de paso en una prosa no es una relación afirmada; `telemetria:` sí lo es. Evita el ruido que en Dataview mete `file.inlinks`.
 - Los enlaces rotos del frontmatter se **reportan** en `higiene` en vez de hacer desaparecer notas del resultado. Los `alternativas:` que apuntan a notas todavía no escritas aparecen ahí: es roadmap, no error.
-- `revalidacion` incluye el tradecraft **sin** `probado:`, que en Dataview se caía del filtro por comparación con `null`. Ese es el caso peor y era invisible.
-- `higiene` valida los enums de [[Esquema de frontmatter]] y exige `opsec`/`probado`/`contexto` en todo tradecraft.
+- `revalidacion` incluye el tradecraft con `probado: nunca`, que en Dataview se caía del filtro por comparación con `null`. Ese es el caso peor y era invisible. Como hoy son casi todas, se **resumen en una línea** y se listan con `--nunca`; la tabla queda para el backlog por fecha, que es el que exige trabajo.
+- `higiene` valida los enums de [[Esquema de frontmatter]], exige `opsec`/`probado`/`contexto` en todo tradecraft, y rechaza un `probado:`/`validada:` que no sea `nunca` ni fecha ISO pasada. Sin ese último control una fecha mal escrita se lee como "nunca probado" y no se distingue de una nota recién nacida.
 
 Cortes rápidos sin script:
 
 ```sh
 rg -l '^opsec: quemado' 600-tradecraft/
-rg --no-heading '^probado: 202[45]' 600-tradecraft/
+rg -l '^probado: nunca' 600-tradecraft/                  # todo lo que falta pasar por laboratorio
 rg -l 'Sysmon EID 10' 600-tradecraft/ 650-detecciones/   # los dos lados de una bisagra
 ```
 

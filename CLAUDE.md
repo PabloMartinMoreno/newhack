@@ -24,7 +24,7 @@ Si algo de este archivo contradice esas notas, **ganan esas notas** — se actua
 1. **Regla de filtro.** Si la nota no responde *"cuándo elijo esto en vez de la alternativa"*, es un payload. No va al vault: va a una matriz en `900-meta/` o a un repo.
 2. **Una nota por eje, no por combinación.** Las técnicas grandes son intersecciones de ejes ortogonales.
 3. **`telemetria:`** es el mismo campo en tradecraft y en detecciones. Es la bisagra operativa; sin ella la fusión es nominal.
-4. **`opsec:`, `probado:`, `contexto:`** en toda nota de tradecraft. El conocimiento rojo caduca; sin esos campos el vault miente.
+4. **`opsec:`, `probado:`, `contexto:`** en toda nota de tradecraft. El conocimiento rojo caduca; sin esos campos el vault miente. `probado:` nace en `nunca` y **solo** cambia a una fecha cuando la técnica se corrió en un laboratorio y funcionó — poner ahí la fecha de escritura miente peor que dejar el campo vacío.
 5. **Cero datos de cliente.** Hostnames, IPs, credenciales y evidencia van al vault de engagements, aparte y cifrado.
 6. **Nada organizado por herramienta.** La herramienta es una entidad en `400-entidades/`, nunca una carpeta.
 7. **Idioma — la regla del corpus externo.** Si el término aparece literal en una fuente externa (ATT&CK, CWE, WSTG, docs de vendor, Sigma), el nombre va en **inglés**; si lo escribiste vos, en **español**. `500-tecnicas/` usa el nombre oficial en inglés sin excepción. El término del otro idioma va siempre como alias.

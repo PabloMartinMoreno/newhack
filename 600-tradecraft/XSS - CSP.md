@@ -8,7 +8,7 @@ telemetria: ["[[Informe de violación de CSP]]"]
 requisitos: [csp-con-debilidad]
 coste: alto
 alternativas: []
-probado: 2026-08-06
+probado: nunca
 contexto: [chrome]
 aliases:
   - Content Security Policy

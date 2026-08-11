@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]", "[[Log de acceso del
 requisitos: [respuesta-diferencial, lista-de-candidatos]
 coste: bajo
 alternativas: ["[[Autenticación - abuso de recuperación de contraseña]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - enumeración de cuentas

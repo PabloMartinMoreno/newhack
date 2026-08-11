@@ -8,7 +8,7 @@ telemetria: ["[[Consulta DNS saliente]]"]
 requisitos: [egress-de-red, primitiva-de-red-en-el-motor]
 coste: bajo
 alternativas: ["[[SQLi - canal booleano ciego]]", "[[SQLi - canal temporal ciego]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [mssql2019]
 aliases:
   - SQLi out-of-band

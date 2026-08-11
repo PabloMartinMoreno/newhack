@@ -8,7 +8,7 @@ telemetria: ["[[Log de auditoría de la aplicación]]", "[[Log de acceso del ser
 requisitos: [blob-controlado, sin-firma-o-firma-rota]
 coste: bajo
 alternativas: ["[[Deserialización - cadena de gadgets]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - edición del blob serializado

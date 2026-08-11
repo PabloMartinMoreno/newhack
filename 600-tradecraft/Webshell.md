@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la
 requisitos: [ejecucion-del-archivo-subido]
 coste: bajo
 alternativas: []
-probado: 2026-08-06
+probado: nunca
 contexto: [php8]
 aliases:
   - web shell

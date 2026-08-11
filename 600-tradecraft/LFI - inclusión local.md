@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [ruta-local-controlable, include-o-require]
 coste: bajo
 alternativas: ["[[RFI - inclusión remota]]", "[[Path traversal - matriz de referencia]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8]
 aliases:
   - LFI

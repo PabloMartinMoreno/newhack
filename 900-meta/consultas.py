@@ -37,6 +37,8 @@ FRONTMATTER = re.compile(r"^---\n(.*?)\n---", re.S)
 WIKILINK = re.compile(r"\[\[([^\]|#^]+)")
 EXCLUIDAS = ("999-plantillas", ".obsidian", ".git")
 
+LISTAR_NUNCA = False
+
 ENUMS = {
     "opsec": {"limpio", "ruidoso", "requiere-bypass", "quemado"},
     "estado": {"idea", "borrador", "produccion", "retirada"},
@@ -187,15 +189,25 @@ def revalidacion(vault, meses):
     )
     corte = datetime.date.today() - datetime.timedelta(days=meses * 30)
     filas = []
+    nunca = []
     for n in vault.por_tipo("tradecraft"):
         p = n.fecha("probado")
         if p is None:
-            filas.append((n.nombre, n.get("opsec", "—"), "NUNCA", "—", lista(n.get("contexto"))))
+            nunca.append((n.nombre, n.get("opsec", "—"), "NUNCA", "—", lista(n.get("contexto"))))
         elif p < corte:
             dias = (datetime.date.today() - p).days
             filas.append((n.nombre, n.get("opsec", "—"), p.isoformat(), dias, lista(n.get("contexto"))))
-    filas.sort(key=lambda f: (f[2] != "NUNCA", f[2]))
-    tabla(["Variante", "OPSEC", "Probado", "Días", "Contexto"], filas, "todo el tradecraft está vigente")
+    filas.sort(key=lambda f: f[2])
+
+    # Las nunca probadas se resumen en vez de listarse: son la mayoría del vault
+    # mientras no haya laboratorio, y a 60 filas la consulta deja de leerse.
+    if nunca and not LISTAR_NUNCA:
+        print(f"  {len(nunca)} variantes nunca probadas — verlas con: consultas.py revalidacion --nunca\n")
+    elif nunca:
+        filas = nunca + filas
+
+    tabla(["Variante", "OPSEC", "Probado", "Días", "Contexto"], filas,
+          "sin backlog por fecha" if nunca else "todo el tradecraft está vigente")
 
 
 def huecos(vault, _):
@@ -274,6 +286,20 @@ def cobertura(vault, _):
     tabla(["Técnica", "Tradecraft", "Detecciones", "Estado"], filas)
 
 
+def fecha_o_nunca(nota, campo):
+    """`probado`/`validada` sin fecha son 'nunca'. Una fecha mal escrita cae en
+    ese mismo hueco y pasa desapercibida: acá se separa el vacío del typo."""
+    v = nota.fm.get(campo)
+    if not v or str(v) == "nunca":
+        return []
+    f = nota.fecha(campo)
+    if f is None:
+        return [(nota.rel, f"{campo}={v} — debe ser fecha ISO o 'nunca'")]
+    if f > datetime.date.today():
+        return [(nota.rel, f"{campo}={f.isoformat()} está en el futuro")]
+    return []
+
+
 def higiene(vault, _):
     titulo("7. Higiene", "Frontmatter inválido, enlaces rotos, inbox estancado.")
 
@@ -294,7 +320,9 @@ def higiene(vault, _):
                     filas.append((n.rel, f"tradecraft sin {campo}"))
             if not n.fm.get("telemetria"):
                 filas.append((n.rel, "tradecraft sin telemetria — regla 3, la bisagra"))
+            filas += fecha_o_nunca(n, "probado")
         if n.tipo == "deteccion":
+            filas += fecha_o_nunca(n, "validada")
             forma = n.fm.get("forma")
             if not forma:
                 filas.append((n.rel, "deteccion sin forma"))
@@ -383,6 +411,9 @@ def main():
             vault_dir = args[i + 1]
         if a == "--meses" and i + 1 < len(args):
             meses = int(args[i + 1])
+        if a == "--nunca":
+            global LISTAR_NUNCA
+            LISTAR_NUNCA = True
 
     if comando not in COMANDOS and comando != "todo":
         print(f"comando desconocido: {comando}\n")

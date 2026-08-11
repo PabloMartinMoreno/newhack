@@ -8,7 +8,7 @@ telemetria: ["[[Conexión saliente del servidor de aplicación]]", "[[Log de acc
 requisitos: [url-controlada, respuesta-reflejada]
 coste: bajo
 alternativas: ["[[SSRF - canal ciego]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - SSRF básico

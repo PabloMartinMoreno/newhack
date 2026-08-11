@@ -8,7 +8,7 @@ telemetria: ["[[Log de auditoría de la aplicación]]", "[[Log de acceso del ser
 requisitos: [dos-cuentas-o-identificador-conocido, sesion-valida]
 coste: bajo
 alternativas: ["[[Control de acceso - escalada vertical]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [api-rest]
 aliases:
   - acceso horizontal

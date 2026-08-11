@@ -8,7 +8,7 @@ telemetria: ["[[Log de auditoría de la aplicación]]"]
 requisitos: [flujo-multipaso, estado-no-verificado]
 coste: medio
 alternativas: ["[[Control de acceso - escalada vertical]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [api-rest]
 aliases:
   - salto de contexto

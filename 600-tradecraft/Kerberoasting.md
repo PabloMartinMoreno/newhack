@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4769 - Kerberos service ticket requested]]"]
 requisitos: [una-credencial-de-dominio, cuentas-de-servicio-con-contraseña-débil]
 coste: medio
 alternativas: ["[[AS-REP roasting]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - kerberoast

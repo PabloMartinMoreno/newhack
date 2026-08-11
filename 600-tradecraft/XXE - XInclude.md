@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Conexión saliente del ser
 requisitos: [xinclude-habilitado, entrada-dentro-de-xml-ajeno]
 coste: bajo
 alternativas: ["[[XXE - canal directo]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - XInclude

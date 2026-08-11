@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4624 - Successful logon]]", "[[Windows 4769 - Kerberos s
 requisitos: [secreto-de-la-cuenta-de-firma]
 coste: bajo
 alternativas: ["[[DCSync]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - golden ticket

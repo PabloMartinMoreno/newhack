@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]"]
 requisitos: [credencial-valida, mfa-mal-integrado]
 coste: medio
 alternativas: ["[[Autenticación - abuso de recuperación de contraseña]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - bypass de MFA

@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [salida-reflejada, cantidad-de-columnas-conocida, tipos-compatibles]
 coste: bajo
 alternativas: ["[[SQLi - canal basado en errores]]", "[[SQLi - canal booleano ciego]]"]
-probado: 2026-08-05
+probado: nunca
 contexto: [mysql8]
 aliases:
   - SQLi UNION

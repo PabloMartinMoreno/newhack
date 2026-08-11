@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4662 - Directory object operation]]"]
 requisitos: [derechos-de-replicación]
 coste: bajo
 alternativas: ["[[LSASS - volcado vía comsvcs.dll MiniDump]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - dcsync

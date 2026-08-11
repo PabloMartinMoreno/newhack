@@ -8,7 +8,7 @@ telemetria: ["[[Log de auditoría de la aplicación]]", "[[Log de acceso del ser
 requisitos: [sesion-valida, ruta-o-funcion-conocida]
 coste: medio
 alternativas: ["[[Control de acceso - mass assignment]]", "[[Control de acceso - IDOR]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [api-rest]
 aliases:
   - escalada vertical

@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]"]
 requisitos: [inyeccion-de-html, sin-necesidad-de-JS]
 coste: medio
 alternativas: ["[[XSS - reflejado]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [chrome]
 aliases:
   - dangling markup

@@ -8,7 +8,7 @@ telemetria: ["[[Proceso hijo del servidor web]]", "[[Conexión saliente del serv
 requisitos: [blob-controlado, biblioteca-con-cadena-conocida]
 coste: medio
 alternativas: ["[[Deserialización - manipulación de objeto]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - gadget chain

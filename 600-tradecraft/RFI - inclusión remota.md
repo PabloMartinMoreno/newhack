@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Consulta DNS saliente]]"]
 requisitos: [allow_url_include-on, egress-de-red]
 coste: bajo
 alternativas: ["[[LFI - inclusión local]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php-legacy]
 aliases:
   - RFI

@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4768 - Kerberos TGT requested]]"]
 requisitos: [plantilla-que-permite-elegir-el-sujeto, derecho-de-inscripción]
 coste: medio
 alternativas: ["[[DCSync]]", "[[Golden ticket]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - ESC1

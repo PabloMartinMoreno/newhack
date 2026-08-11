@@ -8,7 +8,7 @@ telemetria: ["[[Proceso hijo del servidor web]]", "[[Escritura de archivo en la 
 requisitos: [argumento-controlado, binario-con-flags-abusables]
 coste: medio
 alternativas: ["[[Command injection - canal directo]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - abuso de flags

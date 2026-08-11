@@ -8,7 +8,7 @@ telemetria: ["[[Informe de violación de CSP]]"]
 requisitos: [sanitizador-del-lado-cliente, reparse-del-html]
 coste: alto
 alternativas: ["[[XSS - DOM-based]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [chrome]
 aliases:
   - mXSS

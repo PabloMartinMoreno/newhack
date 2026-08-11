@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Registro del WAF]]"]
 requisitos: [ruta-de-archivo-controlable, lectura-sin-include]
 coste: bajo
 alternativas: ["[[LFI - inclusión local]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [linux]
 aliases:
   - directory traversal

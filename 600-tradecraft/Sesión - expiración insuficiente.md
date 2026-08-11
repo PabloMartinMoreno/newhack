@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]"]
 requisitos: [token-capturado-o-propio]
 coste: bajo
 alternativas: ["[[Sesión - robo de token]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - logout que no cierra

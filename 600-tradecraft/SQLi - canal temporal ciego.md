@@ -8,7 +8,7 @@ telemetria: ["[[MySQL - slow query log]]"]
 requisitos: [sin-salida-reflejada, sin-error-diferencial]
 coste: alto
 alternativas: ["[[SQLi - canal fuera de banda]]", "[[SQLi - canal booleano ciego]]"]
-probado: 2026-06-02
+probado: nunca
 contexto: [mysql8, mssql2019]
 aliases:
   - SQLi temporal ciego

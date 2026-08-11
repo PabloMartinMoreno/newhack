@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Escritura de archivo en la
 requisitos: [lfi-que-ejecuta, archivo-envenenable]
 coste: medio
 alternativas: ["[[LFI wrappers - matriz de referencia]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8]
 aliases:
   - LFI a RCE

@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Conexión saliente del ser
 requisitos: [dtd-habilitada, valor-reflejado]
 coste: bajo
 alternativas: ["[[XXE - canal fuera de banda]]", "[[XXE - canal por error]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - XXE clásico

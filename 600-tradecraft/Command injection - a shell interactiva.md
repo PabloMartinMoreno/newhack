@@ -8,7 +8,7 @@ telemetria: ["[[Proceso hijo del servidor web]]", "[[Consulta DNS saliente]]"]
 requisitos: [ejecucion-confirmada]
 coste: medio
 alternativas: ["[[Webshell]]", "[[Command injection - canal directo]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - reverse shell desde command injection

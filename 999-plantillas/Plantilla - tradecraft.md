@@ -8,7 +8,7 @@ telemetria: []
 requisitos: []
 coste: 
 alternativas: []
-probado: 
+probado: nunca
 contexto: []
 aliases: []
 tags: []
@@ -17,7 +17,8 @@ tags: []
 %%
 opsec: limpio | ruidoso | requiere-bypass | quemado
 coste: bajo | medio | alto
-contexto: dónde se probó — win11-defender, win2019-crowdstrike, ubuntu22-auditd
+probado: nunca hasta que la corras en laboratorio. La fecha significa "funcionó ese día", no "la escribí ese día"
+contexto: contra qué entorno hay que probarla — win11-defender, win2019-crowdstrike, ubuntu22-auditd
 Regla de filtro: si esto no responde "cuándo lo elijo en vez de la alternativa", es un payload. No va acá.
 Ninguna de las cuatro secciones lleva sintaxis. La sintaxis va a la matriz de referencia.
 %%

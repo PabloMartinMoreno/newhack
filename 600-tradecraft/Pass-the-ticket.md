@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4624 - Successful logon]]", "[[Sysmon EID 10 - ProcessAc
 requisitos: [ticket-en-memoria, admin-local-en-el-host-origen]
 coste: medio
 alternativas: ["[[Pass-the-hash]]", "[[Golden ticket]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - PtT

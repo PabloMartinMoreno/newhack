@@ -40,12 +40,16 @@ telemetria: ["[[Sysmon EID 8 - CreateRemoteThread]]"]
 requisitos: [admin-local]
 coste: medio                                 # bajo | medio | alto
 alternativas: ["[[SQLi - canal fuera de banda]]"]
-probado: 2026-02-14
+probado: nunca                               # nunca | fecha ISO del último laboratorio
 contexto: [win11-defender, win2019-crowdstrike]
 ---
 ```
 
 `opsec`, `probado` y `contexto` son **innegociables**. Sin ellos el vault acumula técnicas muertas con apariencia de vigentes.
+
+`probado: nunca` es el valor por defecto y el honesto: la nota está escrita, no verificada. Una fecha ahí significa **la corriste en un laboratorio y funcionó ese día**, nada más. Poner la fecha en que se escribió la nota es la única forma de romper el campo, porque deja el vault sin backlog de revalidación y con apariencia de vigente. `higiene` rechaza cualquier valor que no sea `nunca` ni una fecha ISO pasada.
+
+Mientras `probado:` sea `nunca`, `contexto:` es el entorno **contra el que habría que probarla** — el plan de laboratorio. Cuando se prueba de verdad, pasa a ser dónde se probó.
 
 Cuerpo: cuatro secciones fijas — **Cuándo lo elijo · Por qué funciona · Cómo falla · Coste**. Ninguna contiene sintaxis; la sintaxis vive en las matrices de referencia.
 

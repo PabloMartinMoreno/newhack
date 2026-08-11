@@ -8,7 +8,7 @@ telemetria: ["[[Conexión saliente del servidor de aplicación]]", "[[Consulta D
 requisitos: [url-controlada, sin-respuesta-reflejada]
 coste: alto
 alternativas: ["[[SSRF - canal directo]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - blind SSRF

@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]"]
 requisitos: [wrapper-phar-alcanzable, cadena-de-gadgets]
 coste: alto
 alternativas: ["[[LFI - de lectura a RCE]]", "[[LFI wrappers - matriz de referencia]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8]
 aliases:
   - phar deserialization

@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Informe de violación de C
 requisitos: [input-reflejado-en-la-respuesta, victima-abre-el-enlace]
 coste: bajo
 alternativas: ["[[XSS - almacenado]]", "[[XSS - DOM-based]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [chrome]
 aliases:
   - reflected XSS

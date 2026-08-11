@@ -8,7 +8,7 @@ telemetria: ["[[Informe de violación de CSP]]"]
 requisitos: [source-controlable, sink-inseguro-en-el-JS]
 coste: medio
 alternativas: ["[[XSS - reflejado]]", "[[XSS - almacenado]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [chrome]
 aliases:
   - DOM XSS

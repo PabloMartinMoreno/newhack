@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]", "[[Log de acceso del
 requisitos: [flujo-de-recuperacion-expuesto]
 coste: medio
 alternativas: ["[[Autenticación - bypass de segundo factor]]", "[[Autenticación - credential stuffing]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - password reset abuse

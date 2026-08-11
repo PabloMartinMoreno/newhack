@@ -8,7 +8,7 @@ telemetria: ["[[Proceso hijo del servidor web]]", "[[Escritura de archivo en la 
 requisitos: [shell-invocada, sin-salida-reflejada]
 coste: medio
 alternativas: ["[[Command injection - canal fuera de banda]]", "[[Command injection - canal temporal]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - command injection ciego

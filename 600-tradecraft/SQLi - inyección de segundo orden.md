@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]"]
 requisitos: [input-persistido, reuso-inseguro-del-dato]
 coste: medio
 alternativas: []
-probado: 2026-08-06
+probado: nunca
 contexto: [mysql8]
 aliases:
   - SQLi segundo orden

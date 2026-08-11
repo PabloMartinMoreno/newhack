@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]"]
 requisitos: [jwt-como-sesion, verificacion-defectuosa]
 coste: medio
 alternativas: ["[[Sesión - robo de token]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - JWT forjado

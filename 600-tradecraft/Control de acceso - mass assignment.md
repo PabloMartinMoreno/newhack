@@ -8,7 +8,7 @@ telemetria: ["[[Log de auditoría de la aplicación]]"]
 requisitos: [endpoint-de-escritura, asignacion-automatica]
 coste: bajo
 alternativas: ["[[Control de acceso - escalada vertical]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [api-rest]
 aliases:
   - escalada por campo de más

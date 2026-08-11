@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4624 - Successful logon]]"]
 requisitos: [una-credencial-de-dominio]
 coste: bajo
 alternativas: []
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - enumeración de dominio

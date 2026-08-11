@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]", "[[Log de acceso del
 requisitos: [token-alcanzable]
 coste: bajo
 alternativas: ["[[Sesión - fijación]]", "[[Sesión - falsificación de JWT]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - robo de sesión

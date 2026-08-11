@@ -8,7 +8,7 @@ telemetria: ["[[Conexión saliente del servidor de aplicación]]"]
 requisitos: [ssrf-confirmado, oraculo-observable]
 coste: alto
 alternativas: ["[[SSRF - metadatos de instancia cloud]]", "[[SSRF - canal directo]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - port scan vía SSRF

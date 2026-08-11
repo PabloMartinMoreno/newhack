@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Consulta DNS saliente]]"]
 requisitos: [parser-xml-en-el-server, entidades-externas-habilitadas]
 coste: medio
 alternativas: ["[[File upload - SVG y XSS almacenado]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8]
 aliases:
   - XXE por archivo

@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]", "[[Informe de violación de C
 requisitos: [acepta-svg, se-sirve-inline]
 coste: bajo
 alternativas: ["[[File upload + LFI]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [chrome]
 aliases:
   - SVG XSS

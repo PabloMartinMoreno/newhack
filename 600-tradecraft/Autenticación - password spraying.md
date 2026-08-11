@@ -8,7 +8,7 @@ telemetria: ["[[Log de autenticación de la aplicación]]"]
 requisitos: [lista-de-cuentas, sin-limite-por-origen]
 coste: medio
 alternativas: ["[[Autenticación - credential stuffing]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [web-generica]
 aliases:
   - password spraying

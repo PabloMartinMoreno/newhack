@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4768 - Kerberos TGT requested]]"]
 requisitos: [cuentas-sin-preautenticación]
 coste: medio
 alternativas: ["[[Kerberoasting]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - asrep roast

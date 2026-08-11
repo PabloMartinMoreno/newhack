@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]"]
 requisitos: [driver-permite-apilar, cuenta-sysadmin]
 coste: bajo
 alternativas: ["[[SQLi - lectura de archivos en MySQL]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [mssql2019]
 aliases:
   - SQLi stacked MSSQL

@@ -8,7 +8,7 @@ telemetria: ["[[Log de acceso del servidor web]]"]
 requisitos: [respuesta-diferencial, sin-salida-reflejada, sin-error-visible]
 coste: medio
 alternativas: ["[[SQLi - canal basado en errores]]", "[[SQLi - canal temporal ciego]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [mysql8]
 aliases:
   - SQLi boolean blind

@@ -7,7 +7,7 @@ telemetria: ["[[Sysmon EID 10 - ProcessAccess]]", "[[Sysmon EID 1 - ProcessCreat
 requisitos: [admin-local, seDebugPrivilege]
 coste: bajo
 alternativas: []
-probado: 2025-11-20
+probado: nunca
 contexto: [win2019-defender, win11-defender]
 aliases:
   - comsvcs MiniDump

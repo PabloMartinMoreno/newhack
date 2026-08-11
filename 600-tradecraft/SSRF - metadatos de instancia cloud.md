@@ -8,7 +8,7 @@ telemetria: ["[[Conexión saliente del servidor de aplicación]]"]
 requisitos: [ssrf-con-retorno, instancia-en-nube, imds-alcanzable]
 coste: bajo
 alternativas: ["[[SSRF - escaneo de la red interna]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [aws-ec2]
 aliases:
   - IMDS

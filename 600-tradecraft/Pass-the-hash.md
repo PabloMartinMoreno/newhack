@@ -8,7 +8,7 @@ telemetria: ["[[Windows 4624 - Successful logon]]", "[[Windows 5145 - Network sh
 requisitos: [hash-NTLM, NTLM-habilitado]
 coste: bajo
 alternativas: ["[[Pass-the-ticket]]"]
-probado: 2026-08-08
+probado: nunca
 contexto: [lab-ad]
 aliases:
   - PtH

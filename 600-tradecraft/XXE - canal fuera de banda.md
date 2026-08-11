@@ -8,7 +8,7 @@ telemetria: ["[[Conexión saliente del servidor de aplicación]]", "[[Consulta D
 requisitos: [dtd-habilitada, dtd-externa-permitida, egress-de-red]
 coste: medio
 alternativas: ["[[XXE - canal por error]]", "[[XXE - canal directo]]"]
-probado: 2026-08-06
+probado: nunca
 contexto: [php8-linux]
 aliases:
   - blind XXE
