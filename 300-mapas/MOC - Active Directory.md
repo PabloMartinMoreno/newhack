@@ -81,6 +81,18 @@ Este es el temario del módulo, y sigue la ruta de un ataque real.
 
 El punto 1 va primero y no es negociable: casi todas las técnicas del dominio son consecuencia de cómo funcionan esos dos protocolos, no de un fallo.
 
+## Cheatsheets — entrada directa a los comandos
+
+Cuando ya sabés qué hacer y solo querés la invocación, sin pasar por las notas de criterio:
+
+| Matriz | Cubre |
+|---|---|
+| [[AD enumeración - matriz de referencia]] | Sin credencial y con credencial, consultas LDAP puntuales, BloodHound, la máscara de bits de `userAccountControl` |
+| [[AD roasting - matriz de referencia]] | AS-REP y Kerberoast: pedir, formatos, modos de hashcat, silver ticket como atajo |
+| [[AD volcado de credenciales - matriz de referencia]] | LSASS, SAM, LSA Secrets, NTDS, DPAPI — y qué permite cada formato |
+| [[AD movimiento lateral - matriz de referencia]] | Pass-the-hash, pass-the-ticket, overpass, los cinco métodos de ejecución remota y su ruido |
+| [[AD persistencia - matriz de referencia]] | Golden, silver, diamond, ADCS de `ESC1` a `ESC8`, ACL, y por qué `krbtgt` se rota dos veces |
+
 ## Cara azul
 
 El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bisagra del dominio** — es lo que conecta cada nota roja con su fuente en `550-telemetria/`.
@@ -109,7 +121,9 @@ Tres lecciones que este dominio deja, y que valen para todo el vault:
 
 - [x] Enumeración, las dos técnicas de roasting, volcado de credenciales, movimiento lateral por hash y ticket, DCSync, dos persistencias
 - [x] Cada técnica enlaza su artefacto de Windows — la cara azul de la tabla está completa
-- [ ] **Ninguna detección de AD escrita todavía.** La telemetría está mapeada; las reglas de `650-detecciones/` no existen salvo la de LSASS. Es el trabajo que sigue, y el que HTB va a alimentar
+- [x] Cara azul — seis detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]] y [[Acceso a LSASS desde proceso no firmado]]
+- [ ] **[[Enumeración LDAP del directorio]] queda sin detección a propósito.** Tráfico legítimo indistinguible; es el punto ciego del dominio y se declara, no se esconde
+- [ ] Ninguna de las seis está validada en laboratorio. Es el trabajo que HTB alimenta directo
 - [ ] Envenenamiento de nombres (LLMNR/NBT-NS) + relay NTLM — la rama "sin credencial" que falta
 - [ ] Delegaciones: constrained, unconstrained, RBCD — un eje propio de escalada
 - [ ] ADCS más allá de la plantilla de sujeto arbitrario — hay muchas otras configuraciones abusables

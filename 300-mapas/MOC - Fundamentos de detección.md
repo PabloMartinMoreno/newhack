@@ -63,9 +63,20 @@ Las dos preguntas del final son las que tumban reglas antes de escribirlas, y co
 
 ## Dónde aplicar esto en el vault
 
-- Las 16 detecciones de `650-detecciones/` están todas en `estado: idea`. Leerlas con estos conceptos en la mano es el ejercicio: cada una declara su `forma:`, su `fidelidad:`, sus falsos positivos y sus evasiones, y se puede discutir si acertó.
-- Los 12 artefactos de `550-telemetria/` declaran cada uno sus **limitaciones**. Esa sección es la lista de puntos ciegos, que es de donde sale la cobertura real.
+- Las 23 detecciones de `650-detecciones/` están todas en `estado: idea` menos una. Leerlas con estos conceptos en la mano es el ejercicio: cada una declara su `forma:`, su `fidelidad:`, sus falsos positivos y sus evasiones, y se puede discutir si acertó.
+- Los 27 artefactos de `550-telemetria/` declaran cada uno sus **limitaciones**. Esa sección es la lista de puntos ciegos, que es de donde sale la cobertura real.
 - [[Validación de tradecraft en laboratorio]] es el ciclo del lado rojo. El equivalente azul —validar detecciones— todavía no está escrito.
+
+## Cheatsheets — entrada directa a la sintaxis
+
+Cuando ya sabés qué querés detectar y solo falta escribirlo:
+
+| Matriz | Cubre |
+|---|---|
+| [[Detección por forma - matriz de referencia]] | Cada valor de `forma:` traducido a consulta concreta. **Empezar por acá** — es el campo propio del vault |
+| [[KQL - matriz de referencia]] | Tablas de Defender y Sentinel, operadores, `join`, agregación por ventana, línea base |
+| [[Sigma - matriz de referencia]] | Esqueleto, `logsource`, modificadores, correlaciones, y qué no expresa |
+| [[Sysmon - matriz de configuración]] | Instalación, filtros de inclusión y exclusión, `GrantedAccess`, verificar que el evento llega |
 
 ## Huecos conocidos
 

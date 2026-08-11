@@ -11,12 +11,12 @@ tags:
 # MOC - Telemetría de Windows
 
 > [!abstract] Nota de referencia paraguas
-> Las fuentes de datos del lado azul en Windows: qué ve cada una, qué le cuesta y qué no ve. Los conceptos transversales están en [[MOC - Fundamentos de detección]]; las técnicas rojas que las emiten, en [[MOC - Active Directory]], que está sin desarrollar.
+> Las fuentes de datos del lado azul en Windows: qué ve cada una, qué le cuesta y qué no ve. Los conceptos transversales están en [[MOC - Fundamentos de detección]]; las técnicas rojas que las emiten, en [[MOC - Active Directory]].
 
-> [!warning] Andamiaje, no contenido cerrado
-> Estas catorce notas describen **qué es cada fuente**, no qué técnica la dispara. El campo *Quién lo emite* está en pendiente en casi todas, porque el lado rojo de Windows en este vault todavía es una sola nota.
+> [!warning] Seis de las catorce fuentes siguen sin emisor
+> Estas notas nacieron **antes** que su lado rojo, al revés que las fuentes web. Las que cubre [[MOC - Active Directory]] ya tienen su campo *Quién lo emite* escrito; las ocho que quedan —Sysmon 3, 7, 8, 13, 22, PowerShell 4104, Windows 4625 y 4688— siguen esperando la técnica que las dispare.
 >
-> Es deliberado: son el lugar donde colgar lo que se vaya aprendiendo. A diferencia de las fuentes web, que nacieron de técnicas concretas, estas nacieron primero.
+> No rellenarlas de memoria: el campo se llena escribiendo el rojo, no suponiéndolo.
 
 ## Qué encender, y en qué orden
 
@@ -105,16 +105,26 @@ Aun así, el nativo con la línea de comandos habilitada cubre muchísimo. La co
 
 El punto 4 es el que conviene leer entero de una: es el único lugar del vault donde se puede seguir una técnica desde el lado rojo, ver qué artefacto emite, y leer la detección que lo consume. Ese recorrido es el modelo del vault funcionando.
 
+## Cheatsheets — entrada directa a la sintaxis
+
+| Matriz | Cubre |
+|---|---|
+| [[Sysmon - matriz de configuración]] | Instalación, `include` contra `exclude`, condiciones, `GrantedAccess`, verificar que el evento llega |
+| [[Detección por forma - matriz de referencia]] | Cómo se escribe cada `forma:` sobre estas fuentes |
+| [[KQL - matriz de referencia]] | `SecurityEvent` y `Device*`: qué tabla tiene qué |
+| [[Sigma - matriz de referencia]] | `logsource` para Windows, y el mapeo de campos que hay que aplicar |
+
 ## Cómo se llena esto
 
-Cada fuente tiene su campo *Quién lo emite* en pendiente. Se completa igual que se completó el lado web: escribiendo la técnica roja, observando qué apareció de verdad, y recién ahí escribiendo la detección. El ciclo está en [[Validación de tradecraft en laboratorio]].
+Las ocho fuentes que siguen sin emisor se completan igual que se completaron las otras seis: escribiendo la técnica roja, observando qué apareció de verdad, y recién ahí escribiendo la detección. El ciclo está en [[Validación de tradecraft en laboratorio]].
 
 **Lo que no hay que hacer es rellenarlo de memoria.** Una nota de telemetría que declara emisores que nadie observó es exactamente la clase de mentira que el campo `probado:` existe para evitar.
 
 ## Huecos conocidos
 
 - [x] Las catorce fuentes principales, con campos, coste, activación y limitaciones
-- [ ] **El lado rojo entero.** [[MOC - Active Directory]] sigue siendo semilla, así que ninguna de estas fuentes tiene emisores declarados salvo una
-- [ ] **Ninguna detección de Windows** más allá de [[Acceso a LSASS desde proceso no firmado]]
+- [x] El lado rojo — [[MOC - Active Directory]] con ocho técnicas escritas. El campo *Quién lo emite* se llenó solo al escribirlas, que es como tenía que ser
+- [x] Detecciones de Windows — seis, indexadas en [[MOC - Active Directory]]
+- [ ] **Ocho fuentes siguen sin emisor ni detección**: Sysmon 3, 7, 8, 13, 22, PowerShell 4104, Windows 4625 y 4688. Son las que espera el rojo que falta — delegaciones, ADCS, relay NTLM, ejecución en el host
 - [ ] Fuentes que faltan: creación de servicios, tareas programadas, WMI, borrado del registro de eventos, autenticación NTLM
 - [ ] Nada de Linux — `auditd` aparece en [[Proceso hijo del servidor web]] y no tiene notas propias

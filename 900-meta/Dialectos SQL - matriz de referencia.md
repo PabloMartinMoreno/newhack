@@ -4,6 +4,7 @@ aliases:
   - Dialectos SQL
 tags:
   - meta/referencia
+  - dominio/web
 ---
 
 # Dialectos SQL - matriz de referencia
