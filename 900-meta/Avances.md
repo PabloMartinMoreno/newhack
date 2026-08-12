@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Dieciocho dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection |
+| Contenido rojo — web | Diecinueve dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 64 matrices: 55 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 95 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 66 matrices: 57 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 98 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -448,6 +448,22 @@ El siguiente del roadmap, y el hueco que [[MOC - SSTI]] había dejado anotado ex
 
 Noveno dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matrices: [[EL injection - matriz de identificación]] y [[EL injection payloads - matriz de referencia]].
 
+### 2026-08-12 — Dominio Request smuggling
+
+El siguiente del roadmap, y el que rompe con algo que había sido constante en los dieciocho dominios anteriores.
+
+**No ataca la aplicación, ataca la cadena de servidores que hay delante.** No hay entrada que la aplicación evalúe mal: hay dos servidores —frente y back— que miden la misma petición HTTP distinto, uno por `Content-Length` y otro por `Transfer-Encoding`. Eso cambia el alcance respecto de todo lo demás del vault: afecta a **otros usuarios**, saltea los controles del frente, y la mitigación es de arquitectura, no de código.
+
+**El eje raíz es la primitiva de desincronización**, agrupada por dónde vive la ambigüedad: HTTP/1.1 clásico (CL.TE, TE.CL, TE.TE), degradación de HTTP/2 (H2.CL, H2.TE) y sin proxy (CL.0, desync del cliente). La explotación —saltar el frente, capturar peticiones, envenenar la cola, caché— va a matriz porque es **ortogonal** a cómo se logró el desync: una vez que hay sobrante controlado, se hace igual sea cual sea la primitiva. Es la separación más limpia entre "cómo entro" y "qué consigo" de todo el vault.
+
+**La degradación de HTTP/2 va primero, contra la antigüedad de las técnicas.** El HTTP/1.1 clásico está cada vez más mitigado; la degradación reintroduce el problema en cadenas que se creen seguras por hablar H2. Es la rama de mayor rendimiento hoy.
+
+**Primer dominio donde sondear mal daña a usuarios reales**, y eso cambió la estructura: la matriz de sondeo va **antes** que las técnicas en el orden de lectura, con una advertencia en callout, porque una prueba de confirmación mal calibrada antepone bytes a la petición de la siguiente persona. Se detecta por tiempo —que no daña— y solo se confirma con el sobrante apuntado a algo inocuo. No es preferencia: es seguridad operativa.
+
+**El que más tensa el esquema de `deteccion`.** Décimo dominio cerrado sin detección nueva, pero por primera vez no es porque otra regla lo cubra bien: es porque **la detección natural no cabe en el modelo de una fuente**. La señal más fuerte —el frente contó N peticiones y el back N+1 en la misma conexión— es una correlación entre dos telemetrías distintas unidas por identificador de conexión, y `deteccion` asume una fuente por regla. Es el mismo tipo de presión que llevó a agregar `forma:` en su momento: si aparece un segundo caso de telemetría de dos capas, hay que revisar el esquema. Anotado como hueco explícito, no escondido.
+
+Tercer dominio donde la firma rinde —cabeceras duplicadas `CL`+`TE` no tienen forma legítima, las ve el WAF—, después de prototype pollution y OGNL. Dos matrices: [[Request smuggling - matriz de sondeo]] y [[Request smuggling - matriz de explotación]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -469,7 +485,8 @@ Noveno dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matr
 - [x] ~~CORS mal configurado (`CWE-942`)~~ — cerrado el 2026-08-12. Cara azul entera bloqueada por la falta del campo `Origin`
 - [x] ~~SAML~~ — cerrado el 2026-08-12. Segundo dominio sin CWE propia; la envoltura de firma no tiene equivalente en el vault
 - [x] ~~Expression Language de Java (`CWE-917`)~~ — cerrado el 2026-08-12. Primo de SSTI con eje raíz opuesto: la superficie, no el motor
-- [ ] Dominios web que siguen, por orden: request smuggling → web cache poisoning → GraphQL
+- [x] ~~Request smuggling (`CWE-444`)~~ — cerrado el 2026-08-12. Ataca la cadena, no la app; su detección natural no cabe en el esquema de una fuente
+- [ ] Dominios web que siguen, por orden: web cache poisoning → GraphQL → NoSQL injection
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
