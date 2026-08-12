@@ -27,6 +27,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - SSTI]] — inyección de plantillas del lado del servidor y del cliente
 - [[MOC - OAuth]] — `redirect_uri`, `state`, `id_token`, PKCE, registro dinámico
 - [[MOC - Prototype pollution]] — contaminación de prototipos en servidor y cliente
+- [[MOC - CORS]] — validación de origen permisiva, lectura de respuestas ajenas
 
 **Azul**
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**

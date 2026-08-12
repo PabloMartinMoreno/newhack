@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Quince dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution |
+| Contenido rojo — web | Dieciséis dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 59 matrices: 50 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 85 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 60 matrices: 51 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 88 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -400,6 +400,22 @@ El siguiente del roadmap, y el que había quedado anotado como hueco en [[MOC - 
 
 Sexto dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matrices: [[Prototype pollution - matriz de identificación]] y [[Prototype pollution gadgets - matriz de referencia]].
 
+### 2026-08-12 — Dominio CORS mal configurado
+
+El siguiente del roadmap, y el vecino de CSRF que quedó anotado como hueco cuando se cerró aquel dominio.
+
+**El dominio se define por la confusión que hay que desarmar.** CORS se cruza con CSRF más que ningún otro par del vault, y son opuestos: CSRF abusa que el navegador **manda** la petición, CORS mal configurado abusa que el atacante **lee** la respuesta. Uno escribe a ciegas, el otro lee. La nota paraguas arranca por ahí porque sin esa separación las tres técnicas parecen resolver un problema que no es el suyo.
+
+**El eje es cómo falla la validación del origen** —reflejo, subcadena, `null`, comodín—. `Allow-Credentials` no es eje: es el agravante que fija la severidad. La autenticación por cookie tampoco: es el filtro que decide si hay ataque. Tres tradecraft, porque `null` y el comodín comparten el patrón "la lista está bien salvo una entrada" y van juntos.
+
+**El catálogo de bypass es el mismo que OAuth y open redirect.** Reflejo, prefijo, sufijo, subcadena, confusión del analizador: la validación de origen falla igual en `Access-Control-Allow-Origin`, en `redirect_uri` y en `Location`. Tres dominios, tres cabeceras, un solo problema — las matrices se referencian entre sí en vez de repetirse.
+
+**El encadenamiento que eleva el dominio:** CORS lee, y lo que más rinde leer es el token anti-CSRF. Con el token robado se habilita el CSRF que estaba cerrado. Los dos dominios opuestos se complementan, y por eso [[MOC - CSRF]] y [[MOC - CORS]] se referencian en las dos direcciones.
+
+**Primer dominio cuya cara azul entera depende de un campo ausente.** Las cuatro variantes se detectarían por la cabecera `Origin`, y [[Log de acceso del servidor web]] no la registra por defecto. Dos serían de altísima fidelidad si estuviera —`Origin: null` sobre endpoint autenticado no pasa por accidente, y un origen reflejado fuera de la lista blanca real es por definición el ataque—. La recomendación de mayor retorno no es una regla sino instrumentar el campo. Es [[Un log sin identidad es un historial, no una detección]] aplicado a `Origin`, y el caso más extremo hasta ahora: no es que falte una detección, es que la fuente no captura lo único que la haría posible.
+
+Séptimo dominio consecutivo cerrado sin telemetría ni detección nueva. Una matriz: [[CORS bypass de origen - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -418,7 +434,8 @@ Sexto dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matri
 - [x] ~~CSRF y SSTI~~ — cerrados el 2026-08-10, sin telemetría ni detección nueva
 - [x] ~~OAuth/OIDC~~ — cerrado el 2026-08-11. Primer dominio sin CWE propia: cada nota cuelga de su clase real
 - [x] ~~Prototype pollution (`CWE-1321`)~~ — cerrado el 2026-08-11. El eje raíz es el lado (servidor/cliente); el dominio donde la firma sí rinde
-- [ ] Dominios web que siguen, por orden: CORS mal configurado → SAML → Expression Language de Java
+- [x] ~~CORS mal configurado (`CWE-942`)~~ — cerrado el 2026-08-12. Cara azul entera bloqueada por la falta del campo `Origin`
+- [ ] Dominios web que siguen, por orden: SAML → Expression Language de Java → request smuggling
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
