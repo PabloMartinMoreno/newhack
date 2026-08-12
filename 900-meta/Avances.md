@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Dieciséis dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS |
+| Contenido rojo — web | Diecisiete dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 60 matrices: 51 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 88 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 62 matrices: 53 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 92 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -416,6 +416,22 @@ El siguiente del roadmap, y el vecino de CSRF que quedó anotado como hueco cuan
 
 Séptimo dominio consecutivo cerrado sin telemetría ni detección nueva. Una matriz: [[CORS bypass de origen - matriz de referencia]].
 
+### 2026-08-12 — Dominio SAML
+
+El siguiente del roadmap, y el segundo dominio sin CWE propia después de OAuth. Ocupa el mismo lugar en la arquitectura —federación de identidad— con ejes distintos, así que fue MOC aparte y no una rama de aquel.
+
+**Las cuatro clases ya existían; no hubo técnica nueva.** `CWE-347` la firma, `CWE-287` el comentario en el NameID, `CWE-611` el XXE del parser. Es el segundo caso —OAuth fue el primero— donde un protocolo entero se modela sin escribir una sola nota de `500-tecnicas/`, porque SAML es una superficie sobre vulnerabilidades conocidas. La regla 7 lo coloca solo.
+
+**El ataque que le da nombre no tiene equivalente en el vault: la envoltura de firma.** Es lo que justifica que SAML sea dominio aparte de OAuth en vez de una fila en la matriz de tokens. Una firma XML no firma el documento, firma un elemento identificado por su `ID`; el ataque mete dos aserciones —la firmada donde el verificador la busca, la falsa donde el lector toma los datos— y explota que **verificar y leer miran elementos distintos**. Es [[Control de acceso - salto de contexto]] en la capa de firma. Ocho patrones de envoltura, a matriz.
+
+**El comentario en el NameID es el mismo desacople por otro mecanismo.** No mueve elementos: parte el texto con un comentario XML que la canonicalización de la firma y la función de lectura colapsan distinto. Fue un fallo real y masivo en 2018 porque la utilidad de lectura de texto era compartida entre bibliotecas.
+
+**El XXE da vuelta el dominio.** Las tres ramas de firma buscan la sesión; esta busca el servidor. Y ocurre **aguas arriba de la firma**: el parseo pasa antes de validar, así que ni siquiera hace falta una firma válida. `clase: CWE-611`, mismo puente que ya había abierto [[File upload - XXE por archivo]] — el formato que se parsea como XML arrastra toda la superficie de XXE.
+
+**La cara azul se parte en dos, limpio.** Las tres ramas de firma son silenciosas: producen un inicio de sesión que el SP considera legítimo, detectable solo inspeccionando el XML de la aserción, que ninguna fuente parsea. La de XXE es ruidosa: abre una conexión y la ven las reglas de SSRF que ya existen. Las firmas de las ramas silenciosas serían de buena fidelidad si se instrumentara —dos aserciones, `ID` duplicado, comentario en el NameID no ocurren en tráfico legítimo—, así que es el mismo hueco de fuente que [[CORS - reflejo del origen con credenciales]] con `Origin`: la recomendación de mayor retorno es registrar la estructura cruda, no escribir una regla.
+
+Octavo dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matrices: [[SAML - matriz de identificación]] y [[SAML XSW - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -435,7 +451,8 @@ Séptimo dominio consecutivo cerrado sin telemetría ni detección nueva. Una ma
 - [x] ~~OAuth/OIDC~~ — cerrado el 2026-08-11. Primer dominio sin CWE propia: cada nota cuelga de su clase real
 - [x] ~~Prototype pollution (`CWE-1321`)~~ — cerrado el 2026-08-11. El eje raíz es el lado (servidor/cliente); el dominio donde la firma sí rinde
 - [x] ~~CORS mal configurado (`CWE-942`)~~ — cerrado el 2026-08-12. Cara azul entera bloqueada por la falta del campo `Origin`
-- [ ] Dominios web que siguen, por orden: SAML → Expression Language de Java → request smuggling
+- [x] ~~SAML~~ — cerrado el 2026-08-12. Segundo dominio sin CWE propia; la envoltura de firma no tiene equivalente en el vault
+- [ ] Dominios web que siguen, por orden: Expression Language de Java → request smuggling → web cache
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
