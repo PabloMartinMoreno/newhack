@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Diecisiete dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML |
+| Contenido rojo — web | Dieciocho dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 62 matrices: 53 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 92 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 64 matrices: 55 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 95 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -432,6 +432,22 @@ El siguiente del roadmap, y el segundo dominio sin CWE propia después de OAuth.
 
 Octavo dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matrices: [[SAML - matriz de identificación]] y [[SAML XSW - matriz de referencia]].
 
+### 2026-08-12 — Dominio EL injection
+
+El siguiente del roadmap, y el hueco que [[MOC - SSTI]] había dejado anotado explícito. Tiene CWE propia —`CWE-917`—, así que no es de la familia sin-clase de OAuth y SAML: es un dominio pleno, primo de SSTI por mecanismo.
+
+**El eje raíz es la superficie, y es la divergencia deliberada respecto de SSTI.** En SSTI el eje fue la capacidad del motor y la superficie de origen se mandó a matriz. Acá se invierte, con razón: los motores de Java —SpEL, OGNL, MVEL— ejecutan todos directo, así que la capacidad casi no discrimina. Lo que decide el trabajo es **cómo llega la entrada al evaluador**, porque de eso depende si se ve el resultado y dónde buscar. El motor va a matriz, mismo criterio que el motor de plantillas en SSTI. Es el primer dominio donde dos vecinos por mecanismo eligen ejes raíz opuestos, y quedó escrito por qué.
+
+**Lo que separa EL de SSTI es la evaluación ciega.** En SSTI la entrada se refleja y `${7*7}` vuelve como `49`. En EL la mayoría de los casos son ciegos: la expresión se evalúa en un mensaje de validación de bean, en el ruteo, en un registro —lugares que no devuelven el resultado—. Por eso las dos ramas ciegas pesan más que la reflejada, al revés que en SSTI, y por eso el dominio se modela por superficie: para poder encontrarlo cuando no se ve.
+
+**El OGNL del framework es una rama aparte porque el fallo no es de la aplicación.** Los CVE de Struts no están en el código del desarrollador: están en que el framework evaluaba entrada como OGNL en lugares que nadie marcó —nombre de parámetro, cabecera `Content-Type`—. Se ataca por versión y CVE, no por reconocimiento de un reflejo.
+
+**JUEL corrige la expectativa del dominio:** es el EL de las JSP y no da RCE por defecto. Un EL que resulta ser JUEL puro es lectura de contexto, no ejecución — análogo a [[SSTI - lectura sin ejecución]]. Tratarlo como RCE es perder el tiempo, y quedó marcado en los dos árboles.
+
+**Segundo dominio donde la firma rinde**, después de prototype pollution. Las cadenas OGNL de los CVE de Struts —`#_memberAccess`, `@java.lang.Runtime@`— son largas y no tienen forma legítima, así que [[Registro del WAF]] y [[Payload de inyección en parámetros de la URL]] las cazan. Misma excepción a "efecto sobre firma", misma letra chica: entran por cabecera y cuerpo, que solo ve el WAF.
+
+Noveno dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matrices: [[EL injection - matriz de identificación]] y [[EL injection payloads - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -452,7 +468,8 @@ Octavo dominio consecutivo cerrado sin telemetría ni detección nueva. Dos matr
 - [x] ~~Prototype pollution (`CWE-1321`)~~ — cerrado el 2026-08-11. El eje raíz es el lado (servidor/cliente); el dominio donde la firma sí rinde
 - [x] ~~CORS mal configurado (`CWE-942`)~~ — cerrado el 2026-08-12. Cara azul entera bloqueada por la falta del campo `Origin`
 - [x] ~~SAML~~ — cerrado el 2026-08-12. Segundo dominio sin CWE propia; la envoltura de firma no tiene equivalente en el vault
-- [ ] Dominios web que siguen, por orden: Expression Language de Java → request smuggling → web cache
+- [x] ~~Expression Language de Java (`CWE-917`)~~ — cerrado el 2026-08-12. Primo de SSTI con eje raíz opuesto: la superficie, no el motor
+- [ ] Dominios web que siguen, por orden: request smuggling → web cache poisoning → GraphQL
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

@@ -129,4 +129,4 @@ Dos observaciones que este dominio deja claras:
 - [x] Cara azul — cubierta por detecciones existentes, sin reglas nuevas
 - [ ] **[[SSTI - lectura sin ejecución]] no se detecta.** No es hueco de contenido sino de fuente: no nace proceso, no sale conexión, no hay excepción. Haría falta inspección del cuerpo de las respuestas, que es prevención de fuga y no detección. Mismo límite que el XXE local en [[MOC - XXE]]
 - [ ] Inyección en plantillas de correo y de generación de documentos, donde el renderizado es asíncrono y siempre ciego
-- [ ] Expression Language de Java como dominio aparte: comparte método con SSTI pero la superficie es otra —Spring, OGNL, formularios de validación— y merece sus propios ejes
+- [x] Expression Language de Java — [[MOC - EL injection]], dominio aparte con `CWE-917`. Comparte el método pero el eje raíz es la superficie, no la capacidad del motor
