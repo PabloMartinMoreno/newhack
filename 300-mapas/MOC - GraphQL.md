@@ -123,6 +123,6 @@ Décimo segundo dominio cerrado sin detección nueva. La recomendación defensiv
 - [x] Cara azul de denegación — por efecto, con el monitoreo existente
 - [ ] **La telemetría por operación no existe.** El log de acceso ve una URL; lo que hizo la petición es invisible sin registro a nivel de resolver y de operación. No es una detección faltante sino la unidad de medida equivocada, como el conteo de peticiones en [[MOC - Request smuggling]]
 - [ ] **La firma de introspección es escribible ya**, sobre el WAF: alertar consultas con `__schema` en producción detecta el reconocimiento. Candidato a detección propia, hueco de trabajo
-- [ ] NoSQL injection como dominio propio: aparece como sink de argumentos GraphQL y merece sus ejes
+- [x] NoSQL injection como dominio propio — [[MOC - NoSQL injection]], `CWE-943`. Aparece como sink de argumentos GraphQL; GraphQL es el vector, aquella es la clase
 - [ ] Suscripciones de GraphQL (WebSocket) con su superficie propia
 - [ ] CSRF sobre GraphQL cuando acepta `application/x-www-form-urlencoded` — se cruza con [[CSRF - endpoint que espera JSON]]

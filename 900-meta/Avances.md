@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veintiún dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL |
+| Contenido rojo — web | Veintidós dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 70 matrices: 61 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 105 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 72 matrices: 63 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 108 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -494,6 +494,20 @@ El siguiente del roadmap, y el **tercer dominio sin CWE propia** tras OAuth y SA
 
 Duodécimo dominio cerrado sin detección nueva. Como en web cache, hay un candidato escribible ya: la firma de `__schema` sobre el WAF detecta el reconocimiento. Dos matrices: [[GraphQL - matriz de reconocimiento]] y [[GraphQL - matriz de explotación]].
 
+### 2026-08-13 — Dominio NoSQL injection
+
+El siguiente del roadmap, la hermana de SQLi, y el hueco que [[MOC - GraphQL]] dejó anotado —NoSQL aparece como sink de sus argumentos—. Tiene CWE propia, `CWE-943`, así que es dominio pleno, no de capa.
+
+**El eje raíz es la familia de inyección, y es la divergencia respecto de SQLi.** Allá el eje fue el canal de extracción, porque todos los motores rompen una cadena igual. Acá lo primero que decide es **manipular la estructura o evaluar código**: la inyección de operador (`{"$ne":null}`) y la de JavaScript (`$where`) son dos mundos con payloads, impacto y mitigación distintos. El canal de extracción es el segundo eje, heredado de SQLi casi tal cual — [[NoSQL - extracción ciega]] y [[SQLi ciego - matriz de referencia]] comparten estructura.
+
+**La inyección de operador no tiene equivalente en SQLi, y es lo que define el dominio.** En SQL la consulta es una cadena y la inyección es romperla. En Mongo la consulta es un objeto, así que el atacante no rompe nada: **cambia el tipo del dato**, mandando un operador donde iba un valor. No hay comilla que escapar, y por eso la mitigación no es escapar sino forzar el tipo. El contexto de entrada —JSON contra query string parseada a objetos— decide si el operador entra, y por eso el reconocimiento empieza ahí.
+
+**Asimetría defensiva anotada:** la rama barata es la más silenciosa. El salto de operador acierta a la primera y no deja ráfaga de fallos, así que las reglas de fuerza bruta no lo ven — solo la firma del `$` en el cuerpo. La extracción ciega, en cambio, es cientos de consultas casi idénticas: `forma: agregado` sobre la repetición con variación mínima, detectable por volumen sin instrumentar el cuerpo.
+
+**Cuarto dominio donde la firma rinde** —tras prototype pollution, OGNL y request smuggling—: una clave que empieza con `$` en la entrada no tiene forma legítima. Décimo tercer dominio cerrado sin detección nueva, con dos candidatos escribibles: la firma del `$` sobre el WAF y el agregado de la extracción ciega.
+
+Dos matrices: [[NoSQL operadores - matriz de referencia]] y [[NoSQL extracción ciega - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -518,7 +532,8 @@ Duodécimo dominio cerrado sin detección nueva. Como en web cache, hay un candi
 - [x] ~~Request smuggling (`CWE-444`)~~ — cerrado el 2026-08-12. Ataca la cadena, no la app; su detección natural no cabe en el esquema de una fuente
 - [x] ~~Web cache (`CWE-349` + `CWE-524`)~~ — cerrado el 2026-08-12. Envenenamiento y engaño opuestos; el engaño es el primer hueco azul escribible con la fuente actual
 - [x] ~~GraphQL~~ — cerrado el 2026-08-13. Tercer dominio sin CWE propia; rompe la unidad una-petición-una-operación de la telemetría
-- [ ] Dominios web que siguen, por orden: NoSQL injection → race conditions → CSWSH (WebSocket hijacking)
+- [x] ~~NoSQL injection (`CWE-943`)~~ — cerrado el 2026-08-13. Hermana de SQLi; el eje raíz es la familia (operador/JS), no el canal
+- [ ] Dominios web que siguen, por orden: race conditions → CSWSH (WebSocket hijacking) → LDAP injection
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
