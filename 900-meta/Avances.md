@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Diecinueve dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling |
+| Contenido rojo — web | Veinte dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 66 matrices: 57 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 98 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 68 matrices: 59 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 101 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -464,6 +464,22 @@ El siguiente del roadmap, y el que rompe con algo que había sido constante en l
 
 Tercer dominio donde la firma rinde —cabeceras duplicadas `CL`+`TE` no tienen forma legítima, las ve el WAF—, después de prototype pollution y OGNL. Dos matrices: [[Request smuggling - matriz de sondeo]] y [[Request smuggling - matriz de explotación]].
 
+### 2026-08-12 — Dominio Web cache
+
+El siguiente del roadmap, el hueco que [[MOC - Request smuggling]] dejó anotado, y el segundo dominio de **capa de infraestructura**: no ataca la aplicación sino la caché compartida entre el usuario y el servidor.
+
+**Dos técnicas opuestas, como el par CSRF/CORS.** Envenenamiento (`CWE-349`) empuja contenido malo hacia todos; engaño (`CWE-524`) roba la respuesta privada de la víctima. Comparten la capa y casi nada más: distinto fallo, distinta víctima, sentido del flujo contrario. Por eso la **dirección es el eje raíz** y separarla va antes que nada — confundirlas lleva a buscar entradas sin clave cuando lo que se quería era robar una página privada. Dos CWE reales y bien diferenciadas; ninguna inventada.
+
+**El envenenamiento es un multiplicador, no una vulnerabilidad sola.** Lo que se cachea casi siempre es otra clase —un XSS reflejado, una redirección abierta— que sin la caché afectaría solo al atacante. La caché lo vuelve masivo y persistente. Por eso el dominio **referencia** a XSS y a open redirect en vez de reimplementarlos, y la severidad sale de cruzar la entrada sin clave con lo que refleja.
+
+**Tercer dominio donde sondear mal daña a usuarios reales** —tras request smuggling y su primo—, así que la matriz de sondeo va antes que las técnicas, con el cache buster como regla: mientras se prueba, un parámetro único aísla las pruebas en una entrada propia. Envenenar sin buster envenena la entrada que pide todo el mundo.
+
+**El caso que rompe la racha de huecos imposibles.** Once dominios seguidos cerrados sin detección nueva, casi todos porque la señal dependía de un campo no instrumentado. El **engaño de caché es el primero en varios dominios cuya detección propia sería escribible con la fuente que ya existe**: una respuesta con `Set-Cookie` o `Cache-Control: private` que aun así se cacheó es firma de alta fidelidad sobre las **cabeceras de respuesta**, que sí se registran. Quedó anotado como candidato a detección propia —hueco de trabajo, no de fuente—, a diferencia de `Origin` en CORS o el XML de SAML.
+
+La cara azul del envenenamiento, en cambio, sigue el patrón conocido: el momento del envenenamiento solo lo ve el WAF, pero el **efecto** —el XSS cacheado disparándose en cada víctima— lo ve [[Violación de CSP por script inline]] aguas abajo. Detectar efecto en vez de firma vuelve a pagar.
+
+Dos matrices: [[Web cache - matriz de sondeo]] y [[Web cache entradas sin clave - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -486,7 +502,8 @@ Tercer dominio donde la firma rinde —cabeceras duplicadas `CL`+`TE` no tienen 
 - [x] ~~SAML~~ — cerrado el 2026-08-12. Segundo dominio sin CWE propia; la envoltura de firma no tiene equivalente en el vault
 - [x] ~~Expression Language de Java (`CWE-917`)~~ — cerrado el 2026-08-12. Primo de SSTI con eje raíz opuesto: la superficie, no el motor
 - [x] ~~Request smuggling (`CWE-444`)~~ — cerrado el 2026-08-12. Ataca la cadena, no la app; su detección natural no cabe en el esquema de una fuente
-- [ ] Dominios web que siguen, por orden: web cache poisoning → GraphQL → NoSQL injection
+- [x] ~~Web cache (`CWE-349` + `CWE-524`)~~ — cerrado el 2026-08-12. Envenenamiento y engaño opuestos; el engaño es el primer hueco azul escribible con la fuente actual
+- [ ] Dominios web que siguen, por orden: GraphQL → NoSQL injection → race conditions
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

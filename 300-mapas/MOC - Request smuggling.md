@@ -116,6 +116,6 @@ Ninguna detección propia hizo falta escribir, pero por primera vez en la racha 
 - [x] Sondeo seguro y explotación — dos matrices
 - [x] Cara azul de firma — cubierta por el WAF
 - [ ] **La detección natural no cabe en el esquema.** El desajuste de conteo entre frente y back es una correlación entre dos fuentes distintas, unidas por identificador de conexión. `deteccion` asume una fuente por regla. Si aparece un segundo caso así —telemetría de dos capas que hay que unir—, revisar el esquema, como se hizo con `forma:`
-- [ ] Web cache poisoning como dominio propio: el smuggling es una vía de entrada, hay otras
+- [x] Web cache poisoning como dominio propio — [[MOC - Web cache]]. El smuggling es una vía de entrada; el envenenamiento por entrada sin clave es otra que no desincroniza nada
 - [ ] Smuggling sobre HTTP/3 y QUIC, superficie nueva y poco explorada
 - [ ] Desincronización por `Connection: keep-alive` mal manejado y por respuestas parciales
