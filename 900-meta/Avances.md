@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veinte dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache |
+| Contenido rojo — web | Veintiún dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 68 matrices: 59 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 101 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 70 matrices: 61 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Validación en laboratorio | **Nada.** 105 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -480,6 +480,20 @@ La cara azul del envenenamiento, en cambio, sigue el patrón conocido: el moment
 
 Dos matrices: [[Web cache - matriz de sondeo]] y [[Web cache entradas sin clave - matriz de referencia]].
 
+### 2026-08-13 — Dominio GraphQL
+
+El siguiente del roadmap, y el **tercer dominio sin CWE propia** tras OAuth y SAML. GraphQL es una tecnología de API, no una vulnerabilidad: varias clases conocidas reaparecen con mecánicas suyas, más dos que son características. Cada nota cuelga de su clase real.
+
+**Dos clases nuevas, dos reusadas.** `CWE-200` (introspección) y `CWE-770` (denegación por complejidad) no tenían dónde colgar y se crearon. `CWE-862` (autorización por resolver) y `CWE-307` (fuerza bruta por lotes) reusan Broken access control y Autenticación. Y la inyección a través de un argumento **no genera nota**: la clase es la del sink —SQLi, NoSQL, command—, GraphQL es solo el vector, mismo criterio que [[File upload - XXE por archivo]].
+
+**El esquema va antes que todo, y es lo que hace a GraphQL más fácil que REST.** En REST se adivinan endpoints y parámetros; la introspección los entrega. Todo el resto es leer el esquema y elegir el campo. Y la trampa del defensor quedó escrita: apagar la introspección no cierra nada, porque la sugerencia de campos reconstruye el esquema igual — la recomendación es proteger el dato en cada resolver, no esconder el mapa.
+
+**La observación de fondo, que es sobre la unidad de medida.** GraphQL rompe la correspondencia una-petición-una-operación que toda la telemetría web asume. Mete N operaciones en una petición HTTP, así que [[Log de acceso del servidor web]] ve una URL a `/graphql` y qué hizo —mil logins, una lectura administrativa, una consulta que tira el servidor— es invisible ahí. Es el mismo problema que el desajuste de conteo de [[MOC - Request smuggling]] en otra capa, y hace que [[GraphQL - lotes y alias]] sea ruidoso en intentos pero silencioso en peticiones: rompe el 2FA con mil intentos que el log de tráfico ve como una sola petición.
+
+**Consecuencia azul:** la única cara bien cubierta es la denegación, por efecto —un pico de latencia y `5xx` lo ve cualquier monitoreo—. El resto necesita registro por operación y por resolver, que casi nunca está. La recomendación transversal no es una regla sino instrumentar esa unidad de conteo. Es [[Un log sin identidad es un historial, no una detección]] llevado al extremo: falta no un campo sino la unidad entera.
+
+Duodécimo dominio cerrado sin detección nueva. Como en web cache, hay un candidato escribible ya: la firma de `__schema` sobre el WAF detecta el reconocimiento. Dos matrices: [[GraphQL - matriz de reconocimiento]] y [[GraphQL - matriz de explotación]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -503,7 +517,8 @@ Dos matrices: [[Web cache - matriz de sondeo]] y [[Web cache entradas sin clave 
 - [x] ~~Expression Language de Java (`CWE-917`)~~ — cerrado el 2026-08-12. Primo de SSTI con eje raíz opuesto: la superficie, no el motor
 - [x] ~~Request smuggling (`CWE-444`)~~ — cerrado el 2026-08-12. Ataca la cadena, no la app; su detección natural no cabe en el esquema de una fuente
 - [x] ~~Web cache (`CWE-349` + `CWE-524`)~~ — cerrado el 2026-08-12. Envenenamiento y engaño opuestos; el engaño es el primer hueco azul escribible con la fuente actual
-- [ ] Dominios web que siguen, por orden: GraphQL → NoSQL injection → race conditions
+- [x] ~~GraphQL~~ — cerrado el 2026-08-13. Tercer dominio sin CWE propia; rompe la unidad una-petición-una-operación de la telemetría
+- [ ] Dominios web que siguen, por orden: NoSQL injection → race conditions → CSWSH (WebSocket hijacking)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

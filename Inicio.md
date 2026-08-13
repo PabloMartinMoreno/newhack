@@ -32,6 +32,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - EL injection]] — Expression Language de Java: SpEL, OGNL, Struts
 - [[MOC - Request smuggling]] — desincronización entre frente y back de la cadena HTTP
 - [[MOC - Web cache]] — envenenamiento y engaño de la caché compartida
+- [[MOC - GraphQL]] — introspección, autorización por resolver, lotes, complejidad
 
 **Azul**
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**
