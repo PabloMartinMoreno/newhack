@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veintidós dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection |
+| Contenido rojo — web | Veintitrés dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 72 matrices: 63 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Validación en laboratorio | **Nada.** 108 tradecraft en `probado: nunca`, 22 detecciones en `estado: idea`. Es el cuello de botella real |
+| Cheatsheets | 74 matrices: 65 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 111 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -508,6 +508,20 @@ El siguiente del roadmap, la hermana de SQLi, y el hueco que [[MOC - GraphQL]] d
 
 Dos matrices: [[NoSQL operadores - matriz de referencia]] y [[NoSQL extracción ciega - matriz de referencia]].
 
+### 2026-08-13 — Dominio Race conditions
+
+El siguiente del roadmap. `clase: CWE-362`, dominio pleno.
+
+**Es sobre cuándo, no sobre qué, y eso lo hace único en el vault.** En casi todos los demás dominios el ataque está en el contenido de la petición; acá la petición es perfectamente válida —canjear la tarjeta una vez es legítimo— y lo único anómalo es que llegan varias en la misma ventana de milisegundos. No hay payload: el exploit es la sincronización.
+
+**El eje raíz es el tipo de ventana**, porque decide todo el reconocimiento: buscar un contador (superación de límite), buscar dos operaciones que se cruzan (colisión entre endpoints), o sospechar una operación no atómica (subestado oculto). La técnica de disparo es ortogonal —la misma para las tres— y va a matriz.
+
+**La particularidad de estructura: el "cómo se dispara" es más difícil que el "qué se ataca"**, al revés de casi todos los dominios. Por eso [[Race - matriz de disparo]] va antes que las técnicas en el orden de lectura. El ataque de un solo paquete sobre HTTP/2 —20-30 peticiones en un paquete TCP, sin jitter— es lo que volvió el dominio explotable de forma fiable; sin él las tres ramas son teóricas. Comparte instrumental con [[MOC - Request smuggling]] (HTTP/2 crudo, Turbo Intruder), y las dos matrices de disparo se referencian.
+
+**El argumento más fuerte del vault a favor de `forma: invariante`.** Es el dominio que pide detección por invariante y prohíbe la de firma: cada petición es individualmente válida, así que ninguna firma distingue el ataque — la única señal es que **el resultado es imposible**. Saldo negativo, token de un solo uso con dos efectos, dos cuentas con el mismo identificador. Eso es exactamente `forma: invariante`, la misma de [[Actividad de sesión posterior a su cierre]] y [[Ticket de servicio sin ticket inicial previo]]. El agregado ayuda como señal temprana pero es débil en la colisión entre endpoints; el invariante confirma las tres ramas por igual.
+
+Décimo cuarto dominio cerrado sin detección nueva. Dos candidatos escribibles sobre [[Log de auditoría de la aplicación]]: el agregado de la ráfaga simultánea y el invariante sobre el resultado. Dos matrices: [[Race - matriz de disparo]] y [[Race - superficies y sub-estados]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -533,7 +547,8 @@ Dos matrices: [[NoSQL operadores - matriz de referencia]] y [[NoSQL extracción 
 - [x] ~~Web cache (`CWE-349` + `CWE-524`)~~ — cerrado el 2026-08-12. Envenenamiento y engaño opuestos; el engaño es el primer hueco azul escribible con la fuente actual
 - [x] ~~GraphQL~~ — cerrado el 2026-08-13. Tercer dominio sin CWE propia; rompe la unidad una-petición-una-operación de la telemetría
 - [x] ~~NoSQL injection (`CWE-943`)~~ — cerrado el 2026-08-13. Hermana de SQLi; el eje raíz es la familia (operador/JS), no el canal
-- [ ] Dominios web que siguen, por orden: race conditions → CSWSH (WebSocket hijacking) → LDAP injection
+- [x] ~~Race conditions (`CWE-362`)~~ — cerrado el 2026-08-13. Sobre cuándo, no qué; el argumento más fuerte a favor de `forma: invariante`
+- [ ] Dominios web que siguen, por orden: CSWSH (WebSocket hijacking) → LDAP injection → XPath injection
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
