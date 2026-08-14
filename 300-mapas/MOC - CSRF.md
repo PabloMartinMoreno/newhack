@@ -117,4 +117,4 @@ Dos observaciones que este dominio deja claras:
 - [x] Cara azul — cubierta por [[Cambio de privilegio fuera del flujo administrativo]], sin reglas nuevas
 - [ ] **La rama de `SameSite` caduca.** Depende del navegador, no de la aplicación. La ventana de gracia ya se recortó una vez y está anunciada para desaparecer — reconfirmar antes de usarla
 - [ ] CORS mal configurado como dominio propio: origen reflejado, `null` aceptado, comparación por subcadena. Es el vecino de este MOC y responde otra pregunta —leer en vez de escribir—, así que va aparte
-- [ ] CSRF sobre WebSocket, donde no hay control previo ni `SameSite` que valga
+- [x] CSRF sobre WebSocket — [[MOC - WebSocket]], con `CWE-1385` propia. Es el secuestro del handshake, donde no hay control previo ni `SameSite` que valga, y el canal queda bidireccional

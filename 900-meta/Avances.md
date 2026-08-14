@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veintitrés dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions |
+| Contenido rojo — web | Veinticuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 74 matrices: 65 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 111 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 76 matrices: 67 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 113 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -522,6 +522,20 @@ El siguiente del roadmap. `clase: CWE-362`, dominio pleno.
 
 Décimo cuarto dominio cerrado sin detección nueva. Dos candidatos escribibles sobre [[Log de auditoría de la aplicación]]: el agregado de la ráfaga simultánea y el invariante sobre el resultado. Dos matrices: [[Race - matriz de disparo]] y [[Race - superficies y sub-estados]].
 
+### 2026-08-13 — Dominio WebSocket
+
+El siguiente del roadmap (CSWSH), y el hueco que [[MOC - CSRF]] dejó anotado. Tecnología de transporte, así que —como GraphQL— cada nota cuelga de su clase, con una CWE nueva propia.
+
+**Abre dos superficies que el resto del vault no cubre, y esa es la razón de ser dominio.** El handshake, que es un CSRF con defensas propias (`CWE-1385`, falta de validación de origen), y el canal de mensajes, que casi ninguna fuente inspecciona. La superficie es el eje.
+
+**El secuestro (CSWSH) supera al CSRF que le da familia.** El handshake es un `GET` con `Upgrade` que lleva las cookies solo; sin validación de origen, la página del atacante abre un socket con la sesión de la víctima. Y a diferencia del CSRF clásico, **lee las respuestas** —el canal queda bidireccional—, así que el impacto es el de [[MOC - CORS]], no el del CSRF ciego. Por eso `CWE-1385` y no `CWE-352`: `SameSite` y el control previo de CORS no aplican al handshake, la validación de origen es la única defensa. El bypass de un origen laxo reusa [[CORS bypass de origen - matriz de referencia]].
+
+**La inyección por mensaje es un vector, no una nota** —la clase es la del sink—, mismo criterio que GraphQL y File upload XXE.
+
+**La asimetría de visibilidad que ordena la cara azul.** El handshake se ve —`Origin` externo sobre `Upgrade`, firma escribible y de fuente disponible, análoga a la de CORS—. El canal es ciego: una vez abierto el socket, **ninguna fuente de tráfico inspecciona los mensajes**. La acción no autorizada, el payload de inyección, el precio manipulado — todos pasan sin rastro, el WAF ve el handshake y después nada. Es el punto ciego de fuente más amplio del vault: no falta un campo, falta instrumentar un canal entero. [[Un log sin identidad es un historial, no una detección]] llevado al canal.
+
+Décimo quinto dominio cerrado sin detección nueva, con un candidato escribible: la firma del `Origin` externo en el handshake. Dos matrices: [[WebSocket - matriz de reconocimiento]] y [[WebSocket - matriz de manipulación]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -548,7 +562,8 @@ Décimo cuarto dominio cerrado sin detección nueva. Dos candidatos escribibles 
 - [x] ~~GraphQL~~ — cerrado el 2026-08-13. Tercer dominio sin CWE propia; rompe la unidad una-petición-una-operación de la telemetría
 - [x] ~~NoSQL injection (`CWE-943`)~~ — cerrado el 2026-08-13. Hermana de SQLi; el eje raíz es la familia (operador/JS), no el canal
 - [x] ~~Race conditions (`CWE-362`)~~ — cerrado el 2026-08-13. Sobre cuándo, no qué; el argumento más fuerte a favor de `forma: invariante`
-- [ ] Dominios web que siguen, por orden: CSWSH (WebSocket hijacking) → LDAP injection → XPath injection
+- [x] ~~CSWSH / WebSocket (`CWE-1385`)~~ — cerrado el 2026-08-13. Dos superficies: handshake (se ve) y canal (ciego, el mayor punto ciego de fuente del vault)
+- [ ] Dominios web que siguen, por orden: LDAP injection → XPath injection → mass assignment como dominio propio
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

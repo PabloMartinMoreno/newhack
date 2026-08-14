@@ -35,6 +35,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - GraphQL]] — introspección, autorización por resolver, lotes, complejidad
 - [[MOC - NoSQL injection]] — inyección de operador, extracción ciega, JavaScript
 - [[MOC - Race conditions]] — superación de límite, colisión, ataque de un solo paquete
+- [[MOC - WebSocket]] — secuestro entre sitios (CSWSH) y abuso del canal de mensajes
 
 **Azul**
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**
