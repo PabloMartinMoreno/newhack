@@ -37,6 +37,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - Race conditions]] — superación de límite, colisión, ataque de un solo paquete
 - [[MOC - WebSocket]] — secuestro entre sitios (CSWSH) y abuso del canal de mensajes
 - [[MOC - LDAP injection]] — manipulación del filtro, salto de autenticación, extracción ciega
+- [[MOC - XPath injection]] — manipulación de la consulta XML, salto de autenticación, extracción ciega
 
 **Azul**
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**

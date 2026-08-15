@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veinticinco dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection |
+| Contenido rojo — web | Veintiséis dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 78 matrices: 69 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 115 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 80 matrices: 71 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 117 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -550,6 +550,18 @@ El siguiente del roadmap, y la tercera hermana de inyección de consulta con SQL
 
 Décimo sexto dominio cerrado sin detección nueva. Dos matrices: [[LDAP filtro - matriz de referencia]] y [[LDAP extracción ciega - matriz de referencia]].
 
+### 2026-08-13 — Dominio XPath injection, y el cierre de las cuatro hermanas
+
+El siguiente del roadmap, y la **cuarta y última hermana de inyección de consulta** con SQLi, NoSQL y LDAP. `clase: CWE-643`.
+
+**La más parecida a SQLi de las cuatro.** Rompe comillas y balancea expresiones, no cierra paréntesis como LDAP ni cambia el tipo del dato como NoSQL. Eje por canal, como SQLi y LDAP. Dos tradecraft. Quien conoce SQLi tiene medio dominio ganado; lo eficiente es aprender solo lo que cambia.
+
+**Dos diferencias con SQLi que sí importan:** no hay comentarios —XPath 1.0 no tiene `--`, así que hay que **balancear** las comillas (`' or '1'='1' or 'a'='a`) en vez de comentar el resto—; y no hay control de acceso dentro del documento —una vez inyectado, todo el XML es alcanzable sin `UNION` ni permisos, y `name()`/`count()` reconstruyen el esquema entero—. XPath 2.0 agrega `doc('file://')` y `doc('http://')`, que cruzan el dominio con [[MOC - XXE]] y [[MOC - SSRF]].
+
+**El cierre de las cuatro hermanas consolida el candidato azul transversal.** Con SQLi, NoSQL, LDAP y XPath cerradas, la cara azul de las cuatro es idéntica, y eso deja de ser repetición para volverse conclusión: **una detección de firma sobre el cuerpo y una de agregado de consultas casi idénticas cubrirían las cuatro juntas**. Los metacaracteres difieren —`'`, `$`, `*)(`— pero el patrón es el mismo: caracteres de estructura de consulta en un campo de datos. Y las cuatro comparten la asimetría: salto de autenticación silencioso (acierta a la primera, solo la firma lo ve) contra extracción ciega ruidosa (`forma: agregado`). Escribir esas dos reglas es el mayor retorno azul del vault —una de cada una cubre cuatro dominios—, y es el argumento más fuerte a favor de detectar por **clase de patrón** en vez de por dominio.
+
+Décimo séptimo dominio cerrado sin detección nueva. Dos matrices: [[XPath consulta - matriz de referencia]] y [[XPath extracción ciega - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -578,7 +590,8 @@ Décimo sexto dominio cerrado sin detección nueva. Dos matrices: [[LDAP filtro 
 - [x] ~~Race conditions (`CWE-362`)~~ — cerrado el 2026-08-13. Sobre cuándo, no qué; el argumento más fuerte a favor de `forma: invariante`
 - [x] ~~CSWSH / WebSocket (`CWE-1385`)~~ — cerrado el 2026-08-13. Dos superficies: handshake (se ve) y canal (ciego, el mayor punto ciego de fuente del vault)
 - [x] ~~LDAP injection (`CWE-90`)~~ — cerrado el 2026-08-13. Tercera hermana de inyección; eje por canal, sin canal temporal, sintaxis prefija
-- [ ] Dominios web que siguen, por orden: XPath injection → mass assignment como dominio propio → HTTP/2 y protocolos
+- [x] ~~XPath injection (`CWE-643`)~~ — cerrado el 2026-08-13. Cuarta hermana, la más cercana a SQLi; cierra el grupo de inyección de consulta
+- [ ] Dominios web que siguen, por orden: mass assignment como dominio propio → SSJI (server-side JS) → HTTP host header attacks
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
