@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veinticuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket |
+| Contenido rojo — web | Veinticinco dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 76 matrices: 67 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 113 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 78 matrices: 69 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 115 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -536,6 +536,20 @@ El siguiente del roadmap (CSWSH), y el hueco que [[MOC - CSRF]] dejó anotado. T
 
 Décimo quinto dominio cerrado sin detección nueva, con un candidato escribible: la firma del `Origin` externo en el handshake. Dos matrices: [[WebSocket - matriz de reconocimiento]] y [[WebSocket - matriz de manipulación]].
 
+### 2026-08-13 — Dominio LDAP injection
+
+El siguiente del roadmap, y la tercera hermana de inyección de consulta con SQLi y NoSQL. `clase: CWE-90`, dominio pleno.
+
+**El canal es el eje raíz, como en SQLi, no la familia como en NoSQL.** LDAP no tiene la bifurcación operador-contra-código: hay un solo mecanismo —manipular el filtro— y lo que decide es si el resultado se refleja o hay que inferirlo. Dos tradecraft, no tres: manipulación del filtro (salto de auth + divulgación reflejada) y extracción ciega.
+
+**La sintaxis prefija es lo que lo separa de las hermanas.** El filtro es notación polaca con paréntesis —`(&(uid=x)(pass=y))`, operadores adelante—, así que romperlo no es cerrar una comilla sino **cerrar paréntesis y reescribir la lógica booleana**. El comodín `*` es la herramienta central: en la contraseña la vuelve "cualquiera", como patrón es el oráculo de la extracción ciega.
+
+**La limitación propia: LDAP no tiene canal temporal.** SQLi tiene `SLEEP`, NoSQL tiene `sleep` en JavaScript; LDAP no ofrece ninguno. Si no hay oráculo booleano, la extracción ciega se corta. Hay que saberlo antes de invertir.
+
+**Quinta firma de cuerpo que rinde, y la conclusión transversal.** Los metacaracteres `*)(` en un campo de usuario no tienen forma legítima —tras prototype pollution, OGNL, request smuggling y NoSQL—. Y la misma asimetría de NoSQL: el salto de auth acierta a la primera sin ráfaga de fallos (solo la firma lo ve), la extracción ciega es cientos de consultas casi idénticas (`forma: agregado`). Quedó anotado que **una sola detección de firma de inyección sobre el cuerpo cubriría SQLi, NoSQL y LDAP juntas**: los metacaracteres difieren (`'`, `$`, `*)(`) pero el patrón es idéntico —caracteres de estructura de consulta en un campo de datos—.
+
+Décimo sexto dominio cerrado sin detección nueva. Dos matrices: [[LDAP filtro - matriz de referencia]] y [[LDAP extracción ciega - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -563,7 +577,8 @@ Décimo quinto dominio cerrado sin detección nueva, con un candidato escribible
 - [x] ~~NoSQL injection (`CWE-943`)~~ — cerrado el 2026-08-13. Hermana de SQLi; el eje raíz es la familia (operador/JS), no el canal
 - [x] ~~Race conditions (`CWE-362`)~~ — cerrado el 2026-08-13. Sobre cuándo, no qué; el argumento más fuerte a favor de `forma: invariante`
 - [x] ~~CSWSH / WebSocket (`CWE-1385`)~~ — cerrado el 2026-08-13. Dos superficies: handshake (se ve) y canal (ciego, el mayor punto ciego de fuente del vault)
-- [ ] Dominios web que siguen, por orden: LDAP injection → XPath injection → mass assignment como dominio propio
+- [x] ~~LDAP injection (`CWE-90`)~~ — cerrado el 2026-08-13. Tercera hermana de inyección; eje por canal, sin canal temporal, sintaxis prefija
+- [ ] Dominios web que siguen, por orden: XPath injection → mass assignment como dominio propio → HTTP/2 y protocolos
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
