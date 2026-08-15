@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veintiséis dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Veintisiete dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 80 matrices: 71 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 117 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 82 matrices: 73 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 120 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -562,6 +562,22 @@ El siguiente del roadmap, y la **cuarta y última hermana de inyección de consu
 
 Décimo séptimo dominio cerrado sin detección nueva. Dos matrices: [[XPath consulta - matriz de referencia]] y [[XPath extracción ciega - matriz de referencia]].
 
+### 2026-08-13 — Mass assignment descartado, dominio Host header en su lugar
+
+**Corrección de roadmap.** "Mass assignment como dominio propio" estaba mal anotado: ya existe como [[Control de acceso - mass assignment]] bajo `CWE-915`, referenciada desde prototype pollution y deserialización. Hacerla dominio propio duplicaría, contra la regla del vault. Se saltea.
+
+**En su lugar, HTTP Host header attacks**, dominio de capa como OAuth, SAML, GraphQL y WebSocket: el hilo común es que **el `Host` y las cabeceras de reenvío las controla el cliente y la aplicación confía en ellas** para tres cosas distintas —construir enlaces, enrutar, decidir acceso—, y cada uso mal hecho es una clase distinta.
+
+**Solo una CWE nueva, `CWE-290` (bypass por spoofing).** El reset poisoning reusa `CWE-640`, el SSRF por enrutamiento reusa `CWE-918`, y el envenenamiento de caché por `Host` ya lo cubre [[MOC - Web cache]] —se referencia, no se duplica—. Es el mismo patrón de OAuth: un vector transversal cuyas ramas son clases conocidas.
+
+**`X-Forwarded-Host` es el vector que más rinde**, y quedó como el aprendizaje central: la app valida el `Host` real —parece segura— pero construye el enlace o decide con la cabecera de reenvío, que no valida. El agujero más común y el menos auditado justamente porque el `Host` directo sí está protegido.
+
+**La vuelta de tuerca defensiva: confiar en `X-Forwarded-For` rompe el control y su detección a la vez.** Si la app cuenta intentos por la IP de esa cabecera, rotarla evade el límite **y** las reglas de fuerza bruta por IP —cada intento parece de otra IP—. El ataque envenena la telemetría que debería verlo. La única detección que sobrevive agrupa por algo que el atacante no controla.
+
+**Tercera familia de dominios con cara azul escribible** (con CORS y WebSocket): las firmas son cabeceras que no matchean la lista blanca —`Host` externo en un reset, `X-Forwarded-For: 127.0.0.1` desde afuera—, de fuente disponible. Sugiere una detección transversal de "cabecera de confianza contradictoria", hermana del candidato de firma de inyección de las cuatro hermanas.
+
+Décimo octavo dominio cerrado sin detección nueva. Dos matrices: [[Host header inyección - matriz de referencia]] y [[Host header cabeceras de confianza - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -591,7 +607,9 @@ Décimo séptimo dominio cerrado sin detección nueva. Dos matrices: [[XPath con
 - [x] ~~CSWSH / WebSocket (`CWE-1385`)~~ — cerrado el 2026-08-13. Dos superficies: handshake (se ve) y canal (ciego, el mayor punto ciego de fuente del vault)
 - [x] ~~LDAP injection (`CWE-90`)~~ — cerrado el 2026-08-13. Tercera hermana de inyección; eje por canal, sin canal temporal, sintaxis prefija
 - [x] ~~XPath injection (`CWE-643`)~~ — cerrado el 2026-08-13. Cuarta hermana, la más cercana a SQLi; cierra el grupo de inyección de consulta
-- [ ] Dominios web que siguen, por orden: mass assignment como dominio propio → SSJI (server-side JS) → HTTP host header attacks
+- [x] ~~Host header attacks (`CWE-290` + reusadas)~~ — cerrado el 2026-08-13. Dominio de capa; X-Forwarded-Host el vector clave; el ataque envenena su propia detección
+- [x] ~~mass assignment~~ — descartado: ya existe como [[Control de acceso - mass assignment]], no se duplica
+- [ ] Dominios web que siguen, por orden: CRLF / response splitting (`CWE-113`) → inyección en cabeceras de correo (`CWE-93`) → XSLT injection
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
