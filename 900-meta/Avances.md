@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veintisiete dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Veintiocho dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 82 matrices: 73 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 120 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 84 matrices: 75 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 122 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -578,6 +578,22 @@ Décimo séptimo dominio cerrado sin detección nueva. Dos matrices: [[XPath con
 
 Décimo octavo dominio cerrado sin detección nueva. Dos matrices: [[Host header inyección - matriz de referencia]] y [[Host header cabeceras de confianza - matriz de referencia]].
 
+### 2026-08-16 — Dominio CRLF injection / response splitting
+
+El siguiente del roadmap. `clase: CWE-113`, dominio pleno.
+
+**Gira alrededor de un solo átomo: el `\r\n` que separa las cabeceras HTTP.** El eje raíz es el alcance —un `\r\n` inyecta una cabecera, un `\r\n\r\n` parte la respuesta entera y da un cuerpo controlado—. Dos tradecraft. La codificación (cómo se cuela el salto de línea) va a matriz.
+
+**Hermano por átomo de request smuggling.** El `\r\n` controla la estructura HTTP en los dos: allá desincroniza dónde termina una **petición**, acá controla la estructura de una **respuesta**. Los dos viven sobre HTTP/1.1, HTTP/2 los mitiga, la degradación los reintroduce. Quedó escrito como la relación central del dominio.
+
+**Dos observaciones que lo distinguen del resto del grupo de inyección:**
+
+La firma es la más limpia del grupo: el `%0d%0a` es inconfundible y —a diferencia de las otras inyecciones— suele viajar en la **URL** de una redirección, así que lo ve el log de acceso sin instrumentar cuerpos. Consolida el candidato transversal: una regla de firma de metacaracteres de estructura cubriría las cuatro hermanas + Host + CRLF, y el CRLF es el caso más fácil porque el salto de línea codificado no tiene uso legítimo en un parámetro.
+
+Y la inyección de logs **ataca la capa defensiva directamente** —único en el vault—. Todas las demás técnicas dejan rastro en la telemetría; esta puede falsificarlo, insertando líneas de log que ocultan el ataque o incriminan. Es el único caso donde el rojo ataca al azul en su propio terreno, y refuerza [[Un log sin identidad es un historial, no una detección]] desde el otro lado: un log que acepta `\r\n` sin escapar no es fuente confiable — la telemetría también es una superficie.
+
+Décimo noveno dominio cerrado sin detección nueva. Dos matrices: [[CRLF inyección - matriz de referencia]] y [[CRLF impacto - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -609,7 +625,8 @@ Décimo octavo dominio cerrado sin detección nueva. Dos matrices: [[Host header
 - [x] ~~XPath injection (`CWE-643`)~~ — cerrado el 2026-08-13. Cuarta hermana, la más cercana a SQLi; cierra el grupo de inyección de consulta
 - [x] ~~Host header attacks (`CWE-290` + reusadas)~~ — cerrado el 2026-08-13. Dominio de capa; X-Forwarded-Host el vector clave; el ataque envenena su propia detección
 - [x] ~~mass assignment~~ — descartado: ya existe como [[Control de acceso - mass assignment]], no se duplica
-- [ ] Dominios web que siguen, por orden: CRLF / response splitting (`CWE-113`) → inyección en cabeceras de correo (`CWE-93`) → XSLT injection
+- [x] ~~CRLF / response splitting (`CWE-113`)~~ — cerrado el 2026-08-16. Hermano de smuggling por el átomo `\r\n`; la inyección de logs ataca al azul
+- [ ] Dominios web que siguen, por orden: inyección en cabeceras de correo (`CWE-93`) → XSLT injection → clickjacking
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
