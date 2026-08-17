@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Treinta dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Treinta y un dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 88 matrices: 79 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 126 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 90 matrices: 81 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 128 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -620,6 +620,18 @@ El siguiente del roadmap. `clase: CWE-94` (Code Injection), primo de SSTI sobre 
 
 Vigésimo primer dominio cerrado sin detección nueva. Dos matrices: [[XSLT - matriz de identificación]] y [[XSLT payloads - matriz de referencia]].
 
+### 2026-08-16 — Dominio Clickjacking
+
+El siguiente del roadmap. `clase: CWE-1021`, dominio pleno, y el más del lado del cliente del vault.
+
+**No ataca el servidor, ataca la percepción de la víctima.** El objetivo recibe un clic autenticado perfectamente legítimo; lo que se manipula es qué cree la víctima que está clickeando. No hay payload, la víctima es el objetivo, y —lo que lo hace único— la defensa es prevención pura. Eje raíz: la interacción (un clic contra arrastre/multipaso). La factibilidad del encuadre va a matriz.
+
+**Primo de CSRF, y lo sortea.** Los dos hacen que la víctima ejecute una acción que no quiso: CSRF falsifica la petición, clickjacking engaña el clic. Pero clickjacking **sortea las defensas de CSRF** —el clic genera la petición real con su token anti-CSRF válido incluido—, así que un formulario protegido contra CSRF sigue cayendo. Quedó escrito como la relación clave: proteger contra CSRF no protege contra clickjacking.
+
+**El primer dominio cuya cara azul es puramente preventiva, y donde eso no es un hueco a llenar sino la naturaleza del dominio.** El ataque vive en la página del atacante y el navegador de la víctima; el objetivo solo recibe un clic indistinguible de uno real. No hay efecto anómalo aguas abajo como en las inyecciones: el efecto **es** la acción legítima. La carga del marco deja un `Sec-Fetch-Dest: iframe` con `Referer` externo, pero encuadrar es legítimo (widgets, vistas previas), así que la firma tiene fidelidad demasiado baja. La defensa es la cabecera `frame-ancestors`, no una regla. Es el caso más puro de [[Ausencia de alertas no es ausencia de ataque]]: la ausencia de alertas es estructural, no hay nada fiable que alertar.
+
+Vigésimo segundo dominio cerrado sin detección nueva, y el primero donde eso no es un hueco: no hay detección posible, hay prevención. Dos matrices: [[Clickjacking - encuadre - matriz de referencia]] y [[Clickjacking - superposición - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -654,7 +666,8 @@ Vigésimo primer dominio cerrado sin detección nueva. Dos matrices: [[XSLT - ma
 - [x] ~~CRLF / response splitting (`CWE-113`)~~ — cerrado el 2026-08-16. Hermano de smuggling por el átomo `\r\n`; la inyección de logs ataca al azul
 - [x] ~~Email header injection (`CWE-93`)~~ — cerrado el 2026-08-16. Hermana de CRLF, sink de correo; el Bcc de reset ataca el mismo flujo que host header poisoning
 - [x] ~~XSLT injection (`CWE-94`)~~ — cerrado el 2026-08-16. Primo de SSTI sobre XML, eje por capacidad del procesador; cerrado con detecciones existentes
-- [ ] Dominios web que siguen, por orden: clickjacking → tabnabbing → CSV injection
+- [x] ~~Clickjacking (`CWE-1021`)~~ — cerrado el 2026-08-16. Del lado del cliente; primer dominio de cara azul puramente preventiva (frame-ancestors, no detección)
+- [ ] Dominios web que siguen, por orden: tabnabbing → CSV / formula injection → open redirect como dominio propio
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

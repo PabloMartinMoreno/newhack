@@ -42,6 +42,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - CRLF injection]] — inyección de cabecera y división de respuesta HTTP
 - [[MOC - Email header injection]] — `Bcc` de exfiltración, spam, falsificación de remitente
 - [[MOC - XSLT injection]] — lectura y SSRF por `document()`, RCE por funciones de extensión
+- [[MOC - Clickjacking]] — engaño de interfaz por encuadre; defensa preventiva por `frame-ancestors`
 
 **Azul**
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**
