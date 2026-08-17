@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veintiocho dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Veintinueve dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 84 matrices: 75 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 122 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 86 matrices: 77 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 124 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -594,6 +594,20 @@ Y la inyección de logs **ataca la capa defensiva directamente** —único en el
 
 Décimo noveno dominio cerrado sin detección nueva. Dos matrices: [[CRLF inyección - matriz de referencia]] y [[CRLF impacto - matriz de referencia]].
 
+### 2026-08-16 — Dominio Email header injection
+
+El siguiente del roadmap, y el hueco que [[MOC - CRLF injection]] dejó anotado. `clase: CWE-93` —la inyección de CRLF genérica, clase padre de la `CWE-113` de HTTP—.
+
+**Hermana directa de CRLF con el sink cambiado.** El mismo átomo `\r\n`: allá estructura una respuesta HTTP, acá un mensaje de correo. Mismo eje raíz (alcance: una cabecera contra el cuerpo/MIME), mismas codificaciones, mismo árbol. Lo que cambia es el destino —cabeceras de correo— y el impacto —exfiltración, spam, phishing—. El sink clásico es `mail()` de PHP con las cabeceras concatenadas en el quinto parámetro.
+
+**La joya es el `Bcc` en el flujo de reset**, y conecta con la autenticación por un ángulo opuesto al de [[Host header - envenenamiento del restablecimiento]]: aquel cambia el dominio del enlace y espera el clic de la víctima; este se manda una copia del correo entero de reset —con el token— y no depende de nada que haga la víctima. Los dos atacan el mismo flujo desde lados contrarios, y quedó escrito como el paralelo del dominio.
+
+**Un hueco de fuente de tipo nuevo: el servidor de correo.** La firma de la petición —`\r\n` + `Bcc:`/`From:` en un campo de correo— es escribible sobre el WAF. Pero el impacto —el correo con el destinatario o el remitente inyectados— **no lo ve ninguna fuente del vault**, porque no hay artefacto de telemetría del MTA modelado. Es un hueco de fuente distinto de todos los anteriores: no es web, es correo.
+
+**Consolida el candidato de firma transversal sobre dos sinks.** El `\r\n` codificado seguido de un nombre de cabecera —HTTP o de correo— es el mismo patrón. Con las cuatro hermanas de inyección + Host + CRLF + correo, una regla de firma de metacaracteres de estructura en la entrada cubre **siete dominios**; el `\r\n` + nombre de cabecera es su sub-patrón más limpio.
+
+Vigésimo dominio cerrado sin detección nueva. Dos matrices: [[Email header inyección - matriz de referencia]] y [[Email header impacto - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -626,7 +640,8 @@ Décimo noveno dominio cerrado sin detección nueva. Dos matrices: [[CRLF inyecc
 - [x] ~~Host header attacks (`CWE-290` + reusadas)~~ — cerrado el 2026-08-13. Dominio de capa; X-Forwarded-Host el vector clave; el ataque envenena su propia detección
 - [x] ~~mass assignment~~ — descartado: ya existe como [[Control de acceso - mass assignment]], no se duplica
 - [x] ~~CRLF / response splitting (`CWE-113`)~~ — cerrado el 2026-08-16. Hermano de smuggling por el átomo `\r\n`; la inyección de logs ataca al azul
-- [ ] Dominios web que siguen, por orden: inyección en cabeceras de correo (`CWE-93`) → XSLT injection → clickjacking
+- [x] ~~Email header injection (`CWE-93`)~~ — cerrado el 2026-08-16. Hermana de CRLF, sink de correo; el Bcc de reset ataca el mismo flujo que host header poisoning
+- [ ] Dominios web que siguen, por orden: XSLT injection → clickjacking → inyección en cabeceras de reenvío de logs
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

@@ -105,4 +105,4 @@ Décimo noveno dominio cerrado sin detección nueva, con la firma más limpia de
 - [x] Cara azul de firma — la más limpia del grupo de inyección
 - [ ] **La firma de metacaracteres de estructura es transversal a todo el grupo de inyección** (4 hermanas + Host + CRLF). El `%0d%0a` es el caso más limpio. Candidato de detección de mayor retorno del vault, hueco de trabajo
 - [ ] **La inyección de logs exige tratar la telemetría como superficie**: escapar `\r\n` en lo que se registra. No es una detección sino un endurecimiento de la fuente
-- [ ] Inyección en cabeceras de correo (`CWE-93`, SMTP) como dominio vecino: mismo `\r\n` en otro protocolo
+- [x] Inyección en cabeceras de correo — [[MOC - Email header injection]], `CWE-93`. Mismo `\r\n`, sink de correo en vez de HTTP
