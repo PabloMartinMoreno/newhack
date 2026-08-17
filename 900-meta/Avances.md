@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Veintinueve dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Treinta dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 86 matrices: 77 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 124 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 88 matrices: 79 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 126 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -608,6 +608,18 @@ El siguiente del roadmap, y el hueco que [[MOC - CRLF injection]] dejó anotado.
 
 Vigésimo dominio cerrado sin detección nueva. Dos matrices: [[Email header inyección - matriz de referencia]] y [[Email header impacto - matriz de referencia]].
 
+### 2026-08-16 — Dominio XSLT injection
+
+El siguiente del roadmap. `clase: CWE-94` (Code Injection), primo de SSTI sobre XML.
+
+**Modelado por capacidad del procesador, exactamente como SSTI.** XSLT es un lenguaje de transformación evaluado del lado del servidor; la inyección se modela por qué permite el procesador —lectura, SSRF, ejecución—, no por cuál es. El procesador (libxslt/PHP, Xalan/Java, .NET, Saxon) va a matriz, mismo criterio que el motor de plantillas en SSTI. Dos tradecraft: lectura/SSRF y ejecución por extensión.
+
+**La lectura va antes que la ejecución porque necesita menos.** `document()` y `unparsed-text()` están activos más seguido que las funciones de extensión, así que lectura de archivos y SSRF se consiguen sin RCE. Las funciones de extensión —`registerPHPFunctions`, Xalan, `msxsl:script`— son el techo y están apagadas más seguido que las plantillas de SSTI; un XSLT sin extensiones tiene la lectura como límite, y tratarlo como RCE es perder el tiempo. Quedó marcado en los dos árboles.
+
+**La mejor evidencia acumulada de que detectar efecto paga.** El dominio entero se cierra reutilizando SSRF, XXE, command injection y escritura de archivo: la ejecución la ve [[Intérprete de comandos como hijo del servidor web]], el SSRF las reglas de conexión saliente, la escritura por `exsl:document` [[Archivo ejecutable nuevo en la raíz web]]. Un dominio que no existía cuando se escribieron esas reglas queda cubierto porque converge en los mismos efectos —proceso hijo, conexión saliente, archivo nuevo—. El único hueco es la lectura local con `file://`, que no emite nada, mismo límite de fuente que el XXE local.
+
+Vigésimo primer dominio cerrado sin detección nueva. Dos matrices: [[XSLT - matriz de identificación]] y [[XSLT payloads - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -641,7 +653,8 @@ Vigésimo dominio cerrado sin detección nueva. Dos matrices: [[Email header iny
 - [x] ~~mass assignment~~ — descartado: ya existe como [[Control de acceso - mass assignment]], no se duplica
 - [x] ~~CRLF / response splitting (`CWE-113`)~~ — cerrado el 2026-08-16. Hermano de smuggling por el átomo `\r\n`; la inyección de logs ataca al azul
 - [x] ~~Email header injection (`CWE-93`)~~ — cerrado el 2026-08-16. Hermana de CRLF, sink de correo; el Bcc de reset ataca el mismo flujo que host header poisoning
-- [ ] Dominios web que siguen, por orden: XSLT injection → clickjacking → inyección en cabeceras de reenvío de logs
+- [x] ~~XSLT injection (`CWE-94`)~~ — cerrado el 2026-08-16. Primo de SSTI sobre XML, eje por capacidad del procesador; cerrado con detecciones existentes
+- [ ] Dominios web que siguen, por orden: clickjacking → tabnabbing → CSV injection
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
