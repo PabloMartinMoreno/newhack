@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Treinta y tres dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 92 matrices: 83 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 132 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 93 matrices: 84 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -660,6 +660,18 @@ El siguiente del roadmap. `clase: CWE-1236`, dominio **compacto** (una matriz, c
 
 Vigésimo cuarto dominio cerrado sin detección nueva. Una matriz: [[CSV - matriz de referencia]].
 
+### 2026-08-16 — Dominio HTTP parameter pollution
+
+El siguiente del roadmap. `clase: CWE-235`, y el **tercer dominio de discrepancia de parseo** con request smuggling y web cache.
+
+**Los tres abusan que dos componentes interpreten lo mismo distinto**: en smuggling, dónde termina la petición; en caché, cómo se normaliza la clave; en HPP, qué valor tiene un parámetro que aparece dos veces. La tabla de cómo resuelve cada marco un duplicado —PHP el último, Tomcat el primero, ASP.NET concatena, Express lista— **es** el dominio.
+
+**Eje por uso de la discrepancia:** bypass (dos capas discrepan, se cuela un valor) contra inyección de parámetro (un `&` agrega parámetros a una URL que la app construye). HPP es sobre todo un **vehículo de evasión** —el sobre para meter SQLi/XSS por un WAF que discrepa con la aplicación—, así que se combina con la matriz de evasión de cada dominio.
+
+**La ironía del dominio, y la lección defensiva:** el WAF —la fuente natural— es justo el que la técnica ciega. Si valida un valor y la app usa otro, el WAF **registra el inocente que validó**, no el malicioso que se ejecutó. La firma —parámetro duplicado con valores discrepantes— es escribible, pero sobre el **log de acceso** (que ve la query entera), no sobre el WAF. La lección: validar después de resolver el duplicado, no antes, y que WAF y app resuelvan igual. Mismo patrón de "la defensa falla cuando dos componentes ven cosas distintas" de request smuggling, a nivel de parámetro.
+
+Vigésimo quinto dominio cerrado sin detección nueva. Una matriz: [[HPP - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -697,7 +709,8 @@ Vigésimo cuarto dominio cerrado sin detección nueva. Una matriz: [[CSV - matri
 - [x] ~~Clickjacking (`CWE-1021`)~~ — cerrado el 2026-08-16. Del lado del cliente; primer dominio de cara azul puramente preventiva (frame-ancestors, no detección)
 - [x] ~~Tabnabbing (`CWE-1022`)~~ — cerrado el 2026-08-16. Compacto (1 matriz); segundo dominio puramente preventivo (noopener/COOP)
 - [x] ~~CSV / formula injection (`CWE-1236`)~~ — cerrado el 2026-08-16. El más desplazado: sink en la planilla del analista, no el servidor
-- [ ] Dominios web que siguen, por orden: parameter pollution (HPP) → open redirect como dominio propio → mass assignment ya cubierto (saltear)
+- [x] ~~HTTP parameter pollution (`CWE-235`)~~ — cerrado el 2026-08-16. Tercer dominio de discrepancia de parseo; el WAF es la fuente que la técnica ciega
+- [ ] Dominios web que siguen, por orden: open redirect como dominio propio → prototype pollution del lado del cliente ya cubierto (saltear) → revisar qué queda de OWASP/PortSwigger sin modelar
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

@@ -45,6 +45,7 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 - [[MOC - Clickjacking]] — engaño de interfaz por encuadre; defensa preventiva por `frame-ancestors`
 - [[MOC - Tabnabbing]] — secuestro de la pestaña abridora por `window.opener`; defensa por `noopener`/COOP
 - [[MOC - CSV injection]] — fórmulas en exports que ejecutan en la planilla del analista
+- [[MOC - HTTP parameter pollution]] — parámetros duplicados y discrepancia de parseo entre capas
 
 **Azul**
 - [[MOC - Fundamentos de detección]] — los conceptos transversales. **Empezar acá si venís de rojo**
