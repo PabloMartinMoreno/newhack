@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Treinta y un dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Treinta y dos dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 90 matrices: 81 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 128 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 91 matrices: 82 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 130 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -632,6 +632,18 @@ El siguiente del roadmap. `clase: CWE-1021`, dominio pleno, y el más del lado d
 
 Vigésimo segundo dominio cerrado sin detección nueva, y el primero donde eso no es un hueco: no hay detección posible, hay prevención. Dos matrices: [[Clickjacking - encuadre - matriz de referencia]] y [[Clickjacking - superposición - matriz de referencia]].
 
+### 2026-08-16 — Dominio Tabnabbing
+
+El siguiente del roadmap. `clase: CWE-1022`, dominio **compacto** del lado del cliente, hermano de clickjacking.
+
+**Primer dominio con una sola matriz, a propósito.** Tabnabbing es genuinamente chico —una mecánica, `window.opener` sin `noopener`—, así que forzar dos matrices sería relleno, contra la ética del vault ("tres líneas > abstracción prematura"). Dos tradecraft por entrega (enlace saliente contra enlace plantado en contenido de usuario) y una matriz que cubre mecánica, sinks, reconocimiento y mitigación. Es la primera vez que un dominio no lleva dos cheatsheets, y es la decisión correcta: el tamaño del contenido manda, no el patrón.
+
+**El eje es la entrega —quién pone el enlace vulnerable—.** El enlace plantado en contenido de usuario es la variante más explotable: almacenada, las víctimas llegan solas, y **pasa los filtros de XSS porque no inyecta script**, solo un enlace legítimo con `target="_blank"` sin `noopener`.
+
+**Segundo dominio de cara azul puramente preventiva, y consolida el patrón.** Con clickjacking, son los dos donde no hay detección fiable —el ataque vive en el navegador de la víctima— y la defensa es una cabecera/atributo: `noopener`, COOP. Junto con [[XSS - DOM-based]], forman el grupo de ataques del lado del cliente puros que el vault venía nombrando: **el servidor es ciego a lo que pasa en el navegador**, y la defensa se corre a lo que el navegador respeta. Refuerza [[Ausencia de alertas no es ausencia de ataque]]: la ausencia de alertas es estructural. La única diferencia con clickjacking: la variante de enlace plantado deja el enlace almacenado como evidencia de la preparación —detección de tipo distinto, no del ataque en vivo—.
+
+Vigésimo tercer dominio cerrado sin detección nueva, el segundo puramente preventivo. Una matriz: [[Tabnabbing - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -667,7 +679,8 @@ Vigésimo segundo dominio cerrado sin detección nueva, y el primero donde eso n
 - [x] ~~Email header injection (`CWE-93`)~~ — cerrado el 2026-08-16. Hermana de CRLF, sink de correo; el Bcc de reset ataca el mismo flujo que host header poisoning
 - [x] ~~XSLT injection (`CWE-94`)~~ — cerrado el 2026-08-16. Primo de SSTI sobre XML, eje por capacidad del procesador; cerrado con detecciones existentes
 - [x] ~~Clickjacking (`CWE-1021`)~~ — cerrado el 2026-08-16. Del lado del cliente; primer dominio de cara azul puramente preventiva (frame-ancestors, no detección)
-- [ ] Dominios web que siguen, por orden: tabnabbing → CSV / formula injection → open redirect como dominio propio
+- [x] ~~Tabnabbing (`CWE-1022`)~~ — cerrado el 2026-08-16. Compacto (1 matriz); segundo dominio puramente preventivo (noopener/COOP)
+- [ ] Dominios web que siguen, por orden: CSV / formula injection → parameter pollution (HPP) → open redirect como dominio propio
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
