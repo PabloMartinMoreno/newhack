@@ -19,13 +19,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Documentación de administración (`900-meta/`) | Completa |
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Treinta y dos dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
+| Contenido rojo — web | Treinta y tres dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath) |
 | Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 91 matrices: 82 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 130 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
+| Cheatsheets | 92 matrices: 83 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido rojo — web (cont.) | 132 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
 | Vault de engagements | Sin crear |
@@ -644,6 +644,22 @@ El siguiente del roadmap. `clase: CWE-1022`, dominio **compacto** del lado del c
 
 Vigésimo tercer dominio cerrado sin detección nueva, el segundo puramente preventivo. Una matriz: [[Tabnabbing - matriz de referencia]].
 
+### 2026-08-16 — Dominio CSV / formula injection
+
+El siguiente del roadmap. `clase: CWE-1236`, dominio **compacto** (una matriz, como tabnabbing).
+
+**El más desplazado del vault.** El atacante escribe la carga en un campo de la aplicación web, pero se ejecuta **en otro programa, en la máquina de otra persona, después** —cuando un administrador exporta a CSV y lo abre en Excel/LibreOffice/Sheets—. No hay sink en el servidor; el sink es la planilla del analista.
+
+**La víctima es un administrador, no un usuario.** El que abre el export descarga el informe —más privilegios, máquina interna—. Es lo que hace peligroso un dominio de nombre inocuo, y va en el informe.
+
+**Eje por capacidad, como SSTI y XSLT.** Exfiltración (`WEBSERVICE`/`IMPORT*` leen el resto de la planilla y la mandan afuera al abrir, sin requisito del cliente) contra ejecución (DDE, que necesita DDE habilitado —raro hoy— y aceptar advertencias). La exfiltración va primero por ser la fiable.
+
+**Una variante nueva del patrón "el servidor es ciego a lo que pasa afuera".** En clickjacking y tabnabbing lo de afuera es el navegador de la víctima; acá es la hoja de cálculo del analista. La diferencia: CSV injection **sí tiene un punto de entrada en el servidor** —el campo se almacena—, así que la firma de entrada es escribible (`=WEBSERVICE`, `=cmd|` no tienen forma legítima), mientras que en los puramente del lado del cliente ni eso. La ejecución por DDE nace `excel.exe → cmd.exe`, detectable en el endpoint pero sin detección escrita para Office en [[MOC - Telemetría de Windows]] — hueco de cobertura, no de fuente.
+
+**Otro sub-patrón del candidato de firma transversal:** el `=` inicial es un metacarácter de estructura en un campo de datos, del mismo grupo que las cuatro hermanas, el Host, el CRLF y el correo, aunque el sink sea una planilla.
+
+Vigésimo cuarto dominio cerrado sin detección nueva. Una matriz: [[CSV - matriz de referencia]].
+
 ## Pendientes
 
 ### Inmediatos
@@ -680,7 +696,8 @@ Vigésimo tercer dominio cerrado sin detección nueva, el segundo puramente prev
 - [x] ~~XSLT injection (`CWE-94`)~~ — cerrado el 2026-08-16. Primo de SSTI sobre XML, eje por capacidad del procesador; cerrado con detecciones existentes
 - [x] ~~Clickjacking (`CWE-1021`)~~ — cerrado el 2026-08-16. Del lado del cliente; primer dominio de cara azul puramente preventiva (frame-ancestors, no detección)
 - [x] ~~Tabnabbing (`CWE-1022`)~~ — cerrado el 2026-08-16. Compacto (1 matriz); segundo dominio puramente preventivo (noopener/COOP)
-- [ ] Dominios web que siguen, por orden: CSV / formula injection → parameter pollution (HPP) → open redirect como dominio propio
+- [x] ~~CSV / formula injection (`CWE-1236`)~~ — cerrado el 2026-08-16. El más desplazado: sink en la planilla del analista, no el servidor
+- [ ] Dominios web que siguen, por orden: parameter pollution (HPP) → open redirect como dominio propio → mass assignment ya cubierto (saltear)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
