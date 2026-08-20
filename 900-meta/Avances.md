@@ -20,11 +20,11 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
-| Contenido rojo — AD | Cerrado el núcleo: 8 técnicas ATT&CK, 8 tradecraft. Cada uno enlaza su artefacto de Windows |
+| Contenido rojo — AD | Núcleo + delegación: 9 técnicas ATT&CK, 11 tradecraft (unconstrained/constrained/RBCD agregados). Cada uno enlaza su artefacto de Windows |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 14 artefactos, 6 detecciones de AD. `huecos` vuelve a dar **cero** con AD adentro |
-| Cheatsheets | 93 matrices: 84 web, 5 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido azul — Windows | 14 artefactos, 7 detecciones de AD (RBCD agregada). `huecos` sigue en **cero** |
+| Cheatsheets | 94 matrices: 84 web, 6 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
@@ -672,6 +672,18 @@ El siguiente del roadmap. `clase: CWE-235`, y el **tercer dominio de discrepanci
 
 Vigésimo quinto dominio cerrado sin detección nueva. Una matriz: [[HPP - matriz de referencia]].
 
+### 2026-08-19 — Delegación de Kerberos, y el pivote a AD
+
+Cambio de rumbo pedido: el vault estaba desbalanceado —84 matrices web contra 5 de AD—, así que se abre el lado de AD por el hueco que su propio MOC declaró como "un eje propio de escalada". Antes: **open redirect descartado como dominio** —`CWE-601` ya existe como técnica referenciada desde 12 lugares y sus payloads de bypass viven enteros en [[OAuth redirect_uri - matriz de referencia]]; un MOC propio duplicaría, mismo caso que mass assignment—.
+
+**Delegación es la primera ampliación de AD desde el núcleo.** Técnica paraguas [[T1558 - Steal or Forge Kerberos Tickets]] (el padre de golden/kerberoast/as-rep, más el eje de delegación), tres tradecraft por tipo, una matriz de comandos y una detección azul. Sigue la estructura de AD —clase ATT&CK, eje "qué tenés", ciclo rojo↔azul con telemetría de Windows— y no la de web.
+
+**Los tres tipos son tres formas de impersonar sin robar una contraseña**, ordenadas por lo que hace falta: sin restricciones (admin local en el host + coacción del DC → su TGT → DCSync), restringida (`S4U2Self`/`S4U2Proxy` hacia SPNs permitidos, con el truco de reescribir el servicio del SPN), RBCD (escribir `msDS-AllowedToActOnBehalfOfOtherIdentity` en el destino → `S4U`). RBCD es la que más rinde hoy porque el permiso de escritura sobre una máquina aparece por todos lados en BloodHound.
+
+**La lección azul del eje:** la delegación no forja tickets, los pide legítimos, así que no hay firma criptográfica. Solo RBCD tiene señal escribible —la escritura del atributo es de altísima fidelidad, [[Escritura del atributo de delegación RBCD]] sobre `4662`, análoga a la de DCSync—. Las otras dos se detectan por anomalía de relación (cuenta de alto valor a host con delegación, `S4U` privilegiado) que necesita línea base y queda como hueco declarado. RBCD cierra su ciclo rojo↔azul; las otras dos no.
+
+`huecos` sigue en cero: los tres tradecraft enlazan `4768`/`4769`/`4662`, todos consumidos por detecciones existentes o por la nueva de RBCD.
+
 ## Pendientes
 
 ### Inmediatos
@@ -710,7 +722,9 @@ Vigésimo quinto dominio cerrado sin detección nueva. Una matriz: [[HPP - matri
 - [x] ~~Tabnabbing (`CWE-1022`)~~ — cerrado el 2026-08-16. Compacto (1 matriz); segundo dominio puramente preventivo (noopener/COOP)
 - [x] ~~CSV / formula injection (`CWE-1236`)~~ — cerrado el 2026-08-16. El más desplazado: sink en la planilla del analista, no el servidor
 - [x] ~~HTTP parameter pollution (`CWE-235`)~~ — cerrado el 2026-08-16. Tercer dominio de discrepancia de parseo; el WAF es la fuente que la técnica ciega
-- [ ] Dominios web que siguen, por orden: open redirect como dominio propio → prototype pollution del lado del cliente ya cubierto (saltear) → revisar qué queda de OWASP/PortSwigger sin modelar
+- [x] ~~open redirect como dominio~~ — descartado: `CWE-601` ya existe y sus payloads viven en [[OAuth redirect_uri - matriz de referencia]]; no se duplica
+- [x] ~~Delegación de Kerberos (unconstrained/constrained/RBCD)~~ — cerrado el 2026-08-19, primer pivote a AD para balancear el vault
+- [ ] Web prácticamente agotado (34 dominios). Sigue **AD**, por orden: LLMNR/NBT-NS + relay NTLM (rama sin credencial) → ADCS más allá de ESC1 (ESC2-8) → confianzas entre dominios y bosques
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

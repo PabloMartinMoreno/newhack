@@ -32,8 +32,11 @@ Active Directory no se ataca por un servicio: se ataca por las **relaciones**. Q
 │  ├─ SIEMPRE PRIMERO          → [[Enumeración LDAP del directorio]]
 │  ├─ ¿Cuentas de servicio con SPN?  → [[Kerberoasting]]
 │  ├─ ¿Plantilla de certificado abusable?  → [[ADCS - certificado con SAN arbitrario]]
+│  ├─ ¿Escritura sobre una máquina?  → [[Delegación basada en recursos]]   ← la que más rinde hoy
+│  ├─ ¿Controlo una cuenta con msDS-AllowedToDelegateTo?  → [[Delegación restringida]]
 │  └─ ¿Cadena de permisos hacia un objetivo?  → cadenas del grafo (en la enumeración)
 ├─ Admin local en un host
+│  ├─ ¿El host tiene delegación sin restricciones?  → [[Delegación sin restricciones]] → coacción → TGT del DC
 │  ├─ ¿Sesiones de otros en memoria?
 │  │  ├─ hash NTLM   → [[LSASS - volcado vía comsvcs.dll MiniDump]] → [[Pass-the-hash]]
 │  │  └─ ticket      → robar de memoria → [[Pass-the-ticket]]
@@ -92,6 +95,7 @@ Cuando ya sabés qué hacer y solo querés la invocación, sin pasar por las not
 | [[AD volcado de credenciales - matriz de referencia]] | LSASS, SAM, LSA Secrets, NTDS, DPAPI — y qué permite cada formato |
 | [[AD movimiento lateral - matriz de referencia]] | Pass-the-hash, pass-the-ticket, overpass, los cinco métodos de ejecución remota y su ruido |
 | [[AD persistencia - matriz de referencia]] | Golden, silver, diamond, ADCS de `ESC1` a `ESC8`, ACL, y por qué `krbtgt` se rota dos veces |
+| [[AD delegaciones - matriz de referencia]] | Sin restricciones (coacción + captura de TGT), restringida (`S4U`), RBCD (escribir el atributo + `S4U`) |
 
 ## Cara azul
 
@@ -108,6 +112,9 @@ El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bi
 | [[DCSync]] | [[Windows 4662 - Directory object operation]] | Derechos de replicación desde algo que no es un DC |
 | [[Golden ticket]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket de servicio sin ticket inicial previo; cuenta inexistente |
 | [[ADCS - certificado con SAN arbitrario]] | [[Windows 4768 - Kerberos TGT requested]] | Certificado a nombre ajeno; persistencia casi indetectable |
+| [[Delegación sin restricciones]] | [[Windows 4768 - Kerberos TGT requested]] | Cuenta de alto valor autenticándose a un host con delegación — sin detección propia |
+| [[Delegación restringida]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket `S4U` con `Transited Services` e impersonación de cuenta privilegiada — sin detección propia |
+| [[Delegación basada en recursos]] | [[Windows 4662 - Directory object operation]] | Escritura de `msDS-AllowedToActOnBehalfOfOtherIdentity` — [[Escritura del atributo de delegación RBCD]] |
 
 Tres lecciones que este dominio deja, y que valen para todo el vault:
 
@@ -117,14 +124,17 @@ Tres lecciones que este dominio deja, y que valen para todo el vault:
 
 **La fidelidad más alta puede no dejar rastro si la fuente no está bien configurada.** [[DCSync]] es de altísima fidelidad y **no emite nada** si la auditoría no está puesta sobre el objeto raíz del dominio — el segundo paso de configuración que nadie hace. Ver [[Ausencia de alertas no es ausencia de ataque]].
 
+**La delegación se detecta por configuración, no por firma, y solo una de las tres tiene señal escribible.** Las tres variantes piden tickets legítimos —no forjan nada—, así que no hay firma criptográfica que las delate. RBCD es la excepción: su paso de configuración es una **escritura de atributo** de altísima fidelidad —[[Escritura del atributo de delegación RBCD]], análoga a la de DCSync—. Las otras dos, sin restricciones y restringida, no escriben nada detectable: su señal es la anomalía de relación (una cuenta de alto valor autenticándose a un host con delegación, un `S4U` con impersonación privilegiada), que necesita línea base y no tiene detección propia escrita.
+
 ## Huecos conocidos
 
 - [x] Enumeración, las dos técnicas de roasting, volcado de credenciales, movimiento lateral por hash y ticket, DCSync, dos persistencias
 - [x] Cada técnica enlaza su artefacto de Windows — la cara azul de la tabla está completa
-- [x] Cara azul — seis detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]] y [[Acceso a LSASS desde proceso no firmado]]
+- [x] Cara azul — siete detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]], [[Acceso a LSASS desde proceso no firmado]] y [[Escritura del atributo de delegación RBCD]]
+- [x] Delegaciones: sin restricciones, restringida, RBCD — [[T1558 - Steal or Forge Kerberos Tickets]] con tres tradecraft y su matriz. RBCD cierra su ciclo rojo↔azul; las otras dos quedan con detección declarada como hueco
 - [ ] **[[Enumeración LDAP del directorio]] queda sin detección a propósito.** Tráfico legítimo indistinguible; es el punto ciego del dominio y se declara, no se esconde
-- [ ] Ninguna de las seis está validada en laboratorio. Es el trabajo que HTB alimenta directo
+- [ ] **Detección de delegación sin restricciones y restringida.** La telemetría existe (`4768`/`4769`) y se consume, pero falta la regla que ancle en la anomalía de relación —cuenta de alto valor a host con delegación, `S4U` con impersonación privilegiada—. Necesita línea base
+- [ ] Ninguna detección está validada en laboratorio. Es el trabajo que HTB alimenta directo
 - [ ] Envenenamiento de nombres (LLMNR/NBT-NS) + relay NTLM — la rama "sin credencial" que falta
-- [ ] Delegaciones: constrained, unconstrained, RBCD — un eje propio de escalada
 - [ ] ADCS más allá de la plantilla de sujeto arbitrario — hay muchas otras configuraciones abusables
 - [ ] Confianzas entre dominios y bosques
