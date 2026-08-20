@@ -23,7 +23,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Contenido rojo — AD | Núcleo + delegación + sin credencial + ADCS + confianzas: 11 técnicas ATT&CK, 17 tradecraft. Cadena completa: sin credencial → bosque |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 15 artefactos (CA `4887` agregado), 11 detecciones de AD. `huecos` en **cero** |
+| Contenido azul — Windows | 15 artefactos, 12 detecciones de AD. Un solo hueco declarado (SID History, necesita técnica nueva). `huecos` en **cero** |
 | Cheatsheets | 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -749,6 +749,14 @@ El tercero de los huecos azules de AD, y el más limpio de los que quedaban: en 
 
 AD pasa a **15 artefactos de Windows y 11 detecciones**. `huecos` en cero, `sin-probar` "todas fueron atacadas". Quedan dos huecos azules, los dos de línea base y no de campo: delegación sin restricciones y abuso de confianza (`SIDHistory`).
 
+### 2026-08-19 — Delegación sin restricciones detectada; queda un solo hueco azul
+
+Penúltimo hueco azul de AD, cerrado. [[Cuenta de alto valor autenticándose a host con delegación]] ancla en el `4624` como **intersección de dos listas de activos** —los hosts con `TRUSTED_FOR_DELEGATION` y las cuentas sensibles—: un DC no tiene razón para autenticarse a un servidor de aplicación cualquiera, y que lo haga contra uno que acumula TGT es la coacción de [[Delegación sin restricciones]] en curso. Es escribible sobre un artefacto ya modelado, con la salvedad de que la fidelidad depende del inventario, no de un campo del evento.
+
+**Queda un único hueco azul en AD, y está bien diagnosticado por qué no se cierra con una regla:** la escalada por SID History del vault inyecta el SID en el **PAC de un ticket forjado**, no en el atributo, así que no dispara el evento `4765` ("SID History agregado") y solo la cubre en parte la detección de golden. Cerrarlo de verdad no es calibrar una regla sino **agregar una técnica roja nueva** —la persistencia por escritura del atributo `SIDHistory` (DSInternals/mimikatz), que sí emite `4765`— más su artefacto y su detección. Queda declarado con ese diagnóstico, no como "falta una regla".
+
+Con esto AD tiene **12 detecciones** y su ciclo rojo↔azul cerrado salvo ese hueco de técnica. `huecos` en cero, `sin-probar` "todas fueron atacadas", `higiene` limpio. El pivote a AD —cuatro ampliaciones rojas y siete detecciones azules nuevas— deja el dominio con el recorrido completo de un ataque real y su contracara defensiva.
+
 ## Pendientes
 
 ### Inmediatos
@@ -792,7 +800,7 @@ AD pasa a **15 artefactos de Windows y 11 detecciones**. `huecos` en cero, `sin-
 - [x] ~~LLMNR/NBT-NS + relay NTLM~~ — cerrado el 2026-08-19, la rama sin credencial de AD
 - [x] ~~ADCS más allá de ESC1~~ — cerrado el 2026-08-19, catálogo ESC1–15 extraído a matriz propia
 - [x] ~~Confianzas entre dominios y bosques~~ — cerrado el 2026-08-19. Cadena de AD completa (sin credencial → bosque)
-- [ ] **Huecos azules de AD que quedan** (los de línea base, no de campo): delegación sin restricciones (cuenta de alto valor a host con delegación) y abuso de confianza (auditar `SIDHistory` en reposo). Los dos necesitan línea base o lista de activos, no una regla sobre un campo
+- [ ] **Único hueco azul de AD que queda:** SID History. No es una regla faltante sino una **técnica roja** faltante — la persistencia por escritura del atributo `SIDHistory` (que emite `4765`), distinta del ticket forjado. Cerrarlo es agregar esa técnica + artefacto `4765` + detección
 - [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
