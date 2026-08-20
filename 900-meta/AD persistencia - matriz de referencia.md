@@ -3,8 +3,8 @@ tipo: meta
 aliases:
   - Persistencia en AD
   - ticketer
-  - certipy
   - dacledit
+  - Shadow Credentials
 tags:
   - meta/referencia
   - dominio/ad
@@ -73,28 +73,14 @@ Es la evolución directa de la detección: la regla que ve un golden no ve un di
 
 ## 4. ADCS — el certificado como persistencia
 
+El catálogo completo de configuraciones abusables —ESC1 a ESC15, THEFT, Shadow Credentials— vive en su matriz propia: **[[ADCS - matriz de referencia]]**. Acá solo el porqué es persistencia.
+
+Un certificado de autenticación **sobrevive al cambio de contraseña** —la autenticación por certificado no depende de la clave— y vale hasta que caduca (uno o dos años) o hasta que se lo revoca **y** se arregla la plantilla o la CA. Es la persistencia más incómoda de sacar: rotar credenciales no la mata.
+
 `certipy find -u user@dominio.local -p 'pass' -dc-ip 10.0.0.10 -vulnerable -stdout`
-Busca plantillas mal configuradas. Salida `ESC1` a `ESC8`, cada una un abuso distinto.
+El primer comando: marca qué `ESCx` está abierto. La rama de plantilla (ESC1/2/3/4) va por [[ADCS - certificado con SAN arbitrario]] y [[ADCS - plantilla abusable por propósito o ACL]]; la de CA (ESC6/7/8/11) por [[ADCS - abuso de la configuración de la CA]].
 
-**ESC1** — la plantilla deja poner el sujeto y permite autenticación:
-
-`certipy req -u user@dominio.local -p 'pass' -ca CA-NAME -template VulnTemplate -upn administrador@dominio.local`
-`certipy auth -pfx administrador.pfx -dc-ip 10.0.0.10`
-
-Devuelve un TGT y el hash NT del administrador. Ver [[ADCS - certificado con SAN arbitrario]].
-
-**ESC8** — relay de NTLM al endpoint web de la CA:
-
-`certipy relay -ca 10.0.0.30 -template DomainController`
-
-| Código | Qué está mal en la plantilla |
-|---|---|
-| `ESC1` | El solicitante fija el sujeto y la plantilla sirve para autenticar |
-| `ESC2` | La plantilla vale para cualquier propósito |
-| `ESC3` | Agente de inscripción: se pide en nombre de otro |
-| `ESC4` | La ACL de la plantilla es escribible — se la vuelve vulnerable y se la deja como estaba |
-| `ESC6` | La CA acepta SAN arbitrario en cualquier plantilla |
-| `ESC8` | El endpoint HTTP de la CA acepta NTLM y no exige firma |
+**Shadow Credentials** es la persistencia por certificado más limpia: escribir `msDS-KeyCredentialLink` en una cuenta agrega una clave propia y permite pedir su TGT sin tocar su contraseña. En [[ADCS - matriz de referencia]] § 10.
 
 ## 5. ACL como persistencia
 

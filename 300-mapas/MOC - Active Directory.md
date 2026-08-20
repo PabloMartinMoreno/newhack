@@ -32,7 +32,10 @@ Active Directory no se ataca por un servicio: se ataca por las **relaciones**. Q
 ├─ Una credencial de dominio cualquiera
 │  ├─ SIEMPRE PRIMERO          → [[Enumeración LDAP del directorio]]
 │  ├─ ¿Cuentas de servicio con SPN?  → [[Kerberoasting]]
-│  ├─ ¿Plantilla de certificado abusable?  → [[ADCS - certificado con SAN arbitrario]]
+│  ├─ ¿PKI mal configurada?  → certipy find
+│  │  ├─ plantilla deja poner el SAN  → [[ADCS - certificado con SAN arbitrario]] (ESC1)
+│  │  ├─ plantilla mal por EKU/agente/ACL  → [[ADCS - plantilla abusable por propósito o ACL]] (ESC2/3/4)
+│  │  └─ la CA misma (bandera/ACL/relay)  → [[ADCS - abuso de la configuración de la CA]] (ESC6/7/8)
 │  ├─ ¿Escritura sobre una máquina?  → [[Delegación basada en recursos]]   ← la que más rinde hoy
 │  ├─ ¿Controlo una cuenta con msDS-AllowedToDelegateTo?  → [[Delegación restringida]]
 │  └─ ¿Cadena de permisos hacia un objetivo?  → cadenas del grafo (en la enumeración)
@@ -98,6 +101,7 @@ Cuando ya sabés qué hacer y solo querés la invocación, sin pasar por las not
 | [[AD persistencia - matriz de referencia]] | Golden, silver, diamond, ADCS de `ESC1` a `ESC8`, ACL, y por qué `krbtgt` se rota dos veces |
 | [[AD delegaciones - matriz de referencia]] | Sin restricciones (coacción + captura de TGT), restringida (`S4U`), RBCD (escribir el atributo + `S4U`) |
 | [[AD envenenamiento y relay - matriz de referencia]] | Responder, romper NetNTLMv2, comprobar firma, `ntlmrelayx` a SMB/LDAP/ADCS, coacción |
+| [[ADCS - matriz de referencia]] | El catálogo `ESC1`–`ESC15` con el comando de cada uno, THEFT, Shadow Credentials, `certipy` |
 
 ## Cara azul
 
@@ -116,6 +120,8 @@ El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bi
 | [[DCSync]] | [[Windows 4662 - Directory object operation]] | Derechos de replicación desde algo que no es un DC |
 | [[Golden ticket]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket de servicio sin ticket inicial previo; cuenta inexistente |
 | [[ADCS - certificado con SAN arbitrario]] | [[Windows 4768 - Kerberos TGT requested]] | Certificado a nombre ajeno; persistencia casi indetectable |
+| [[ADCS - plantilla abusable por propósito o ACL]] | [[Windows 4662 - Directory object operation]] | Modificación de plantilla (ESC4/13) — firma escribible; el uso del cert no |
+| [[ADCS - abuso de la configuración de la CA]] | [[Windows 4624 - Successful logon]] | ESC8/11 son relay → NTLM anómalo; ESC7 modifica la CA → escritura en `4662` |
 | [[Delegación sin restricciones]] | [[Windows 4768 - Kerberos TGT requested]] | Cuenta de alto valor autenticándose a un host con delegación — sin detección propia |
 | [[Delegación restringida]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket `S4U` con `Transited Services` e impersonación de cuenta privilegiada — sin detección propia |
 | [[Delegación basada en recursos]] | [[Windows 4662 - Directory object operation]] | Escritura de `msDS-AllowedToActOnBehalfOfOtherIdentity` — [[Escritura del atributo de delegación RBCD]] |
@@ -141,5 +147,7 @@ Tres lecciones que este dominio deja, y que valen para todo el vault:
 - [ ] **Detección de delegación sin restricciones y restringida.** La telemetría existe (`4768`/`4769`) y se consume, pero falta la regla que ancle en la anomalía de relación —cuenta de alto valor a host con delegación, `S4U` con impersonación privilegiada—. Necesita línea base
 - [ ] Ninguna detección está validada en laboratorio. Es el trabajo que HTB alimenta directo
 - [ ] Envenenamiento de nombres (LLMNR/NBT-NS) + relay NTLM — la rama "sin credencial" que falta
-- [ ] ADCS más allá de la plantilla de sujeto arbitrario — hay muchas otras configuraciones abusables
+- [x] ADCS más allá de ESC1 — [[ADCS - plantilla abusable por propósito o ACL]] (ESC2/3/4/13/15) y [[ADCS - abuso de la configuración de la CA]] (ESC6/7/8/11), con el catálogo completo en [[ADCS - matriz de referencia]]. ESC8/11 cruzan con [[Relay de NTLM]]
+- [ ] **Detección de autenticación por certificado.** El `4768` con información de certificado se consume por las reglas de TGT pero ninguna distingue el cert-as-anyone; la señal escribible es la modificación de plantilla/CA sobre `4662` (ESC4/7/13), análoga a RBCD. Falta la regla del uso del cert
+- [ ] Falta un artefacto de telemetría de la CA (`4886`/`4887` de inscripción) para ver la emisión, no solo el uso
 - [ ] Confianzas entre dominios y bosques

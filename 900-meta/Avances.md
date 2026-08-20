@@ -20,11 +20,11 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
-| Contenido rojo — AD | Núcleo + delegación + rama sin credencial: 10 técnicas ATT&CK, 13 tradecraft. La cadena arranca ahora sin credencial (LLMNR/relay) |
+| Contenido rojo — AD | Núcleo + delegación + sin credencial + ADCS completo: 10 técnicas ATT&CK, 15 tradecraft. ESC1–15 con catálogo propio |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos (Sysmon 3 estrenado), 8 detecciones de AD. `huecos` sigue en **cero** |
-| Cheatsheets | 95 matrices: 84 web, 7 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Cheatsheets | 96 matrices: 84 web, 8 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
@@ -699,6 +699,18 @@ Técnica paraguas [[T1557.001 - LLMNR NBT-NS Poisoning and SMB Relay]], dos trad
 
 AD pasa a 7 matrices y 8 detecciones. `huecos` sigue en cero.
 
+### 2026-08-19 — ADCS completo, más allá de ESC1
+
+Tercer paso del pivote a AD. Hasta ahora ADCS era una sola nota (ESC1) y un catálogo apretado dentro de la matriz de persistencia. Se lo extrae a **matriz propia** —[[ADCS - matriz de referencia]], el catálogo `ESC1`–`ESC15` con el comando de cada uno, THEFT y Shadow Credentials— y se agregan dos notas de criterio que completan las familias.
+
+**El eje es dónde vive el fallo:** la plantilla o la CA. [[ADCS - certificado con SAN arbitrario]] (ESC1) ya cubría "la plantilla deja poner el sujeto"; se agregan [[ADCS - plantilla abusable por propósito o ACL]] (ESC2/3/4/13/15 — EKU, agente de inscripción, ACL escribible que se vuelve ESC1, política de emisión, EKUwu) y [[ADCS - abuso de la configuración de la CA]] (ESC6/7/8/11 — la bandera de SAN global, la ACL de la CA, y los endpoints relayables). Un fallo de plantilla afecta una plantilla; un fallo de CA afecta todas.
+
+**ESC8/11 cierran el círculo con el relay.** El relay a la inscripción de la CA —que [[Relay de NTLM]] ya mencionaba— es la cadena que convierte una autenticación de máquina capturada en un certificado de DC, y por eso ADCS y el relay se referencian: coacción del DC → relay a la CA → cert del DC → DCSync.
+
+**Extracción sin duplicar.** La matriz de persistencia dejó de hospedar el catálogo ESC y ahora apunta a [[ADCS - matriz de referencia]]; conserva solo el porqué el certificado es persistencia —sobrevive al cambio de contraseña—. Es la misma regla de no duplicar que descartó open redirect y mass assignment.
+
+**Dos huecos azules declarados:** falta una detección de autenticación por certificado (el `4768` con cert se consume por las reglas de TGT pero ninguna distingue el cert-as-anyone) y un artefacto de la CA (`4886`/`4887`) para ver la emisión, no solo el uso. La señal escribible hoy es la modificación de plantilla/CA sobre `4662` (ESC4/7/13), análoga a RBCD. `huecos` sigue en cero.
+
 ## Pendientes
 
 ### Inmediatos
@@ -740,7 +752,8 @@ AD pasa a 7 matrices y 8 detecciones. `huecos` sigue en cero.
 - [x] ~~open redirect como dominio~~ — descartado: `CWE-601` ya existe y sus payloads viven en [[OAuth redirect_uri - matriz de referencia]]; no se duplica
 - [x] ~~Delegación de Kerberos (unconstrained/constrained/RBCD)~~ — cerrado el 2026-08-19, primer pivote a AD para balancear el vault
 - [x] ~~LLMNR/NBT-NS + relay NTLM~~ — cerrado el 2026-08-19, la rama sin credencial de AD
-- [ ] Sigue **AD**, por orden: ADCS más allá de ESC1 (ESC2-8) → confianzas entre dominios y bosques → detección de delegación unconstrained/constrained (los huecos azules declarados)
+- [x] ~~ADCS más allá de ESC1~~ — cerrado el 2026-08-19, catálogo ESC1–15 extraído a matriz propia
+- [ ] Sigue **AD**, por orden: confianzas entre dominios y bosques → los huecos azules declarados (detección de delegación unconstrained/constrained, auth por certificado, artefacto de la CA)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
