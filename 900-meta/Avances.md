@@ -20,11 +20,11 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
-| Contenido rojo — AD | Núcleo + delegación + sin credencial + ADCS completo: 10 técnicas ATT&CK, 15 tradecraft. ESC1–15 con catálogo propio |
+| Contenido rojo — AD | Núcleo + delegación + sin credencial + ADCS + confianzas: 11 técnicas ATT&CK, 17 tradecraft. Cadena completa: sin credencial → bosque |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 14 artefactos (Sysmon 3 estrenado), 8 detecciones de AD. `huecos` sigue en **cero** |
-| Cheatsheets | 96 matrices: 84 web, 8 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Cheatsheets | 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
@@ -711,6 +711,20 @@ Tercer paso del pivote a AD. Hasta ahora ADCS era una sola nota (ESC1) y un cat�
 
 **Dos huecos azules declarados:** falta una detección de autenticación por certificado (el `4768` con cert se consume por las reglas de TGT pero ninguna distingue el cert-as-anyone) y un artefacto de la CA (`4886`/`4887`) para ver la emisión, no solo el uso. La señal escribible hoy es la modificación de plantilla/CA sobre `4662` (ESC4/7/13), análoga a RBCD. `huecos` sigue en cero.
 
+### 2026-08-19 — Confianzas entre dominios y bosques
+
+Cuarto y último paso del pivote a AD, y el que **completa la cadena**: desde la delegación y el relay ya se llega a admin de dominio; esto lleva de admin de dominio al **bosque entero**. Con esto la cadena de AD va de "solo acceso a la red" a "control del bosque" sin huecos de eslabón.
+
+Técnica paraguas [[T1134.005 - SID-History Injection]] para la escalada intra-bosque, más [[T1558 - Steal or Forge Kerberos Tickets]] (ya existía) para el cruce inter-bosque. Dos tradecraft, una matriz.
+
+**El principio que ordena el eje, y que queda escrito:** *el límite de seguridad es el bosque, no el dominio*. Dentro de un bosque el filtrado de SID está apagado por defecto, así que comprometer **cualquier** dominio —el más débil, un laboratorio olvidado— permite forjar un ticket con el SID de *Enterprise Admins* de la raíz inyectado y tomar el bosque en dos pasos. No hay que comprometer la raíz; alcanza con el eslabón flojo. [[Escalada intra-bosque por SID History]].
+
+**Entre bosques distintos es otra cosa:** el filtrado de SID sí está activo por defecto y bloquea el SID inyectado, así que el cruce va por la **clave de la confianza** —extraerla y forjar un TGT de referencia inter-reino—, con el alcance limitado por el filtrado salvo mala configuración. [[Movimiento entre bosques por la clave de confianza]]. La distinción intra/inter bosque es el eje del dominio.
+
+**Hueco azul declarado:** ninguna detección distingue el SID de escalada en el PAC ni el ticket inter-reino anómalo —se consumen como golden cualquiera—. La señal en reposo de mayor retorno es auditar el atributo `SIDHistory`: una cuenta con el SID de un grupo privilegiado de otro dominio, sin migración, es la firma del ataque parado. `huecos` sigue en cero.
+
+Con esto **AD queda con su cadena completa** —sin credencial, credencial, admin local, admin de dominio, bosque— y 9 matrices contra las 5 con que arrancó el pivote. El desbalance con web (84 matrices) sigue, pero AD ya cubre el recorrido entero de un ataque real.
+
 ## Pendientes
 
 ### Inmediatos
@@ -753,7 +767,9 @@ Tercer paso del pivote a AD. Hasta ahora ADCS era una sola nota (ESC1) y un cat�
 - [x] ~~Delegación de Kerberos (unconstrained/constrained/RBCD)~~ — cerrado el 2026-08-19, primer pivote a AD para balancear el vault
 - [x] ~~LLMNR/NBT-NS + relay NTLM~~ — cerrado el 2026-08-19, la rama sin credencial de AD
 - [x] ~~ADCS más allá de ESC1~~ — cerrado el 2026-08-19, catálogo ESC1–15 extraído a matriz propia
-- [ ] Sigue **AD**, por orden: confianzas entre dominios y bosques → los huecos azules declarados (detección de delegación unconstrained/constrained, auth por certificado, artefacto de la CA)
+- [x] ~~Confianzas entre dominios y bosques~~ — cerrado el 2026-08-19. Cadena de AD completa (sin credencial → bosque)
+- [ ] **Huecos azules de AD declarados**, si se quiere cerrar el ciclo rojo↔azul de las ampliaciones: detección de delegación unconstrained/constrained, auth por certificado (+ artefacto de la CA `4886`/`4887`), abuso de confianza (auditar `SIDHistory`)
+- [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

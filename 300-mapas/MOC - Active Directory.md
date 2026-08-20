@@ -47,6 +47,8 @@ Active Directory no se ataca por un servicio: se ataca por las **relaciones**. Q
 │  └─ reutilización de admin local → [[Pass-the-hash]] en masa
 └─ Admin de dominio (o derechos delegados)
    ├─ los secretos de todo el dominio  → [[DCSync]]
+   ├─ ¿el dominio NO es la raíz del bosque?  → [[Escalada intra-bosque por SID History]]   ← el límite es el bosque, no el dominio
+   ├─ ¿hay una confianza a otro bosque?  → [[Movimiento entre bosques por la clave de confianza]]
    └─ persistencia
       ├─ forjar identidad            → [[Golden ticket]]
       └─ certificado de larga vida   → [[ADCS - certificado con SAN arbitrario]]
@@ -102,6 +104,7 @@ Cuando ya sabés qué hacer y solo querés la invocación, sin pasar por las not
 | [[AD delegaciones - matriz de referencia]] | Sin restricciones (coacción + captura de TGT), restringida (`S4U`), RBCD (escribir el atributo + `S4U`) |
 | [[AD envenenamiento y relay - matriz de referencia]] | Responder, romper NetNTLMv2, comprobar firma, `ntlmrelayx` a SMB/LDAP/ADCS, coacción |
 | [[ADCS - matriz de referencia]] | El catálogo `ESC1`–`ESC15` con el comando de cada uno, THEFT, Shadow Credentials, `certipy` |
+| [[AD confianzas - matriz de referencia]] | Enumerar confianzas, SID History a la raíz del bosque, clave de confianza inter-reino, filtrado de SID |
 
 ## Cara azul
 
@@ -122,6 +125,8 @@ El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bi
 | [[ADCS - certificado con SAN arbitrario]] | [[Windows 4768 - Kerberos TGT requested]] | Certificado a nombre ajeno; persistencia casi indetectable |
 | [[ADCS - plantilla abusable por propósito o ACL]] | [[Windows 4662 - Directory object operation]] | Modificación de plantilla (ESC4/13) — firma escribible; el uso del cert no |
 | [[ADCS - abuso de la configuración de la CA]] | [[Windows 4624 - Successful logon]] | ESC8/11 son relay → NTLM anómalo; ESC7 modifica la CA → escritura en `4662` |
+| [[Escalada intra-bosque por SID History]] | [[Windows 4769 - Kerberos service ticket requested]] | SID de otro dominio en el PAC; `SIDHistory` en reposo — sin detección propia |
+| [[Movimiento entre bosques por la clave de confianza]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket inter-reino anómalo por dirección o cuenta — sin detección propia |
 | [[Delegación sin restricciones]] | [[Windows 4768 - Kerberos TGT requested]] | Cuenta de alto valor autenticándose a un host con delegación — sin detección propia |
 | [[Delegación restringida]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket `S4U` con `Transited Services` e impersonación de cuenta privilegiada — sin detección propia |
 | [[Delegación basada en recursos]] | [[Windows 4662 - Directory object operation]] | Escritura de `msDS-AllowedToActOnBehalfOfOtherIdentity` — [[Escritura del atributo de delegación RBCD]] |
@@ -150,4 +155,5 @@ Tres lecciones que este dominio deja, y que valen para todo el vault:
 - [x] ADCS más allá de ESC1 — [[ADCS - plantilla abusable por propósito o ACL]] (ESC2/3/4/13/15) y [[ADCS - abuso de la configuración de la CA]] (ESC6/7/8/11), con el catálogo completo en [[ADCS - matriz de referencia]]. ESC8/11 cruzan con [[Relay de NTLM]]
 - [ ] **Detección de autenticación por certificado.** El `4768` con información de certificado se consume por las reglas de TGT pero ninguna distingue el cert-as-anyone; la señal escribible es la modificación de plantilla/CA sobre `4662` (ESC4/7/13), análoga a RBCD. Falta la regla del uso del cert
 - [ ] Falta un artefacto de telemetría de la CA (`4886`/`4887` de inscripción) para ver la emisión, no solo el uso
-- [ ] Confianzas entre dominios y bosques
+- [x] Confianzas entre dominios y bosques — [[T1134.005 - SID-History Injection]] con [[Escalada intra-bosque por SID History]] (hijo → raíz del bosque) y [[Movimiento entre bosques por la clave de confianza]] (TGT inter-reino), y su matriz. El principio "el límite es el bosque, no el dominio" queda escrito
+- [ ] **Detección de abuso de confianza.** El `4769` inter-reino y el SID inyectado se consumen por las reglas de golden, pero ninguna distingue el SID de escalada ni el ticket que cruza mal. La señal en reposo de mayor retorno es auditar el atributo `SIDHistory`
