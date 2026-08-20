@@ -4,7 +4,7 @@ clase: "[[T1649 - Steal or Forge Authentication Certificates]]"
 eje: persistencia
 implementacion: "Solicitar un certificado a nombre de otra cuenta desde una plantilla mal configurada"
 opsec: requiere-bypass
-telemetria: ["[[Windows 4768 - Kerberos TGT requested]]"]
+telemetria: ["[[Windows 4768 - Kerberos TGT requested]]", "[[Windows 4887 - Certificate Services issued]]"]
 requisitos: [plantilla-que-permite-elegir-el-sujeto, derecho-de-inscripción]
 coste: medio
 alternativas: ["[[DCSync]]", "[[Golden ticket]]"]
@@ -46,8 +46,8 @@ Medio. Encontrar la plantilla vulnerable es reconocimiento; solicitarla y usar e
 
 Sigilosa, y ese es el problema.
 
-- **La solicitud del certificado** queda en el registro de la autoridad de certificación — que es una fuente propia, casi nunca centralizada, y que hay que estar mirando. Un certificado emitido a nombre de un administrador desde una cuenta cualquiera es la señal, si alguien la ve.
-- **El uso del certificado** para autenticarse deja [[Windows 4768 - Kerberos TGT requested]], porque el certificado se canjea por un ticket inicial. El evento existe; distinguirlo de una autenticación con tarjeta inteligente legítima requiere contexto.
+- **La emisión del certificado** queda en el `4887` de la autoridad de certificación —[[Windows 4887 - Certificate Services issued]]—, y ahí está la señal más fuerte de ESC1: un certificado con el UPN de un administrador en el SAN pedido por una cuenta cualquiera. La discrepancia entre el SAN y el solicitante la ve [[Certificado emitido con sujeto ajeno al solicitante]] **en el momento de emitir**, antes del uso. El requisito es que la auditoría de AD CS esté encendida, que casi nunca lo está.
+- **El uso del certificado** para autenticarse deja [[Windows 4768 - Kerberos TGT requested]], porque el certificado se canjea por un ticket inicial. Lo ve [[Autenticación por certificado a cuenta privilegiada]]; distinguirlo de una autenticación con tarjeta inteligente legítima requiere contexto, y llega más tarde que la señal de emisión.
 - **La persistencia es lo peor de detectar**, porque no hay evento recurrente: el certificado ya emitido se usa cuando el atacante quiere, y sobrevive a toda rotación de credenciales.
 
 Del lado azul, la jugada de mayor retorno es preventiva: **auditar las plantillas** antes de que alguien las use. La autoridad de certificación tiene el mismo poder que un controlador de dominio y casi nunca la misma vigilancia.

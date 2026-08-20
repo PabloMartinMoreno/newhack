@@ -4,7 +4,7 @@ clase: "[[T1649 - Steal or Forge Authentication Certificates]]"
 eje: credencial
 implementacion: "Abusar la configuración de la CA misma —una bandera, una ACL, o un endpoint que acepta NTLM— para emitir un certificado privilegiado"
 opsec: ruidoso
-telemetria: ["[[Windows 4768 - Kerberos TGT requested]]", "[[Windows 4624 - Successful logon]]"]
+telemetria: ["[[Windows 4768 - Kerberos TGT requested]]", "[[Windows 4624 - Successful logon]]", "[[Windows 4887 - Certificate Services issued]]"]
 requisitos: [configuración-de-la-CA-abusable]
 coste: medio
 alternativas: ["[[ADCS - plantilla abusable por propósito o ACL]]", "[[Relay de NTLM]]"]
@@ -57,9 +57,9 @@ El reconocimiento con `certipy find` es lo que decide qué rama está abierta y 
 
 Ruidosa, y con la particularidad de que ESC8/11 convergen con las detecciones de relay que ya existen:
 
-- La **emisión** deja eventos en el log de la CA (`4886`/`4887`), no modelados en el vault como artefacto.
+- La **emisión** deja el `4887` en la CA —[[Windows 4887 - Certificate Services issued]]—; para ESC6 (SAN en cualquier plantilla) la discrepancia entre el SAN y el solicitante la ve [[Certificado emitido con sujeto ajeno al solicitante]].
 - El **uso** del certificado deja [[Windows 4768 - Kerberos TGT requested]] con información de certificado, la misma señal que el resto de ADCS.
 - **ESC8/11**, al ser relay, producen una [[Windows 4624 - Successful logon]] NTLM de la víctima coaccionada desde un origen ajeno —lo que cubre [[Autenticación NTLM donde el dominio usa Kerberos]]— y, si la coacción fue de un DC, la anomalía de que un DC se autentique a un host cualquiera.
 - **ESC7**, al modificar la configuración de la CA, deja un cambio en el objeto de la CA en el directorio, visible en [[Windows 4662 - Directory object operation]] si la auditoría lo cubre.
 
-La cara azul del abuso de la CA es la misma asimetría que ADCS entero: el uso del cert lo ve [[Autenticación por certificado a cuenta privilegiada]] sobre el `4768`, las ramas de **relay** aterrizan en las detecciones de relay existentes, y las de **modificación de configuración** dejan la firma de escritura de `4662`. Lo que sigue sin verse es la **emisión** del certificado —falta un artefacto de la CA (`4886`/`4887`)—, así que un cert emitido y todavía no usado es invisible; queda como hueco declarado en [[MOC - Active Directory]].
+La cara azul del abuso de la CA cubre las tres fases: la **emisión** la ve [[Certificado emitido con sujeto ajeno al solicitante]] sobre el `4887` (con la auditoría de la CA encendida), el **uso** del cert [[Autenticación por certificado a cuenta privilegiada]] sobre el `4768`, las ramas de **relay** las detecciones de relay existentes, y la **modificación de configuración** la firma de escritura de `4662`. El único requisito duro es que la auditoría de AD CS esté activa —sin ella el `4887` no existe—, el mismo punto ciego de configuración que el `4662` de DCSync.

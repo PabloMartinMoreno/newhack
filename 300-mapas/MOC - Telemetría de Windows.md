@@ -65,6 +65,8 @@ Los dos apuntes del grupo 2 son los que más veces se hacen mal, y en los dos ca
 ├─ Que probaron credenciales
 │  ├─ contra máquinas          → [[Windows 4625 - Failed logon]] y su SubStatus
 │  └─ contra Kerberos          → [[Windows 4768 - Kerberos TGT requested]]
+├─ Que emitieron un certificado
+│  └─ en la CA                 → [[Windows 4887 - Certificate Services issued]]  (auditoría de AD CS)
 ├─ Que tocaron la memoria de otro proceso
 │  ├─ abrieron un handle       → [[Sysmon EID 10 - ProcessAccess]]
 │  ├─ crearon un hilo          → [[Sysmon EID 8 - CreateRemoteThread]]

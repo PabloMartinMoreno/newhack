@@ -23,7 +23,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Contenido rojo — AD | Núcleo + delegación + sin credencial + ADCS + confianzas: 11 técnicas ATT&CK, 17 tradecraft. Cadena completa: sin credencial → bosque |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 14 artefactos, 10 detecciones de AD (PKINIT y S4U agregadas). `huecos` en **cero** |
+| Contenido azul — Windows | 15 artefactos (CA `4887` agregado), 11 detecciones de AD. `huecos` en **cero** |
 | Cheatsheets | 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -737,6 +737,18 @@ Las cuatro ampliaciones de AD (delegación, sin credencial, ADCS, confianzas) de
 
 AD pasa a **10 detecciones**. `sin-probar` da "todas fueron atacadas" y `huecos` sigue en cero: cada detección tiene su tradecraft que la dispara, y cada artefacto rojo tiene quién lo consuma. El ciclo rojo↔azul de AD queda cerrado salvo los tres huecos declarados, que son de instrumentación o de línea base, no de contenido.
 
+### 2026-08-19 — El artefacto de la CA y la detección de emisión de ADCS
+
+El tercero de los huecos azules de AD, y el más limpio de los que quedaban: en vez de una regla de línea base, es **modelar un artefacto nuevo** y escribir su detección.
+
+**[[Windows 4887 - Certificate Services issued]]** es el registro operativo de la CA —la emisión de cada certificado—, y la única fuente que ve el certificado **al nacer**, antes de que se lo use. Su campo clave es el `SubjectAltName` pedido: en ESC1 y ESC6 el atacante pone ahí el UPN de un administrador, y queda registrado junto a la cuenta real que lo pidió.
+
+**[[Certificado emitido con sujeto ajeno al solicitante]]** ancla en esa discrepancia —SAN ≠ solicitante— y es la detección de ADCS de **mayor fidelidad y la más temprana**: [[Autenticación por certificado a cuenta privilegiada]] ve el uso del cert (tardío), esta lo ve en la emisión, con la evidencia del abuso en el propio evento. Con las dos, ADCS queda cubierto en emisión y uso.
+
+**El requisito es el mismo punto ciego de siempre:** la auditoría de AD CS no viene encendida —`certutil -setreg CA\AuditFilter 127`—, igual que el `4662` de DCSync necesita la auditoría sobre el objeto raíz. Sin ella el `4887` no existe y la emisión es invisible. Es otro caso de [[Ausencia de alertas no es ausencia de ataque]], y está escrito en un callout de la detección.
+
+AD pasa a **15 artefactos de Windows y 11 detecciones**. `huecos` en cero, `sin-probar` "todas fueron atacadas". Quedan dos huecos azules, los dos de línea base y no de campo: delegación sin restricciones y abuso de confianza (`SIDHistory`).
+
 ## Pendientes
 
 ### Inmediatos
@@ -780,7 +792,7 @@ AD pasa a **10 detecciones**. `sin-probar` da "todas fueron atacadas" y `huecos`
 - [x] ~~LLMNR/NBT-NS + relay NTLM~~ — cerrado el 2026-08-19, la rama sin credencial de AD
 - [x] ~~ADCS más allá de ESC1~~ — cerrado el 2026-08-19, catálogo ESC1–15 extraído a matriz propia
 - [x] ~~Confianzas entre dominios y bosques~~ — cerrado el 2026-08-19. Cadena de AD completa (sin credencial → bosque)
-- [ ] **Huecos azules de AD que quedan** (los de línea base / instrumentación, no de campo): delegación sin restricciones, abuso de confianza (`SIDHistory`), artefacto de la CA (`4886`/`4887`) para la emisión
+- [ ] **Huecos azules de AD que quedan** (los de línea base, no de campo): delegación sin restricciones (cuenta de alto valor a host con delegación) y abuso de confianza (auditar `SIDHistory` en reposo). Los dos necesitan línea base o lista de activos, no una regla sobre un campo
 - [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando

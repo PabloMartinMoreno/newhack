@@ -4,7 +4,7 @@ clase: "[[T1649 - Steal or Forge Authentication Certificates]]"
 eje: credencial
 implementacion: "Abusar una plantilla mal configurada por su EKU, su rol de agente, o su ACL escribible, para obtener un certificado que autentica como un privilegiado"
 opsec: ruidoso
-telemetria: ["[[Windows 4768 - Kerberos TGT requested]]", "[[Windows 4662 - Directory object operation]]"]
+telemetria: ["[[Windows 4768 - Kerberos TGT requested]]", "[[Windows 4662 - Directory object operation]]", "[[Windows 4887 - Certificate Services issued]]"]
 requisitos: [plantilla-de-certificado-mal-configurada, permiso-de-inscripción]
 coste: bajo
 alternativas: ["[[ADCS - certificado con SAN arbitrario]]", "[[ADCS - abuso de la configuración de la CA]]"]
@@ -59,7 +59,7 @@ El costo está en el reconocimiento —correr `certipy find -vulnerable` y leer 
 
 Ruidosa en dos puntos, según la rama:
 
-- **La inscripción del certificado** deja eventos en la CA (`4886`/`4887` en el log de la entidad certificadora), que el vault no modela como artefacto propio.
+- **La inscripción del certificado** deja el `4887` en la CA —[[Windows 4887 - Certificate Services issued]]—, con el SAN pedido y el solicitante real. Si el SAN no corresponde al solicitante, lo ve [[Certificado emitido con sujeto ajeno al solicitante]] en el momento de emitir, antes del uso.
 - **El uso del certificado** para autenticarse deja una [[Windows 4768 - Kerberos TGT requested]] con información de certificado en el campo correspondiente. Es la señal de que alguien se autenticó con un cert, y su anomalía es de contexto —un usuario que normalmente no usa certificados, o un cert recién emitido—.
 - **ESC4 y ESC13** modifican objetos del directorio (la plantilla, la política): esa escritura deja [[Windows 4662 - Directory object operation]], la misma clase de señal de alta fidelidad que la escritura de RBCD, si la auditoría está sobre esos objetos.
 
