@@ -20,11 +20,11 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
-| Contenido rojo — AD | Núcleo + delegación: 9 técnicas ATT&CK, 11 tradecraft (unconstrained/constrained/RBCD agregados). Cada uno enlaza su artefacto de Windows |
+| Contenido rojo — AD | Núcleo + delegación + rama sin credencial: 10 técnicas ATT&CK, 13 tradecraft. La cadena arranca ahora sin credencial (LLMNR/relay) |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 14 artefactos, 7 detecciones de AD (RBCD agregada). `huecos` sigue en **cero** |
-| Cheatsheets | 94 matrices: 84 web, 6 AD, 4 azules. Indexadas desde el MOC de su dominio |
+| Contenido azul — Windows | 14 artefactos (Sysmon 3 estrenado), 8 detecciones de AD. `huecos` sigue en **cero** |
+| Cheatsheets | 95 matrices: 84 web, 7 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
 | Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
@@ -684,6 +684,21 @@ Cambio de rumbo pedido: el vault estaba desbalanceado —84 matrices web contra 
 
 `huecos` sigue en cero: los tres tradecraft enlazan `4768`/`4769`/`4662`, todos consumidos por detecciones existentes o por la nueva de RBCD.
 
+### 2026-08-19 — La rama sin credencial de AD: LLMNR/NBT-NS + relay NTLM
+
+Segundo paso del pivote a AD. Cierra la rama que faltaba: **el primer punto de apoyo cuando solo hay acceso a la red, sin usuario ni contraseña**. Antes la cadena de AD arrancaba en "una credencial cualquiera"; ahora arranca antes.
+
+Técnica paraguas [[T1557.001 - LLMNR NBT-NS Poisoning and SMB Relay]], dos tradecraft, una matriz, una detección. Dos ramas que se encadenan:
+
+- **Capturar** — Responder envenena las consultas por difusión (LLMNR/NBT-NS) y la víctima manda un NetNTLMv2 que se rompe fuera de línea. Es el primer hash del pentest interno, y la alternativa sin credencial a [[AS-REP roasting]].
+- **Retransmitir** — en vez de romper el hash, se reenvía la autenticación a un objetivo sin firma. Relay a LDAP configura RBCD, a SMB da ejecución, a la CA da un certificado (ESC8). No depende de romper nada.
+
+**El relay es el que rinde**, y conecta las dos ampliaciones de AD: relay a LDAP para escribir RBCD es la cadena moderna a admin de dominio, y cae exactamente en la detección [[Escritura del atributo de delegación RBCD]] que se escribió con la delegación —la misma regla, sin saber que el vector fue un relay—.
+
+**Cara azul asimétrica, y estrena un artefacto.** El envenenamiento vive en la red y es difícil de ver; su única ventana es la conexión de la víctima al host del atacante, que estrena [[Sysmon EID 3 - NetworkConnect]] —el primero de los artefactos de red de Sysmon con emisor y consumidor reales, dejando de ser andamiaje— con la detección [[Conexión a host de resolución de nombres no autorizado]] (`forma: correlacion`, fidelidad media, necesita lista blanca de servidores). El relay, en cambio, aterriza en hosts monitoreados —un logon NTLM anómalo, una escritura de RBCD— y converge en detecciones que ya existen.
+
+AD pasa a 7 matrices y 8 detecciones. `huecos` sigue en cero.
+
 ## Pendientes
 
 ### Inmediatos
@@ -724,7 +739,8 @@ Cambio de rumbo pedido: el vault estaba desbalanceado —84 matrices web contra 
 - [x] ~~HTTP parameter pollution (`CWE-235`)~~ — cerrado el 2026-08-16. Tercer dominio de discrepancia de parseo; el WAF es la fuente que la técnica ciega
 - [x] ~~open redirect como dominio~~ — descartado: `CWE-601` ya existe y sus payloads viven en [[OAuth redirect_uri - matriz de referencia]]; no se duplica
 - [x] ~~Delegación de Kerberos (unconstrained/constrained/RBCD)~~ — cerrado el 2026-08-19, primer pivote a AD para balancear el vault
-- [ ] Web prácticamente agotado (34 dominios). Sigue **AD**, por orden: LLMNR/NBT-NS + relay NTLM (rama sin credencial) → ADCS más allá de ESC1 (ESC2-8) → confianzas entre dominios y bosques
+- [x] ~~LLMNR/NBT-NS + relay NTLM~~ — cerrado el 2026-08-19, la rama sin credencial de AD
+- [ ] Sigue **AD**, por orden: ADCS más allá de ESC1 (ESC2-8) → confianzas entre dominios y bosques → detección de delegación unconstrained/constrained (los huecos azules declarados)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

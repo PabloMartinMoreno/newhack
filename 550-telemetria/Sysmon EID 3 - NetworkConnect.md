@@ -55,5 +55,7 @@ Con la sección correspondiente en la configuración de Sysmon. Suele venir desa
 
 ## Quién lo emite / quién lo consume
 
-Rojo: pendiente — ver [[MOC - Telemetría de Windows]]
-Azul: pendiente
+Rojo: [[Envenenamiento de resolución de nombres]] — la víctima envenenada se conecta al host del atacante, y esa conexión a una IP no-servidor es la señal.
+Azul: [[Conexión a host de resolución de nombres no autorizado]] — ancla en el destino fuera de la lista blanca de servidores.
+
+Es el primero de los artefactos de red de Sysmon con emisor y consumidor reales; el resto sigue como andamiaje — ver [[MOC - Telemetría de Windows]].

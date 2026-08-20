@@ -26,8 +26,9 @@ Active Directory no se ataca por un servicio: se ataca por las **relaciones**. Q
 ```
 ¿Qué credencial tengo?
 ├─ Ninguna (solo red)
-│  ├─ ¿Cuentas sin preautenticación?  → [[AS-REP roasting]]   ← no necesita credencial
-│  └─ envenenamiento de nombres + relay  (sin nota propia todavía)
+│  ├─ Responder a la escucha  → [[Envenenamiento de resolución de nombres]]   ← el primer hash del pentest
+│  │  └─ ¿el hash no rompe? ¿hay objetivos sin firma?  → [[Relay de NTLM]] (no depende de romper)
+│  └─ ¿Cuentas sin preautenticación?  → [[AS-REP roasting]]   ← tampoco necesita credencial
 ├─ Una credencial de dominio cualquiera
 │  ├─ SIEMPRE PRIMERO          → [[Enumeración LDAP del directorio]]
 │  ├─ ¿Cuentas de servicio con SPN?  → [[Kerberoasting]]
@@ -96,6 +97,7 @@ Cuando ya sabés qué hacer y solo querés la invocación, sin pasar por las not
 | [[AD movimiento lateral - matriz de referencia]] | Pass-the-hash, pass-the-ticket, overpass, los cinco métodos de ejecución remota y su ruido |
 | [[AD persistencia - matriz de referencia]] | Golden, silver, diamond, ADCS de `ESC1` a `ESC8`, ACL, y por qué `krbtgt` se rota dos veces |
 | [[AD delegaciones - matriz de referencia]] | Sin restricciones (coacción + captura de TGT), restringida (`S4U`), RBCD (escribir el atributo + `S4U`) |
+| [[AD envenenamiento y relay - matriz de referencia]] | Responder, romper NetNTLMv2, comprobar firma, `ntlmrelayx` a SMB/LDAP/ADCS, coacción |
 
 ## Cara azul
 
@@ -103,6 +105,8 @@ El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bi
 
 | Técnica | Telemetría | Firma |
 |---|---|---|
+| [[Envenenamiento de resolución de nombres]] | [[Sysmon EID 3 - NetworkConnect]] | Endpoint conectándose a un host de resolución no autorizado — [[Conexión a host de resolución de nombres no autorizado]] |
+| [[Relay de NTLM]] | [[Windows 4624 - Successful logon]] | Logon NTLM de la víctima desde un origen ajeno — lo cubre [[Autenticación NTLM donde el dominio usa Kerberos]] |
 | [[Enumeración LDAP del directorio]] | [[Windows 4624 - Successful logon]] | Casi nada: es tráfico legítimo. El punto ciego de AD |
 | [[AS-REP roasting]] | [[Windows 4768 - Kerberos TGT requested]] | Ticket inicial con preautenticación en cero — casi sin falsos positivos |
 | [[Kerberoasting]] | [[Windows 4769 - Kerberos service ticket requested]] | Cifrado RC4, y volumen anormal de servicios pedidos |
@@ -130,8 +134,9 @@ Tres lecciones que este dominio deja, y que valen para todo el vault:
 
 - [x] Enumeración, las dos técnicas de roasting, volcado de credenciales, movimiento lateral por hash y ticket, DCSync, dos persistencias
 - [x] Cada técnica enlaza su artefacto de Windows — la cara azul de la tabla está completa
-- [x] Cara azul — siete detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]], [[Acceso a LSASS desde proceso no firmado]] y [[Escritura del atributo de delegación RBCD]]
+- [x] Cara azul — ocho detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]], [[Acceso a LSASS desde proceso no firmado]], [[Escritura del atributo de delegación RBCD]] y [[Conexión a host de resolución de nombres no autorizado]]
 - [x] Delegaciones: sin restricciones, restringida, RBCD — [[T1558 - Steal or Forge Kerberos Tickets]] con tres tradecraft y su matriz. RBCD cierra su ciclo rojo↔azul; las otras dos quedan con detección declarada como hueco
+- [x] La rama **sin credencial** — [[T1557.001 - LLMNR NBT-NS Poisoning and SMB Relay]] con captura ([[Envenenamiento de resolución de nombres]]) y relay ([[Relay de NTLM]]), su matriz, y la detección [[Conexión a host de resolución de nombres no autorizado]] que estrena [[Sysmon EID 3 - NetworkConnect]]. El relay converge en detecciones existentes (NTLM anómalo, escritura de RBCD)
 - [ ] **[[Enumeración LDAP del directorio]] queda sin detección a propósito.** Tráfico legítimo indistinguible; es el punto ciego del dominio y se declara, no se esconde
 - [ ] **Detección de delegación sin restricciones y restringida.** La telemetría existe (`4768`/`4769`) y se consume, pero falta la regla que ancle en la anomalía de relación —cuenta de alto valor a host con delegación, `S4U` con impersonación privilegiada—. Necesita línea base
 - [ ] Ninguna detección está validada en laboratorio. Es el trabajo que HTB alimenta directo
