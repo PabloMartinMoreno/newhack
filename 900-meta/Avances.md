@@ -23,7 +23,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Contenido rojo — AD | Núcleo + delegación + sin credencial + ADCS + confianzas: 11 técnicas ATT&CK, 17 tradecraft. Cadena completa: sin credencial → bosque |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 14 artefactos (Sysmon 3 estrenado), 8 detecciones de AD. `huecos` sigue en **cero** |
+| Contenido azul — Windows | 14 artefactos, 10 detecciones de AD (PKINIT y S4U agregadas). `huecos` en **cero** |
 | Cheatsheets | 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -725,6 +725,18 @@ Técnica paraguas [[T1134.005 - SID-History Injection]] para la escalada intra-b
 
 Con esto **AD queda con su cadena completa** —sin credencial, credencial, admin local, admin de dominio, bosque— y 9 matrices contra las 5 con que arrancó el pivote. El desbalance con web (84 matrices) sigue, pero AD ya cubre el recorrido entero de un ataque real.
 
+### 2026-08-19 — Cerrar los huecos azules de las ampliaciones de AD
+
+Las cuatro ampliaciones de AD (delegación, sin credencial, ADCS, confianzas) dejaron el lado rojo completo y varios huecos azules declarados. Se cierran los dos **más limpios de escribir** —los que anclan en un campo concreto de un artefacto ya modelado— y se dejan declarados los que necesitan línea base o eventos no modelados.
+
+**[[Autenticación por certificado a cuenta privilegiada]]** cierra el hueco de ADCS: el `4768` con información de certificado (PKINIT) marca que alguien se autenticó con un cert, y el filtro por cuenta privilegiada lo vuelve señal —un administrador autenticándose con certificado es raro—. No distingue el cert forjado del legítimo, pero cubre el **uso** de cualquier rama de ADCS, que todas terminan en `certipy auth`.
+
+**[[Impersonación por delegación S4U]]** cierra el hueco de delegación restringida: el `4769` con `Transited Services` no vacío es la marca de S4U2Proxy, y con impersonación de cuenta privilegiada es el abuso. Cubre restringida y RBCD en su fase de uso —RBCD queda **doblemente cubierta**, la escritura del atributo y el uso—.
+
+**Lo que queda declarado**, porque no ancla en un campo sino en una relación con línea base o en un evento no modelado: la delegación **sin restricciones** (cuenta de alto valor a host con `TRUSTED_FOR_DELEGATION`), el **abuso de confianza** (`SIDHistory` en el PAC, o auditar el atributo en reposo), y la **emisión** de certificados (`4886`/`4887` de la CA, sin artefacto).
+
+AD pasa a **10 detecciones**. `sin-probar` da "todas fueron atacadas" y `huecos` sigue en cero: cada detección tiene su tradecraft que la dispara, y cada artefacto rojo tiene quién lo consuma. El ciclo rojo↔azul de AD queda cerrado salvo los tres huecos declarados, que son de instrumentación o de línea base, no de contenido.
+
 ## Pendientes
 
 ### Inmediatos
@@ -768,7 +780,7 @@ Con esto **AD queda con su cadena completa** —sin credencial, credencial, admi
 - [x] ~~LLMNR/NBT-NS + relay NTLM~~ — cerrado el 2026-08-19, la rama sin credencial de AD
 - [x] ~~ADCS más allá de ESC1~~ — cerrado el 2026-08-19, catálogo ESC1–15 extraído a matriz propia
 - [x] ~~Confianzas entre dominios y bosques~~ — cerrado el 2026-08-19. Cadena de AD completa (sin credencial → bosque)
-- [ ] **Huecos azules de AD declarados**, si se quiere cerrar el ciclo rojo↔azul de las ampliaciones: detección de delegación unconstrained/constrained, auth por certificado (+ artefacto de la CA `4886`/`4887`), abuso de confianza (auditar `SIDHistory`)
+- [ ] **Huecos azules de AD que quedan** (los de línea base / instrumentación, no de campo): delegación sin restricciones, abuso de confianza (`SIDHistory`), artefacto de la CA (`4886`/`4887`) para la emisión
 - [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando

@@ -122,13 +122,13 @@ El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bi
 | [[Pass-the-ticket]] | [[Sysmon EID 10 - ProcessAccess]] | El robo del ticket, no el uso: se detecta el paso anterior |
 | [[DCSync]] | [[Windows 4662 - Directory object operation]] | Derechos de replicación desde algo que no es un DC |
 | [[Golden ticket]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket de servicio sin ticket inicial previo; cuenta inexistente |
-| [[ADCS - certificado con SAN arbitrario]] | [[Windows 4768 - Kerberos TGT requested]] | Certificado a nombre ajeno; persistencia casi indetectable |
-| [[ADCS - plantilla abusable por propósito o ACL]] | [[Windows 4662 - Directory object operation]] | Modificación de plantilla (ESC4/13) — firma escribible; el uso del cert no |
+| [[ADCS - certificado con SAN arbitrario]] | [[Windows 4768 - Kerberos TGT requested]] | Cuenta privilegiada autenticándose con certificado (PKINIT) — [[Autenticación por certificado a cuenta privilegiada]] |
+| [[ADCS - plantilla abusable por propósito o ACL]] | [[Windows 4662 - Directory object operation]] | Modificación de plantilla (ESC4/13) — firma escribible; el uso del cert lo ve la de PKINIT |
 | [[ADCS - abuso de la configuración de la CA]] | [[Windows 4624 - Successful logon]] | ESC8/11 son relay → NTLM anómalo; ESC7 modifica la CA → escritura en `4662` |
 | [[Escalada intra-bosque por SID History]] | [[Windows 4769 - Kerberos service ticket requested]] | SID de otro dominio en el PAC; `SIDHistory` en reposo — sin detección propia |
 | [[Movimiento entre bosques por la clave de confianza]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket inter-reino anómalo por dirección o cuenta — sin detección propia |
 | [[Delegación sin restricciones]] | [[Windows 4768 - Kerberos TGT requested]] | Cuenta de alto valor autenticándose a un host con delegación — sin detección propia |
-| [[Delegación restringida]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket `S4U` con `Transited Services` e impersonación de cuenta privilegiada — sin detección propia |
+| [[Delegación restringida]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket `S4U` con `Transited Services` e impersonación privilegiada — [[Impersonación por delegación S4U]] |
 | [[Delegación basada en recursos]] | [[Windows 4662 - Directory object operation]] | Escritura de `msDS-AllowedToActOnBehalfOfOtherIdentity` — [[Escritura del atributo de delegación RBCD]] |
 
 Tres lecciones que este dominio deja, y que valen para todo el vault:
@@ -145,15 +145,16 @@ Tres lecciones que este dominio deja, y que valen para todo el vault:
 
 - [x] Enumeración, las dos técnicas de roasting, volcado de credenciales, movimiento lateral por hash y ticket, DCSync, dos persistencias
 - [x] Cada técnica enlaza su artefacto de Windows — la cara azul de la tabla está completa
-- [x] Cara azul — ocho detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]], [[Acceso a LSASS desde proceso no firmado]], [[Escritura del atributo de delegación RBCD]] y [[Conexión a host de resolución de nombres no autorizado]]
+- [x] Cara azul — diez detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]], [[Acceso a LSASS desde proceso no firmado]], [[Escritura del atributo de delegación RBCD]], [[Conexión a host de resolución de nombres no autorizado]], [[Autenticación por certificado a cuenta privilegiada]] e [[Impersonación por delegación S4U]]
 - [x] Delegaciones: sin restricciones, restringida, RBCD — [[T1558 - Steal or Forge Kerberos Tickets]] con tres tradecraft y su matriz. RBCD cierra su ciclo rojo↔azul; las otras dos quedan con detección declarada como hueco
 - [x] La rama **sin credencial** — [[T1557.001 - LLMNR NBT-NS Poisoning and SMB Relay]] con captura ([[Envenenamiento de resolución de nombres]]) y relay ([[Relay de NTLM]]), su matriz, y la detección [[Conexión a host de resolución de nombres no autorizado]] que estrena [[Sysmon EID 3 - NetworkConnect]]. El relay converge en detecciones existentes (NTLM anómalo, escritura de RBCD)
 - [ ] **[[Enumeración LDAP del directorio]] queda sin detección a propósito.** Tráfico legítimo indistinguible; es el punto ciego del dominio y se declara, no se esconde
-- [ ] **Detección de delegación sin restricciones y restringida.** La telemetría existe (`4768`/`4769`) y se consume, pero falta la regla que ancle en la anomalía de relación —cuenta de alto valor a host con delegación, `S4U` con impersonación privilegiada—. Necesita línea base
+- [x] Detección de delegación **restringida** — [[Impersonación por delegación S4U]] ancla en el `4769` con `Transited Services` e impersonación privilegiada
+- [ ] **Detección de delegación sin restricciones** — sigue abierta: su señal es una anomalía de relación (cuenta de alto valor autenticándose a un host con `TRUSTED_FOR_DELEGATION`) que necesita línea base y lista de hosts con delegación, no un campo de un evento
 - [ ] Ninguna detección está validada en laboratorio. Es el trabajo que HTB alimenta directo
 - [ ] Envenenamiento de nombres (LLMNR/NBT-NS) + relay NTLM — la rama "sin credencial" que falta
 - [x] ADCS más allá de ESC1 — [[ADCS - plantilla abusable por propósito o ACL]] (ESC2/3/4/13/15) y [[ADCS - abuso de la configuración de la CA]] (ESC6/7/8/11), con el catálogo completo en [[ADCS - matriz de referencia]]. ESC8/11 cruzan con [[Relay de NTLM]]
-- [ ] **Detección de autenticación por certificado.** El `4768` con información de certificado se consume por las reglas de TGT pero ninguna distingue el cert-as-anyone; la señal escribible es la modificación de plantilla/CA sobre `4662` (ESC4/7/13), análoga a RBCD. Falta la regla del uso del cert
-- [ ] Falta un artefacto de telemetría de la CA (`4886`/`4887` de inscripción) para ver la emisión, no solo el uso
+- [x] Detección de autenticación por certificado — [[Autenticación por certificado a cuenta privilegiada]] ancla en el `4768` con información de certificado (PKINIT) para una cuenta privilegiada. No distingue el cert forjado del legítimo, pero un administrador autenticándose con cert es la anomalía
+- [ ] Falta un artefacto de telemetría de la CA (`4886`/`4887` de inscripción) para ver la **emisión**, no solo el uso — cerraría el flanco de los certs que se emiten y aún no se usan
 - [x] Confianzas entre dominios y bosques — [[T1134.005 - SID-History Injection]] con [[Escalada intra-bosque por SID History]] (hijo → raíz del bosque) y [[Movimiento entre bosques por la clave de confianza]] (TGT inter-reino), y su matriz. El principio "el límite es el bosque, no el dominio" queda escrito
 - [ ] **Detección de abuso de confianza.** El `4769` inter-reino y el SID inyectado se consumen por las reglas de golden, pero ninguna distingue el SID de escalada ni el ticket que cruza mal. La señal en reposo de mayor retorno es auditar el atributo `SIDHistory`
