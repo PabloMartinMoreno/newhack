@@ -20,10 +20,10 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
-| Contenido rojo — AD | Núcleo + delegación + sin credencial + ADCS + confianzas: 11 técnicas ATT&CK, 17 tradecraft. Cadena completa: sin credencial → bosque |
+| Contenido rojo — AD | Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 18 tradecraft. SID History en sus dos formas (escalada y persistencia) |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 15 artefactos, 12 detecciones de AD. Un solo hueco declarado (SID History, necesita técnica nueva). `huecos` en **cero** |
+| Contenido azul — Windows | 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero** |
 | Cheatsheets | 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio |
 | Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
 | Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
@@ -757,6 +757,18 @@ Penúltimo hueco azul de AD, cerrado. [[Cuenta de alto valor autenticándose a h
 
 Con esto AD tiene **12 detecciones** y su ciclo rojo↔azul cerrado salvo ese hueco de técnica. `huecos` en cero, `sin-probar` "todas fueron atacadas", `higiene` limpio. El pivote a AD —cuatro ampliaciones rojas y siete detecciones azules nuevas— deja el dominio con el recorrido completo de un ataque real y su contracara defensiva.
 
+### 2026-08-19 — SID History por sus dos caras: el ciclo rojo↔azul de AD, cerrado
+
+El último hueco azul de AD, cerrado del modo correcto: no forzando una regla sobre la escalada por ticket forjado, sino **agregando la técnica roja que faltaba** —la persistencia por escritura del atributo—, que sí deja firma.
+
+**[[Persistencia por SID History]]** escribe el atributo `SIDHistory` de una cuenta con el SID de *Domain Admins*/*Enterprise Admins*: la cuenta queda como **miembro silencioso** del grupo, sin aparecer en las membresías, y sobrevive a la rotación de credenciales. Es persistencia más limpia que agregar la cuenta al grupo o que el golden ticket. La escritura deja el nuevo artefacto [[Windows 4765 - SID History added]], y [[SID History agregado a una cuenta]] ancla en el `SourceSid`: un SID administrativo agregado a una cuenta común, fuera de una migración, es firma casi inequívoca —de las de mayor fidelidad de AD, con la de DCSync y RBCD—.
+
+**La distinción que quedó escrita en la técnica paraguas:** SID History se inyecta de dos formas con huella opuesta. En el **ticket** ([[Escalada intra-bosque por SID History]]) el SID va en el PAC de un ticket forjado, no toca el directorio, y no deja firma de escritura —es un límite de la técnica, no un hueco—. En el **atributo** (la persistencia) sí deja el `4765`. Una es escalada de un momento, la otra persistencia duradera; una se ve en la escritura, la otra no.
+
+**Con esto el ciclo rojo↔azul de AD queda cerrado.** Cada rama roja tiene su artefacto y, salvo el ticket forjado que por diseño no deja escritura, su detección. AD: 18 tradecraft, 16 artefactos de Windows, 13 detecciones. `huecos` en cero, `sin-probar` "todas fueron atacadas", `higiene` limpio.
+
+El pivote a AD completo, en cinco pasos: delegación · rama sin credencial (LLMNR/relay) · ADCS completo · confianzas · y el cierre de los huecos azules. AD pasó de un núcleo de 8 técnicas y 5 matrices a la cadena entera de un ataque real —de "solo red" al bosque— con su contracara defensiva. El desbalance de matrices con web (84 contra 9) queda, pero AD ya cubre el recorrido completo, que era el objetivo del pivote.
+
 ## Pendientes
 
 ### Inmediatos
@@ -800,7 +812,7 @@ Con esto AD tiene **12 detecciones** y su ciclo rojo↔azul cerrado salvo ese hu
 - [x] ~~LLMNR/NBT-NS + relay NTLM~~ — cerrado el 2026-08-19, la rama sin credencial de AD
 - [x] ~~ADCS más allá de ESC1~~ — cerrado el 2026-08-19, catálogo ESC1–15 extraído a matriz propia
 - [x] ~~Confianzas entre dominios y bosques~~ — cerrado el 2026-08-19. Cadena de AD completa (sin credencial → bosque)
-- [ ] **Único hueco azul de AD que queda:** SID History. No es una regla faltante sino una **técnica roja** faltante — la persistencia por escritura del atributo `SIDHistory` (que emite `4765`), distinta del ticket forjado. Cerrarlo es agregar esa técnica + artefacto `4765` + detección
+- [x] ~~SID History~~ — cerrado el 2026-08-19 agregando la persistencia por atributo ([[Persistencia por SID History]]) + `4765` + su detección. Ciclo rojo↔azul de AD completo
 - [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando

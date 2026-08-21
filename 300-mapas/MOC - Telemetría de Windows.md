@@ -67,6 +67,8 @@ Los dos apuntes del grupo 2 son los que más veces se hacen mal, y en los dos ca
 │  └─ contra Kerberos          → [[Windows 4768 - Kerberos TGT requested]]
 ├─ Que emitieron un certificado
 │  └─ en la CA                 → [[Windows 4887 - Certificate Services issued]]  (auditoría de AD CS)
+├─ Que tocaron el SID History de una cuenta
+│  └─ la escritura del atributo → [[Windows 4765 - SID History added]]  (auditoría de gestión de cuentas)
 ├─ Que tocaron la memoria de otro proceso
 │  ├─ abrieron un handle       → [[Sysmon EID 10 - ProcessAccess]]
 │  ├─ crearon un hilo          → [[Sysmon EID 8 - CreateRemoteThread]]
