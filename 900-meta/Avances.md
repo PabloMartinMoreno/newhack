@@ -20,7 +20,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 | Plantillas (`999-plantillas/`) | 11 tipos, completas |
 | Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
 | Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
-| Contenido rojo — AD | Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 18 tradecraft. SID History en sus dos formas (escalada y persistencia) |
+| Contenido rojo — AD | Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices |
 | Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
 | Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
 | Contenido azul — Windows | 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero** |
@@ -768,6 +768,18 @@ El último hueco azul de AD, cerrado del modo correcto: no forzando una regla so
 **Con esto el ciclo rojo↔azul de AD queda cerrado.** Cada rama roja tiene su artefacto y, salvo el ticket forjado que por diseño no deja escritura, su detección. AD: 18 tradecraft, 16 artefactos de Windows, 13 detecciones. `huecos` en cero, `sin-probar` "todas fueron atacadas", `higiene` limpio.
 
 El pivote a AD completo, en cinco pasos: delegación · rama sin credencial (LLMNR/relay) · ADCS completo · confianzas · y el cierre de los huecos azules. AD pasó de un núcleo de 8 técnicas y 5 matrices a la cadena entera de un ataque real —de "solo red" al bosque— con su contracara defensiva. El desbalance de matrices con web (84 contra 9) queda, pero AD ya cubre el recorrido completo, que era el objetivo del pivote.
+
+### 2026-08-23 — AD partido en nueve MOCs por fase; Inicio por familias; tablas anchas saldadas
+
+Tres cambios de estructura, disparados por un problema de render: tablas más anchas que la ventana de nvim se ven mal, y ningún plugin reflota una tabla —es límite del terminal—. El arreglo real es de contenido.
+
+- **La tabla Cara azul del MOC de AD** pasó de 315 a <120 cols de render: la columna *Firma* en prosa duplicaba el nombre de la nota de detección, así que se sacó (la firma vive en cada detección) y los artefactos se aliasearon a su EID (`[[Windows 4624…|4624]]`). Columnas nuevas: `Técnica | Emite | Detección`.
+- **Inicio por familias.** Los 34 MOCs web eran una lista plana; ahora cuelgan de un `### Web` con seis familias por **mecanismo** (inyección · identidad y acceso · el servidor trae · cliente/navegador · parseo y cabeceras · lógica y estado), orden clásico→avanzado. `### Active Directory` y `### Azul` quedan como paraguas paralelos. No hay nota-taxonomía: la agrupación vive en Inicio.
+- **AD partido en nueve MOCs por fase**, 1:1 con las nueve matrices, para quedar paralelo a la granularidad de web (un MOC por unidad coherente). [[MOC - Active Directory]] pasa a **hub**: conserva el árbol maestro *lo que tenés → qué se abre* y la bisagra roja↔azul (ambos transversales), e indexa las fases. Cada fase —envenenamiento y relay, enumeración, roasting, volcado, movimiento lateral, delegaciones, ADCS, persistencia, confianzas— es un MOC con su árbol, su matriz como cheatsheet y su cara azul. De paso, la tabla Cheatsheets del hub (157 cols) se volvió lista.
+
+**Por qué el hub sobrevive y no se reparte:** el árbol *lo que tenés* cruza todas las fases —es la decisión que define el dominio— y la tabla Cara azul es la bisagra completa. Repartirlos rompería el mapa. Web no tiene hub porque sus clases son ortogonales; AD sí lo necesita porque es una sola kill chain.
+
+Vault: 427 notas (9 MOCs nuevos). `higiene` exit 0, `huecos` cero, ningún alias duplicado, todo MOC indexado en Inicio.
 
 ## Pendientes
 

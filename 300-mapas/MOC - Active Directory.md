@@ -9,8 +9,8 @@ tags:
 
 # MOC - Active Directory
 
-> [!abstract] Nota de referencia paraguas
-> Superficie: [[Active Directory]]. Las fuentes de datos, en [[MOC - Telemetría de Windows]]. Los conceptos de detección, en [[MOC - Fundamentos de detección]]. Acá vive **la decisión**.
+> [!abstract] Hub del dominio
+> Superficie: [[Active Directory]]. Las fuentes de datos, en [[MOC - Telemetría de Windows]]. Los conceptos de detección, en [[MOC - Fundamentos de detección]]. Acá viven el **árbol maestro** (*lo que tenés → qué se abre*) y la **bisagra roja↔azul**; cada fase es un MOC propio, indexados abajo.
 
 Active Directory no se ataca por un servicio: se ataca por las **relaciones**. Quién puede hacer qué sobre quién, y qué credenciales quedan en memoria en cada máquina como consecuencia. Por eso el dominio se organiza por **lo que tenés** —qué credencial, qué acceso— y no por técnica: cada nivel de acceso abre unas ramas y cierra otras.
 
@@ -91,25 +91,25 @@ Este es el temario del módulo, y sigue la ruta de un ataque real.
 
 El punto 1 va primero y no es negociable: casi todas las técnicas del dominio son consecuencia de cómo funcionan esos dos protocolos, no de un fallo.
 
-## Cheatsheets — entrada directa a los comandos
+## Las nueve fases — un MOC cada una
 
-Cuando ya sabés qué hacer y solo querés la invocación, sin pasar por las notas de criterio:
+Cada fase es un MOC con su árbol de decisión, su cheatsheet (matriz de comandos) y su cara azul. Ordenadas por dependencia:
 
-| Matriz | Cubre |
-|---|---|
-| [[AD enumeración - matriz de referencia]] | Sin credencial y con credencial, consultas LDAP puntuales, BloodHound, la máscara de bits de `userAccountControl` |
-| [[AD roasting - matriz de referencia]] | AS-REP y Kerberoast: pedir, formatos, modos de hashcat, silver ticket como atajo |
-| [[AD volcado de credenciales - matriz de referencia]] | LSASS, SAM, LSA Secrets, NTDS, DPAPI — y qué permite cada formato |
-| [[AD movimiento lateral - matriz de referencia]] | Pass-the-hash, pass-the-ticket, overpass, los cinco métodos de ejecución remota y su ruido |
-| [[AD persistencia - matriz de referencia]] | Golden, silver, diamond, ADCS de `ESC1` a `ESC8`, ACL, y por qué `krbtgt` se rota dos veces |
-| [[AD delegaciones - matriz de referencia]] | Sin restricciones (coacción + captura de TGT), restringida (`S4U`), RBCD (escribir el atributo + `S4U`) |
-| [[AD envenenamiento y relay - matriz de referencia]] | Responder, romper NetNTLMv2, comprobar firma, `ntlmrelayx` a SMB/LDAP/ADCS, coacción |
-| [[ADCS - matriz de referencia]] | El catálogo `ESC1`–`ESC15` con el comando de cada uno, THEFT, Shadow Credentials, `certipy` |
-| [[AD confianzas - matriz de referencia]] | Enumerar confianzas, SID History a la raíz del bosque, clave de confianza inter-reino, filtrado de SID |
+1. [[MOC - AD envenenamiento y relay]] — sin credencial: el primer hash y el reenvío
+2. [[MOC - AD enumeración]] — el directorio como base de datos; **siempre primero** con credencial
+3. [[MOC - AD roasting]] — credenciales que se rompen fuera de línea
+4. [[MOC - AD volcado de credenciales]] — memoria, disco y el propio directorio
+5. [[MOC - AD movimiento lateral]] — moverse con hash o ticket; NTLM contra Kerberos
+6. [[MOC - AD delegaciones]] — actuar en nombre de otro: sin restricciones, restringida, RBCD
+7. [[MOC - ADCS]] — la PKI que emite identidad
+8. [[MOC - AD persistencia]] — volver a entrar tras la rotación
+9. [[MOC - AD confianzas]] — del dominio al bosque
+
+Las matrices de comandos viven dentro de cada MOC, en su sección *Cara roja*.
 
 ## Cara azul
 
-El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bisagra del dominio** — es lo que conecta cada nota roja con su fuente en `550-telemetria/`.
+El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bisagra del dominio** — es lo que conecta cada nota roja con su fuente en `550-telemetria/`. La *firma* —cómo se reconoce en el evento— vive en cada nota de detección; acá va solo el mapeo.
 
 | Técnica | Emite | Detección |
 |---|---|---|
@@ -146,6 +146,7 @@ Tres lecciones que este dominio deja, y que valen para todo el vault:
 
 ## Huecos conocidos
 
+- [x] Dominio partido en **nueve MOCs por fase**, 1:1 con las matrices; este maestro queda de hub con el árbol *lo que tenés* y la bisagra roja↔azul
 - [x] Enumeración, las dos técnicas de roasting, volcado de credenciales, movimiento lateral por hash y ticket, DCSync, dos persistencias
 - [x] Cada técnica enlaza su artefacto de Windows — la cara azul de la tabla está completa
 - [x] Cara azul — trece detecciones: [[Solicitud de TGT sin preautenticación]], [[Tickets de servicio con cifrado débil en volumen]], [[Replicación de directorio desde un origen no autorizado]], [[Autenticación NTLM donde el dominio usa Kerberos]], [[Ticket de servicio sin ticket inicial previo]], [[Acceso a LSASS desde proceso no firmado]], [[Escritura del atributo de delegación RBCD]], [[Conexión a host de resolución de nombres no autorizado]], [[Autenticación por certificado a cuenta privilegiada]], [[Impersonación por delegación S4U]], [[Certificado emitido con sujeto ajeno al solicitante]], [[Cuenta de alto valor autenticándose a host con delegación]] y [[SID History agregado a una cuenta]]
