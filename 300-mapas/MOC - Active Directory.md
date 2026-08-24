@@ -111,27 +111,28 @@ Cuando ya sabés qué hacer y solo querés la invocación, sin pasar por las not
 
 El mapa completo de qué emite cada técnica y qué la ve. **Esta tabla es la bisagra del dominio** — es lo que conecta cada nota roja con su fuente en `550-telemetria/`.
 
-| Técnica | Telemetría | Firma |
+| Técnica | Emite | Detección |
 |---|---|---|
-| [[Envenenamiento de resolución de nombres]] | [[Sysmon EID 3 - NetworkConnect]] | Endpoint conectándose a un host de resolución no autorizado — [[Conexión a host de resolución de nombres no autorizado]] |
-| [[Relay de NTLM]] | [[Windows 4624 - Successful logon]] | Logon NTLM de la víctima desde un origen ajeno — lo cubre [[Autenticación NTLM donde el dominio usa Kerberos]] |
-| [[Enumeración LDAP del directorio]] | [[Windows 4624 - Successful logon]] | Casi nada: es tráfico legítimo. El punto ciego de AD |
-| [[AS-REP roasting]] | [[Windows 4768 - Kerberos TGT requested]] | Ticket inicial con preautenticación en cero — casi sin falsos positivos |
-| [[Kerberoasting]] | [[Windows 4769 - Kerberos service ticket requested]] | Cifrado RC4, y volumen anormal de servicios pedidos |
-| [[LSASS - volcado vía comsvcs.dll MiniDump]] | [[Sysmon EID 10 - ProcessAccess]] | Acceso a memoria de LSASS — [[Acceso a LSASS desde proceso no firmado]] |
-| [[Pass-the-hash]] | [[Windows 4624 - Successful logon]] | Tipo 3 + NTLM donde debería haber Kerberos |
-| [[Pass-the-ticket]] | [[Sysmon EID 10 - ProcessAccess]] | El robo del ticket, no el uso: se detecta el paso anterior |
-| [[DCSync]] | [[Windows 4662 - Directory object operation]] | Derechos de replicación desde algo que no es un DC |
-| [[Golden ticket]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket de servicio sin ticket inicial previo; cuenta inexistente |
-| [[ADCS - certificado con SAN arbitrario]] | [[Windows 4887 - Certificate Services issued]] · [[Windows 4768 - Kerberos TGT requested]] | SAN que no corresponde al solicitante en la emisión — [[Certificado emitido con sujeto ajeno al solicitante]]; el uso, [[Autenticación por certificado a cuenta privilegiada]] |
-| [[ADCS - plantilla abusable por propósito o ACL]] | [[Windows 4662 - Directory object operation]] | Modificación de plantilla (ESC4/13) — firma escribible; el uso del cert lo ve la de PKINIT |
-| [[ADCS - abuso de la configuración de la CA]] | [[Windows 4624 - Successful logon]] | ESC8/11 son relay → NTLM anómalo; ESC7 modifica la CA → escritura en `4662` |
-| [[Escalada intra-bosque por SID History]] | [[Windows 4769 - Kerberos service ticket requested]] | SID de otro dominio en el PAC del ticket forjado — sin firma de escritura, cubierta en parte por la de golden |
-| [[Persistencia por SID History]] | [[Windows 4765 - SID History added]] | Escritura de `SIDHistory` con un SID administrativo — [[SID History agregado a una cuenta]] |
-| [[Movimiento entre bosques por la clave de confianza]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket inter-reino anómalo por dirección o cuenta — sin detección propia |
-| [[Delegación sin restricciones]] | [[Windows 4624 - Successful logon]] · [[Windows 4768 - Kerberos TGT requested]] | Cuenta de alto valor autenticándose a un host con delegación — [[Cuenta de alto valor autenticándose a host con delegación]] |
-| [[Delegación restringida]] | [[Windows 4769 - Kerberos service ticket requested]] | Ticket `S4U` con `Transited Services` e impersonación privilegiada — [[Impersonación por delegación S4U]] |
-| [[Delegación basada en recursos]] | [[Windows 4662 - Directory object operation]] | Escritura de `msDS-AllowedToActOnBehalfOfOtherIdentity` — [[Escritura del atributo de delegación RBCD]] |
+| [[Envenenamiento de resolución de nombres]] | [[Sysmon EID 3 - NetworkConnect\|Sysmon 3]] | [[Conexión a host de resolución de nombres no autorizado]] |
+| [[Relay de NTLM]] | [[Windows 4624 - Successful logon\|4624]] | [[Autenticación NTLM donde el dominio usa Kerberos]] |
+| [[Enumeración LDAP del directorio]] | [[Windows 4624 - Successful logon\|4624]] | punto ciego — tráfico legítimo (a propósito) |
+| [[AS-REP roasting]] | [[Windows 4768 - Kerberos TGT requested\|4768]] | [[Solicitud de TGT sin preautenticación]] |
+| [[Kerberoasting]] | [[Windows 4769 - Kerberos service ticket requested\|4769]] | [[Tickets de servicio con cifrado débil en volumen]] |
+| [[LSASS - volcado vía comsvcs.dll MiniDump]] | [[Sysmon EID 10 - ProcessAccess\|Sysmon 10]] | [[Acceso a LSASS desde proceso no firmado]] |
+| [[Pass-the-hash]] | [[Windows 4624 - Successful logon\|4624]] | [[Autenticación NTLM donde el dominio usa Kerberos]] |
+| [[Pass-the-ticket]] | [[Sysmon EID 10 - ProcessAccess\|Sysmon 10]] | el paso anterior — [[Acceso a LSASS desde proceso no firmado]] |
+| [[DCSync]] | [[Windows 4662 - Directory object operation\|4662]] | [[Replicación de directorio desde un origen no autorizado]] |
+| [[Golden ticket]] | [[Windows 4769 - Kerberos service ticket requested\|4769]] | [[Ticket de servicio sin ticket inicial previo]] |
+| [[ADCS - certificado con SAN arbitrario]] · emisión | [[Windows 4887 - Certificate Services issued\|4887]] | [[Certificado emitido con sujeto ajeno al solicitante]] |
+| [[ADCS - certificado con SAN arbitrario]] · uso | [[Windows 4768 - Kerberos TGT requested\|4768]] | [[Autenticación por certificado a cuenta privilegiada]] |
+| [[ADCS - plantilla abusable por propósito o ACL]] | [[Windows 4662 - Directory object operation\|4662]] | el uso — [[Autenticación por certificado a cuenta privilegiada]] |
+| [[ADCS - abuso de la configuración de la CA]] | [[Windows 4624 - Successful logon\|4624]] | ESC8/11 — [[Autenticación NTLM donde el dominio usa Kerberos]] |
+| [[Escalada intra-bosque por SID History]] | [[Windows 4769 - Kerberos service ticket requested\|4769]] | en parte, la de golden |
+| [[Persistencia por SID History]] | [[Windows 4765 - SID History added\|4765]] | [[SID History agregado a una cuenta]] |
+| [[Movimiento entre bosques por la clave de confianza]] | [[Windows 4769 - Kerberos service ticket requested\|4769]] | sin detección propia |
+| [[Delegación sin restricciones]] | [[Windows 4624 - Successful logon\|4624]] | [[Cuenta de alto valor autenticándose a host con delegación]] |
+| [[Delegación restringida]] | [[Windows 4769 - Kerberos service ticket requested\|4769]] | [[Impersonación por delegación S4U]] |
+| [[Delegación basada en recursos]] | [[Windows 4662 - Directory object operation\|4662]] | [[Escritura del atributo de delegación RBCD]] |
 
 Tres lecciones que este dominio deja, y que valen para todo el vault:
 
