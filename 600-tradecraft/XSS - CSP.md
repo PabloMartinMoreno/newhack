@@ -25,9 +25,9 @@ No es un tipo de XSS: es **el obstáculo** que define el XSS moderno. Cuando ya 
 
 Primero se lee el header `Content-Security-Policy` de la respuesta y se busca la debilidad. Sin debilidad, la inyección puede ser real y aun así no explotable.
 
-## Por qué (a veces) se puede saltear
+## Por qué funciona
 
-CSP restringe de dónde se puede cargar y ejecutar script. Falla cuando la política es **permisiva o mal armada**:
+El bypass funciona cuando la política es **permisiva o mal armada**. CSP restringe de dónde se puede cargar y ejecutar script; se saltea por sus grietas:
 
 - `unsafe-inline` presente → los handlers y `<script>` inline ejecutan: no hay CSP efectivo para XSS.
 - Un dominio permitido en `script-src` que **hostea un gadget** (JSONP, una librería con `eval`, un endpoint que refleja).
@@ -35,7 +35,7 @@ CSP restringe de dónde se puede cargar y ejecutar script. Falla cuando la polí
 - `nonce` reutilizado o predecible.
 - Falta `object-src 'none'` / `base-uri` → inyección vía `<base>` o `<object>`.
 
-## Cómo falla el bypass
+## Cómo falla
 
 - **CSP estricta y bien armada** — `script-src 'nonce-aleatorio' 'strict-dynamic'; object-src 'none'; base-uri 'none'` sin dominios con gadgets: no hay por dónde. La inyección queda como hallazgo sin impacto de ejecución.
 - **El gadget no existe** en los dominios permitidos.
