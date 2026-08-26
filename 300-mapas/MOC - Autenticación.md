@@ -67,10 +67,8 @@ La primera rama es la clave del dominio entero: **el control habitual está en e
 
 ## Cheatsheets
 
-| Matriz | Cubre |
-|---|---|
-| [[Autenticación - matriz de referencia]] | Oráculos de enumeración, contraseñas que pagan y cálculo de la ventana, análisis del token de recuperación |
-| [[MFA bypass - matriz de referencia]] | Camino sin MFA, salto de paso, manipulación de la verificación, fuerza bruta del código, respaldo, rodeos |
+- [[Autenticación - matriz de referencia]] — Oráculos de enumeración, contraseñas que pagan y cálculo de la ventana, análisis del token de recuperación
+- [[MFA bypass - matriz de referencia]] — Camino sin MFA, salto de paso, manipulación de la verificación, fuerza bruta del código, respaldo, rodeos
 
 ## Orden de aprendizaje
 

@@ -67,10 +67,8 @@ La severidad va de trivial a crítica con el mismo fallo, igual que en [[MOC - C
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[Race - matriz de disparo]] | Ataque de un solo paquete, último byte, Turbo Intruder, calentar conexión, calibrar, detectar la ventana |
-| [[Race - superficies y sub-estados]] | Dónde viven las ventanas por tipo, ataques sensibles al tiempo, elegir el endpoint más lento, severidad |
+- [[Race - matriz de disparo]] — Ataque de un solo paquete, último byte, Turbo Intruder, calentar conexión, calibrar, detectar la ventana
+- [[Race - superficies y sub-estados]] — Dónde viven las ventanas por tipo, ataques sensibles al tiempo, elegir el endpoint más lento, severidad
 
 ## Orden de aprendizaje
 

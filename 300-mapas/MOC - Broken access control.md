@@ -72,10 +72,8 @@ Cambiar un entero por un UUID **no es una mitigación**: oculta el identificador
 
 ## Cheatsheets
 
-| Matriz | Cubre |
-|---|---|
-| [[Control de acceso - matriz de pruebas]] | El método: preparación, la matriz actor × objeto × operación, cómo leer cada respuesta, priorización, qué documentar |
-| [[Control de acceso bypass - matriz de referencia]] | Verbos, cabeceras, normalización de rutas, descubrimiento, dónde se filtran los identificadores, campos de mass assignment |
+- [[Control de acceso - matriz de pruebas]] — El método: preparación, la matriz actor × objeto × operación, cómo leer cada respuesta, priorización, qué documentar
+- [[Control de acceso bypass - matriz de referencia]] — Verbos, cabeceras, normalización de rutas, descubrimiento, dónde se filtran los identificadores, campos de mass assignment
 
 ## Orden de aprendizaje
 

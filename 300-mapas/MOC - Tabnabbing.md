@@ -57,9 +57,7 @@ El impacto es phishing, y su credibilidad viene de que la víctima **ya estaba**
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[Tabnabbing - matriz de referencia]] | La prueba de concepto, los sinks, detectar enlaces vulnerables, el estado del navegador, la fuga de `Referer`, las mitigaciones |
+- [[Tabnabbing - matriz de referencia]] — La prueba de concepto, los sinks, detectar enlaces vulnerables, el estado del navegador, la fuga de `Referer`, las mitigaciones
 
 ## Orden de aprendizaje
 

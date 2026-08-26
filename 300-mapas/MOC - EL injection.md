@@ -69,10 +69,8 @@ JUEL es el que corrige la expectativa: es el EL de las JSP y **no** da ejecució
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[EL injection - matriz de identificación]] | Delimitadores, distinguir de SSTI, firmas por motor, confirmación ciega, dónde buscar la evaluación indirecta |
-| [[EL injection payloads - matriz de referencia]] | RCE por motor, la cadena OGNL de Struts, escape de sandbox, lectura de contexto de JUEL, canal ciego |
+- [[EL injection - matriz de identificación]] — Delimitadores, distinguir de SSTI, firmas por motor, confirmación ciega, dónde buscar la evaluación indirecta
+- [[EL injection payloads - matriz de referencia]] — RCE por motor, la cadena OGNL de Struts, escape de sandbox, lectura de contexto de JUEL, canal ciego
 
 ## Orden de aprendizaje
 

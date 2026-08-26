@@ -79,10 +79,8 @@ Este segundo árbol es el que rescata los hallazgos que se abandonan. Un SSTI si
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[SSTI - matriz de identificación]] | Los siete delimitadores, el polyglot, el árbol de identificación, firmas por motor, caso ciego |
-| [[SSTI payloads - matriz de referencia]] | Ejecución por motor, el recorrido de Jinja2, evasión de filtros, volcado de contexto, canal ciego |
+- [[SSTI - matriz de identificación]] — Los siete delimitadores, el polyglot, el árbol de identificación, firmas por motor, caso ciego
+- [[SSTI payloads - matriz de referencia]] — Ejecución por motor, el recorrido de Jinja2, evasión de filtros, volcado de contexto, canal ciego
 
 ## Orden de aprendizaje
 

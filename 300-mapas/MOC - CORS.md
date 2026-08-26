@@ -71,9 +71,7 @@ El primer nodo es el que eleva el dominio de "fuga de datos" a "toma de cuenta".
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[CORS bypass de origen - matriz de referencia]] | Las tres cabeceras, reflejo, sufijo, prefijo, subcadena, `null` con `iframe` sandbox, cómo leer la respuesta y qué robar |
+- [[CORS bypass de origen - matriz de referencia]] — Las tres cabeceras, reflejo, sufijo, prefijo, subcadena, `null` con `iframe` sandbox, cómo leer la respuesta y qué robar
 
 ## Orden de aprendizaje
 

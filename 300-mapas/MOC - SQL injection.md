@@ -54,16 +54,14 @@ Las primitivas se combinan; todas viven en [[SQLi evasión - matriz de referenci
 
 Cuando ya sabés qué hacer y solo querés la sintaxis, sin pasar por las notas de criterio:
 
-| Matriz | Cubre |
-|---|---|
-| [[SQLi UNION - matriz de referencia]] | Confirmar inyección, cierre, columnas, enumerar, extraer, archivos — paso a paso |
-| [[SQLi error-based - matriz de referencia]] | Primitivas de error por motor, enumerar, truncamiento |
-| [[SQLi ciego - matriz de referencia]] | Booleano y temporal: oráculo, extracción por carácter, binaria |
-| [[SQLi fuera de banda - matriz de referencia]] | Primitiva de red por motor, exfil por DNS, herramientas |
-| [[SQLi evasión - matriz de referencia]] | Sin comillas / sin espacios / palabras clave / WAF |
-| [[SQLi impacto - matriz de referencia]] | Lectura y escritura de archivos, stacked queries → RCE |
-| [[SQLi contextos - matriz de referencia]] | Cómo romper según dónde cae el input: numérico, string, `ORDER BY`, `LIMIT`, `INSERT` |
-| [[Dialectos SQL - matriz de referencia]] | Diferencias de sintaxis entre los 5 motores |
+- [[SQLi UNION - matriz de referencia]] — Confirmar inyección, cierre, columnas, enumerar, extraer, archivos — paso a paso
+- [[SQLi error-based - matriz de referencia]] — Primitivas de error por motor, enumerar, truncamiento
+- [[SQLi ciego - matriz de referencia]] — Booleano y temporal: oráculo, extracción por carácter, binaria
+- [[SQLi fuera de banda - matriz de referencia]] — Primitiva de red por motor, exfil por DNS, herramientas
+- [[SQLi evasión - matriz de referencia]] — Sin comillas / sin espacios / palabras clave / WAF
+- [[SQLi impacto - matriz de referencia]] — Lectura y escritura de archivos, stacked queries → RCE
+- [[SQLi contextos - matriz de referencia]] — Cómo romper según dónde cae el input: numérico, string, `ORDER BY`, `LIMIT`, `INSERT`
+- [[Dialectos SQL - matriz de referencia]] — Diferencias de sintaxis entre los 5 motores
 
 ## Orden de aprendizaje
 

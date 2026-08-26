@@ -47,11 +47,9 @@ Intersección de ejes ortogonales. Una nota por valor de eje.
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[Path traversal - matriz de referencia]] | `../`, encodings, null byte, path absoluto, bypass de filtros |
-| [[LFI wrappers - matriz de referencia]] | `php://filter` (lectura + filter chains RCE), `data://`, `php://input`, `expect://`, `zip://`, `phar://` |
-| [[LFI a RCE - matriz de referencia]] | log/session/environ poisoning, `/proc/self/fd`, phpinfo race |
+- [[Path traversal - matriz de referencia]] — `../`, encodings, null byte, path absoluto, bypass de filtros
+- [[LFI wrappers - matriz de referencia]] — `php://filter` (lectura + filter chains RCE), `data://`, `php://input`, `expect://`, `zip://`, `phar://`
+- [[LFI a RCE - matriz de referencia]] — log/session/environ poisoning, `/proc/self/fd`, phpinfo race
 
 ## Orden de aprendizaje
 

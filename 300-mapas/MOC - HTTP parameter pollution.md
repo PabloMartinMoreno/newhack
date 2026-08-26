@@ -61,9 +61,7 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[HPP - matriz de referencia]] | La tabla de resolución por marco de trabajo, confirmar cada capa, codificación del separador, bypass, inyección, sobrescritura |
+- [[HPP - matriz de referencia]] — La tabla de resolución por marco de trabajo, confirmar cada capa, codificación del separador, bypass, inyección, sobrescritura
 
 ## Orden de aprendizaje
 

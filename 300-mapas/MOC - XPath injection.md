@@ -66,10 +66,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[XPath consulta - matriz de referencia]] | Sintaxis, confirmar, salto de auth, balanceo, ampliar nodos, funciones, XPath 2.0, escape |
-| [[XPath extracción ciega - matriz de referencia]] | Oráculo booleano, medir largo, extracción con `substring`, enumerar esquema con `name`/`count`, `xcat` |
+- [[XPath consulta - matriz de referencia]] — Sintaxis, confirmar, salto de auth, balanceo, ampliar nodos, funciones, XPath 2.0, escape
+- [[XPath extracción ciega - matriz de referencia]] — Oráculo booleano, medir largo, extracción con `substring`, enumerar esquema con `name`/`count`, `xcat`
 
 ## Orden de aprendizaje
 

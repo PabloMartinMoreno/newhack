@@ -79,10 +79,8 @@ La aserción reutilizable es la que se subestima: un proveedor de servicio que n
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[SAML - matriz de identificación]] | Reconocer el flujo, decodificar los dos bindings, anatomía de la aserción, las cinco pruebas de apertura, herramienta |
-| [[SAML XSW - matriz de referencia]] | Los ocho patrones de envoltura en orden, manejo de `ID`, qué cambiar en la aserción falsa |
+- [[SAML - matriz de identificación]] — Reconocer el flujo, decodificar los dos bindings, anatomía de la aserción, las cinco pruebas de apertura, herramienta
+- [[SAML XSW - matriz de referencia]] — Los ocho patrones de envoltura en orden, manejo de `ID`, qué cambiar en la aserción falsa
 
 ## Orden de aprendizaje
 

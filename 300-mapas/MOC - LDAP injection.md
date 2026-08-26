@@ -63,10 +63,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[LDAP filtro - matriz de referencia]] | La sintaxis, confirmar, salto de auth por contexto, ampliar el resultado, inyección en DN, escape |
-| [[LDAP extracción ciega - matriz de referencia]] | Oráculo booleano, enumerar atributos y usuarios, extracción con comodín, bisección con `>=`/`<=` |
+- [[LDAP filtro - matriz de referencia]] — La sintaxis, confirmar, salto de auth por contexto, ampliar el resultado, inyección en DN, escape
+- [[LDAP extracción ciega - matriz de referencia]] — Oráculo booleano, enumerar atributos y usuarios, extracción con comodín, bisección con `>=`/`<=`
 
 ## Orden de aprendizaje
 

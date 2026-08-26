@@ -80,10 +80,8 @@ La respuesta envenenada se sirve a todos los que piden el recurso
 
 ## Cheatsheets — entrada directa a las construcciones
 
-| Matriz | Cubre |
-|---|---|
-| [[Web cache - matriz de sondeo]] | Cache buster, detectar la caché, mapear la clave, buscar entradas sin clave, medir la ventana, sondeo del engaño |
-| [[Web cache entradas sin clave - matriz de referencia]] | Catálogo de cabeceras, de reflejo a impacto, DoS, cloaking, fat GET, discrepancias, confusión de ruta |
+- [[Web cache - matriz de sondeo]] — Cache buster, detectar la caché, mapear la clave, buscar entradas sin clave, medir la ventana, sondeo del engaño
+- [[Web cache entradas sin clave - matriz de referencia]] — Catálogo de cabeceras, de reflejo a impacto, DoS, cloaking, fat GET, discrepancias, confusión de ruta
 
 ## Orden de aprendizaje
 

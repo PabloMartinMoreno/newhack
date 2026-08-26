@@ -59,10 +59,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[XSLT - matriz de identificación]] | Confirmar, `system-property`, firmas por procesador, versión, qué capacidades hay, canal ciego |
-| [[XSLT payloads - matriz de referencia]] | Divulgación, lectura, SSRF, RCE por procesador (PHP/Java/.NET), escritura, canal ciego |
+- [[XSLT - matriz de identificación]] — Confirmar, `system-property`, firmas por procesador, versión, qué capacidades hay, canal ciego
+- [[XSLT payloads - matriz de referencia]] — Divulgación, lectura, SSRF, RCE por procesador (PHP/Java/.NET), escritura, canal ciego
 
 ## Orden de aprendizaje
 

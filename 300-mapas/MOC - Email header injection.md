@@ -62,10 +62,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[Email header inyección - matriz de referencia]] | Confirmar, sinks (`mail()`, SMTP), dónde cae, codificaciones, cabeceras a inyectar |
-| [[Email header impacto - matriz de referencia]] | Exfil de reset, spam, `From` falso, cuerpo, MIME, por impacto |
+- [[Email header inyección - matriz de referencia]] — Confirmar, sinks (`mail()`, SMTP), dónde cae, codificaciones, cabeceras a inyectar
+- [[Email header impacto - matriz de referencia]] — Exfil de reset, spam, `From` falso, cuerpo, MIME, por impacto
 
 ## Orden de aprendizaje
 

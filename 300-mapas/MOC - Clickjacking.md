@@ -63,10 +63,8 @@ La severidad va de informativa a crítica con el mismo fallo, igual que en CSRF:
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[Clickjacking - encuadre - matriz de referencia]] | Probar el encuadre, leer las defensas, grietas, bypass de frame-buster con sandbox, Clickbandit |
-| [[Clickjacking - superposición - matriz de referencia]] | El CSS del marco invisible, calibrar, recortar, arrastre, precarga, entrega de XSS, plantilla |
+- [[Clickjacking - encuadre - matriz de referencia]] — Probar el encuadre, leer las defensas, grietas, bypass de frame-buster con sandbox, Clickbandit
+- [[Clickjacking - superposición - matriz de referencia]] — El CSS del marco invisible, calibrar, recortar, arrastre, precarga, entrega de XSS, plantilla
 
 ## Orden de aprendizaje
 

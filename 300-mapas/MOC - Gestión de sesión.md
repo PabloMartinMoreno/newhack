@@ -78,10 +78,8 @@ Las tres primeras son tres peticiones y cubren la mayor parte de lo explotable. 
 
 ## Cheatsheets
 
-| Matriz | Cubre |
-|---|---|
-| [[Sesión - matriz de referencia]] | Atributos de cookie y prefijos, análisis del token, pruebas de fijación, expiración y concurrencia |
-| [[JWT - matriz de referencia]] | Lectura del token, `none`, confusión de algoritmo, claves provistas, `kid` como inyección, afirmaciones, secreto débil |
+- [[Sesión - matriz de referencia]] — Atributos de cookie y prefijos, análisis del token, pruebas de fijación, expiración y concurrencia
+- [[JWT - matriz de referencia]] — Lectura del token, `none`, confusión de algoritmo, claves provistas, `kid` como inyección, afirmaciones, secreto débil
 
 ## Orden de aprendizaje
 

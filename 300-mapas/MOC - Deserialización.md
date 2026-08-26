@@ -64,10 +64,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets
 
-| Matriz | Cubre |
-|---|---|
-| [[Deserialización - matriz de identificación]] | Firmas de formato, anatomía del blob de PHP, dónde aparecen, secretos por marco de trabajo |
-| [[Deserialización gadgets - matriz de referencia]] | Enumerar dependencias, `ysoserial`, `PHPGGC`, `pickle`, `ysoserial.net`, orden de trabajo |
+- [[Deserialización - matriz de identificación]] — Firmas de formato, anatomía del blob de PHP, dónde aparecen, secretos por marco de trabajo
+- [[Deserialización gadgets - matriz de referencia]] — Enumerar dependencias, `ysoserial`, `PHPGGC`, `pickle`, `ysoserial.net`, orden de trabajo
 
 ## Orden de aprendizaje
 

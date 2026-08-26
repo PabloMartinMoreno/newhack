@@ -73,10 +73,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa a las construcciones
 
-| Matriz | Cubre |
-|---|---|
-| [[GraphQL - matriz de reconocimiento]] | Encontrar el endpoint, la consulta de introspección, herramientas, reconstrucción por sugerencia, mapear la superficie |
-| [[GraphQL - matriz de explotación]] | Autorización, alias y lotes, denegación por profundidad, inyección por argumento, sondeo de defensas |
+- [[GraphQL - matriz de reconocimiento]] — Encontrar el endpoint, la consulta de introspección, herramientas, reconstrucción por sugerencia, mapear la superficie
+- [[GraphQL - matriz de explotación]] — Autorización, alias y lotes, denegación por profundidad, inyección por argumento, sondeo de defensas
 
 ## Orden de aprendizaje
 

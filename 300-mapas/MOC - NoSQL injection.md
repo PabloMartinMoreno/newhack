@@ -74,10 +74,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[NoSQL operadores - matriz de referencia]] | Contexto de entrada, salto de auth, comparación, `$regex`, `$where`, contrabando por query string |
-| [[NoSQL extracción ciega - matriz de referencia]] | Oráculo booleano y temporal, extracción por `$regex`, búsqueda binaria, `$exists`, automatización |
+- [[NoSQL operadores - matriz de referencia]] — Contexto de entrada, salto de auth, comparación, `$regex`, `$where`, contrabando por query string
+- [[NoSQL extracción ciega - matriz de referencia]] — Oráculo booleano y temporal, extracción por `$regex`, búsqueda binaria, `$exists`, automatización
 
 ## Orden de aprendizaje
 

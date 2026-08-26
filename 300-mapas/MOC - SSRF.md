@@ -76,12 +76,10 @@ La tercera rama es la que más paga y la que menos se prueba: **la mayoría de l
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[SSRF superficies - matriz de referencia]] | Dónde nace: parámetros, webhooks, renderizadores de PDF, cabeceras, descubrimiento de OAuth |
-| [[SSRF destinos - matriz de referencia]] | Rutas de IMDS por proveedor, rangos internos, los puertos que pagan, cómo leer el oráculo |
-| [[SSRF esquemas - matriz de referencia]] | Qué esquema soporta cada cliente, `file`, `dict`, payloads de `gopher` |
-| [[SSRF evasión - matriz de referencia]] | Representaciones de IP, confusión de parsers, redirección, DNS rebinding |
+- [[SSRF superficies - matriz de referencia]] — Dónde nace: parámetros, webhooks, renderizadores de PDF, cabeceras, descubrimiento de OAuth
+- [[SSRF destinos - matriz de referencia]] — Rutas de IMDS por proveedor, rangos internos, los puertos que pagan, cómo leer el oráculo
+- [[SSRF esquemas - matriz de referencia]] — Qué esquema soporta cada cliente, `file`, `dict`, payloads de `gopher`
+- [[SSRF evasión - matriz de referencia]] — Representaciones de IP, confusión de parsers, redirección, DNS rebinding
 
 ## Orden de aprendizaje
 

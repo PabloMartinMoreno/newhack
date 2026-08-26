@@ -70,11 +70,9 @@ La primera rama es la que más tiempo hace perder, y no es un filtro: es que `/e
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[XXE formatos - matriz de referencia]] | Dónde hay XML: SOAP, SVG, OOXML, SAML, cambio de tipo de contenido, embebido |
-| [[XXE payloads - matriz de referencia]] | Confirmación, canal directo, la DTD de exfiltración, por error, XInclude, impacto |
-| [[XXE evasión - matriz de referencia]] | Base64, sin `DOCTYPE`, filtros de cadena, sin egress, esquemas alternativos |
+- [[XXE formatos - matriz de referencia]] — Dónde hay XML: SOAP, SVG, OOXML, SAML, cambio de tipo de contenido, embebido
+- [[XXE payloads - matriz de referencia]] — Confirmación, canal directo, la DTD de exfiltración, por error, XInclude, impacto
+- [[XXE evasión - matriz de referencia]] — Base64, sin `DOCTYPE`, filtros de cadena, sin egress, esquemas alternativos
 
 ## Orden de aprendizaje
 

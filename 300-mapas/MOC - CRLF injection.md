@@ -61,10 +61,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[CRLF inyección - matriz de referencia]] | Codificaciones del `\r\n`, confirmar, bypass de filtros, dónde cae, ubicar el corte |
-| [[CRLF impacto - matriz de referencia]] | Payloads de una cabecera, división a XSS, caché, inyección de logs, por impacto |
+- [[CRLF inyección - matriz de referencia]] — Codificaciones del `\r\n`, confirmar, bypass de filtros, dónde cae, ubicar el corte
+- [[CRLF impacto - matriz de referencia]] — Payloads de una cabecera, división a XSS, caché, inyección de logs, por impacto
 
 ## Orden de aprendizaje
 

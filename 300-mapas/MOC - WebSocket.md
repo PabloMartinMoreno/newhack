@@ -74,10 +74,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[WebSocket - matriz de reconocimiento]] | Detectar el socket, anatomía del handshake, probar el origen, PoC de CSWSH, herramientas, mapear el protocolo |
-| [[WebSocket - matriz de manipulación]] | Autz por mensaje, inyección por sink, manipulación de estructura, repetición, XSS entrante |
+- [[WebSocket - matriz de reconocimiento]] — Detectar el socket, anatomía del handshake, probar el origen, PoC de CSWSH, herramientas, mapear el protocolo
+- [[WebSocket - matriz de manipulación]] — Autz por mensaje, inyección por sink, manipulación de estructura, repetición, XSS entrante
 
 ## Orden de aprendizaje
 

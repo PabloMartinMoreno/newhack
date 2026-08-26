@@ -44,10 +44,8 @@ Subí una webshell .php simple. ¿Qué la rechaza?
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[File upload bypass - matriz de referencia]] | Evasión de extensión, MIME, magic bytes, doble extensión, `.htaccess` |
-| [[Webshells - matriz de referencia]] | Webshells mínimas por lenguaje, polyglots, one-liners de reverse shell |
+- [[File upload bypass - matriz de referencia]] — Evasión de extensión, MIME, magic bytes, doble extensión, `.htaccess`
+- [[Webshells - matriz de referencia]] — Webshells mínimas por lenguaje, polyglots, one-liners de reverse shell
 
 ## Orden de aprendizaje
 

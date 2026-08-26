@@ -111,12 +111,10 @@ El punto 4 es el que conviene leer entero de una: es el único lugar del vault d
 
 ## Cheatsheets — entrada directa a la sintaxis
 
-| Matriz | Cubre |
-|---|---|
-| [[Sysmon - matriz de configuración]] | Instalación, `include` contra `exclude`, condiciones, `GrantedAccess`, verificar que el evento llega |
-| [[Detección por forma - matriz de referencia]] | Cómo se escribe cada `forma:` sobre estas fuentes |
-| [[KQL - matriz de referencia]] | `SecurityEvent` y `Device*`: qué tabla tiene qué |
-| [[Sigma - matriz de referencia]] | `logsource` para Windows, y el mapeo de campos que hay que aplicar |
+- [[Sysmon - matriz de configuración]] — Instalación, `include` contra `exclude`, condiciones, `GrantedAccess`, verificar que el evento llega
+- [[Detección por forma - matriz de referencia]] — Cómo se escribe cada `forma:` sobre estas fuentes
+- [[KQL - matriz de referencia]] — `SecurityEvent` y `Device*`: qué tabla tiene qué
+- [[Sigma - matriz de referencia]] — `logsource` para Windows, y el mapeo de campos que hay que aplicar
 
 ## Cómo se llena esto
 

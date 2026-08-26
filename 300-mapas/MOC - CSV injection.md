@@ -58,9 +58,7 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[CSV - matriz de referencia]] | Disparadores y evasión, confirmar, exfiltración por app, DDE, phishing, dónde plantar, mitigación |
+- [[CSV - matriz de referencia]] — Disparadores y evasión, confirmar, exfiltración por app, DDE, phishing, dónde plantar, mitigación
 
 ## Orden de aprendizaje
 

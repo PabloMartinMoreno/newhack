@@ -98,11 +98,9 @@ El token de refresco es el que se subestima. Un `offline_access` concedido sin q
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[OAuth - matriz de reconocimiento]] | El documento de descubrimiento, identificar el flujo, las cinco pruebas de apertura, alcances |
-| [[OAuth redirect_uri - matriz de referencia]] | Prefijo, sufijo, recorrido, comodín, confusión del analizador, codificación, redirección abierta del cliente |
-| [[OAuth tokens - matriz de referencia]] | `id_token` campo por campo, `alg: none`, confusión de algoritmo, `jku`, canje, PKCE, alcances |
+- [[OAuth - matriz de reconocimiento]] — El documento de descubrimiento, identificar el flujo, las cinco pruebas de apertura, alcances
+- [[OAuth redirect_uri - matriz de referencia]] — Prefijo, sufijo, recorrido, comodín, confusión del analizador, codificación, redirección abierta del cliente
+- [[OAuth tokens - matriz de referencia]] — `id_token` campo por campo, `alg: none`, confusión de algoritmo, `jku`, canje, PKCE, alcances
 
 ## Orden de aprendizaje
 

@@ -13,22 +13,20 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 
 ## Estado actual
 
-| Capa | Estado |
-|---|---|
-| Estructura de carpetas | Completa |
-| Documentación de administración (`900-meta/`) | Completa |
-| Plantillas (`999-plantillas/`) | 11 tipos, completas |
-| Notas semilla | Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC |
-| Contenido rojo — web | Treinta y cuatro dominios cerrados: SQLi, XSS, file inclusion, file upload, command injection, SSRF, XXE, control de acceso, autenticación, sesión, deserialización, CSRF, SSTI, OAuth, prototype pollution, CORS, SAML, EL injection, request smuggling, web cache, GraphQL, NoSQL injection, race conditions, WebSocket, LDAP injection, XPath injection, Host header, CRLF injection, email header injection, XSLT injection, clickjacking, tabnabbing, CSV injection, HTTP parameter pollution. Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP) |
-| Contenido rojo — AD | Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices |
-| Contenido azul — web | 16 detecciones sobre 12 artefactos, todas en `estado: idea` |
-| Contenido azul — fundamentos | 8 zettels + [[MOC - Fundamentos de detección]] |
-| Contenido azul — Windows | 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero** |
-| Cheatsheets | 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio |
-| Contenido rojo — web (cont.) | 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules |
-| Cliente | **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados |
-| Consultas cruzadas | `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones |
-| Vault de engagements | Sin crear |
+- **Estructura de carpetas** — Completa
+- **Documentación de administración (`900-meta/`)** — Completa
+- **Plantillas (`999-plantillas/`)** — 11 tipos, completas
+- **Notas semilla** — Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC
+- **Contenido rojo — web** — Treinta y cuatro dominios cerrados (lista completa en la bitácora, agrupados por familia en [[Inicio]]). Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP)
+- **Contenido rojo — AD** — Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices
+- **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
+- **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
+- **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
+- **Cheatsheets** — 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio
+- **Contenido rojo — web (cont.)** — 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules
+- **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
+- **Consultas cruzadas** — `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
+- **Vault de engagements** — Sin crear
 
 ## Bitácora
 
@@ -780,6 +778,14 @@ Tres cambios de estructura, disparados por un problema de render: tablas más an
 **Por qué el hub sobrevive y no se reparte:** el árbol *lo que tenés* cruza todas las fases —es la decisión que define el dominio— y la tabla Cara azul es la bisagra completa. Repartirlos rompería el mapa. Web no tiene hub porque sus clases son ortogonales; AD sí lo necesita porque es una sola kill chain.
 
 Vault: 427 notas (9 MOCs nuevos). `higiene` exit 0, `huecos` cero, ningún alias duplicado, todo MOC indexado en Inicio.
+
+### 2026-08-24 — Cheatsheets de MOC: tabla → lista, en los 36
+
+Extensión del criterio de la entrada anterior a todo el vault. La sección *Cheatsheets* de cada MOC era una tabla `Matriz | Cubre` cuya columna de descripción la hacía desbordar (155-176 cols de render). Se convirtieron las **36** a lista (`- [[matriz]] — cubre…`): sin ancho de columna que exceda la ventana, y **presentación uniforme** con el hub de AD, que ya era lista. 91 filas convertidas, cero con `|` interno.
+
+**Convención que queda fijada:** la sección *Cheatsheets* de un MOC se escribe como **lista**, no como tabla. Una tabla de dos columnas cuya segunda columna es prosa siempre desborda; la lista envuelve como párrafo.
+
+Las tablas *Cara azul* de los MOCs web (5 quedan en 141-162) **no** se tocaron: a diferencia de la de AD —donde la columna *Firma* duplicaba el nombre de la detección—, acá la *Firma* es contenido real y la telemetría no tiene alias corto natural. Achicarlas sería perder contenido. `<leader>uw` las cubre. También se recortó la fila web de la tabla de estado de este archivo, que enumeraba los 34 dominios inline (640 cols) — la lista vive en la bitácora y en [[Inicio]].
 
 ## Pendientes
 

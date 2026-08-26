@@ -73,14 +73,12 @@ La cuarta rama es la que se olvida: cuando el comando está fijo y no se puede c
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[Command injection contextos - matriz de referencia]] | Cómo romper según dónde cae el input: suelto, entre comillas, en una ruta, newline |
-| [[Command injection shells - matriz de referencia]] | Diferencias entre `sh`, `cmd` y PowerShell: separadores, retardo, red, lectura |
-| [[Command injection ciego - matriz de referencia]] | Confirmar ejecución, oráculo booleano, escritura a la raíz web, exfiltración por DNS |
-| [[Command injection evasión - matriz de referencia]] | Sin espacios / sin barras / palabras clave / WAF / Windows |
-| [[Command injection impacto - matriz de referencia]] | Reconocimiento, reverse shells por lenguaje, promoción a TTY, pivote |
-| [[Argument injection - matriz de referencia]] | Qué flag pedirle a cada binario: ejecución, escritura, lectura, cambio de destino |
+- [[Command injection contextos - matriz de referencia]] — Cómo romper según dónde cae el input: suelto, entre comillas, en una ruta, newline
+- [[Command injection shells - matriz de referencia]] — Diferencias entre `sh`, `cmd` y PowerShell: separadores, retardo, red, lectura
+- [[Command injection ciego - matriz de referencia]] — Confirmar ejecución, oráculo booleano, escritura a la raíz web, exfiltración por DNS
+- [[Command injection evasión - matriz de referencia]] — Sin espacios / sin barras / palabras clave / WAF / Windows
+- [[Command injection impacto - matriz de referencia]] — Reconocimiento, reverse shells por lenguaje, promoción a TTY, pivote
+- [[Argument injection - matriz de referencia]] — Qué flag pedirle a cada binario: ejecución, escritura, lectura, cambio de destino
 
 ## Orden de aprendizaje
 

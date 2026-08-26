@@ -69,10 +69,8 @@ El CSRF de inicio de sesión es el que más veces se pasa por alto porque parece
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[CSRF entrega - matriz de referencia]] | El conjunto de peticiones simples, `GET`, autoenvío, el truco de `text/plain`, `fetch` con credenciales |
-| [[CSRF bypass - matriz de referencia]] | Qué probar contra cada defensa en orden de coste, y qué recomendar en el informe |
+- [[CSRF entrega - matriz de referencia]] — El conjunto de peticiones simples, `GET`, autoenvío, el truco de `text/plain`, `fetch` con credenciales
+- [[CSRF bypass - matriz de referencia]] — Qué probar contra cada defensa en orden de coste, y qué recomendar en el informe
 
 ## Orden de aprendizaje
 

@@ -75,10 +75,8 @@ El agravante que hay que escribir siempre en el informe es el **alcance**: a dif
 
 ## Cheatsheets — entrada directa a los payloads
 
-| Matriz | Cubre |
-|---|---|
-| [[Prototype pollution - matriz de identificación]] | Las tres claves, confirmación en cliente y servidor, funciones vulnerables, evasión de filtros, herramienta |
-| [[Prototype pollution gadgets - matriz de referencia]] | Propiedades genéricas, `NODE_OPTIONS`, plantillas, Express, HTML del cliente, config del sanitizador, carga de recursos |
+- [[Prototype pollution - matriz de identificación]] — Las tres claves, confirmación en cliente y servidor, funciones vulnerables, evasión de filtros, herramienta
+- [[Prototype pollution gadgets - matriz de referencia]] — Propiedades genéricas, `NODE_OPTIONS`, plantillas, Express, HTML del cliente, config del sanitizador, carga de recursos
 
 ## Orden de aprendizaje
 

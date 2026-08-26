@@ -71,12 +71,10 @@ Las dos preguntas del final son las que tumban reglas antes de escribirlas, y co
 
 Cuando ya sabés qué querés detectar y solo falta escribirlo:
 
-| Matriz | Cubre |
-|---|---|
-| [[Detección por forma - matriz de referencia]] | Cada valor de `forma:` traducido a consulta concreta. **Empezar por acá** — es el campo propio del vault |
-| [[KQL - matriz de referencia]] | Tablas de Defender y Sentinel, operadores, `join`, agregación por ventana, línea base |
-| [[Sigma - matriz de referencia]] | Esqueleto, `logsource`, modificadores, correlaciones, y qué no expresa |
-| [[Sysmon - matriz de configuración]] | Instalación, filtros de inclusión y exclusión, `GrantedAccess`, verificar que el evento llega |
+- [[Detección por forma - matriz de referencia]] — Cada valor de `forma:` traducido a consulta concreta. **Empezar por acá** — es el campo propio del vault
+- [[KQL - matriz de referencia]] — Tablas de Defender y Sentinel, operadores, `join`, agregación por ventana, línea base
+- [[Sigma - matriz de referencia]] — Esqueleto, `logsource`, modificadores, correlaciones, y qué no expresa
+- [[Sysmon - matriz de configuración]] — Instalación, filtros de inclusión y exclusión, `GrantedAccess`, verificar que el evento llega
 
 ## Huecos conocidos
 

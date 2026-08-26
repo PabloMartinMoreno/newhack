@@ -74,10 +74,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets — entrada directa
 
-| Matriz | Cubre |
-|---|---|
-| [[Host header inyección - matriz de referencia]] | Confirmar, `Host` directo, `X-Forwarded-Host`, doble Host, URL absoluta, malformados, por objetivo |
-| [[Host header cabeceras de confianza - matriz de referencia]] | El catálogo de cabeceras de reenvío, acceso interno spoofeado, bypass de límite, saltar controles por ruta |
+- [[Host header inyección - matriz de referencia]] — Confirmar, `Host` directo, `X-Forwarded-Host`, doble Host, URL absoluta, malformados, por objetivo
+- [[Host header cabeceras de confianza - matriz de referencia]] — El catálogo de cabeceras de reenvío, acceso interno spoofeado, bypass de límite, saltar controles por ruta
 
 ## Orden de aprendizaje
 

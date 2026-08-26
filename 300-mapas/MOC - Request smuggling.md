@@ -67,10 +67,8 @@ Este segundo árbol es lo que separa un smuggling "confirmado" de uno "grave". L
 
 ## Cheatsheets — entrada directa a las construcciones
 
-| Matriz | Cubre |
-|---|---|
-| [[Request smuggling - matriz de sondeo]] | Detección por tiempo, confirmación segura, ofuscación de TE, degradación H2, encontrar CL.0 |
-| [[Request smuggling - matriz de explotación]] | Saltar el frente, capturar peticiones, envenenar la cola, caché, cadena del lado del cliente |
+- [[Request smuggling - matriz de sondeo]] — Detección por tiempo, confirmación segura, ofuscación de TE, degradación H2, encontrar CL.0
+- [[Request smuggling - matriz de explotación]] — Saltar el frente, capturar peticiones, envenenar la cola, caché, cadena del lado del cliente
 
 ## Orden de aprendizaje
 
