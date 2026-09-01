@@ -12,9 +12,49 @@ tags:
 # Nmap - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
-> Sintaxis. El criterio —qué sondeo elegir y por qué— está en [[MOC - Reconocimiento de red]]; el porqué protocolar, en [[TCP - respuestas a segmentos inesperados]].
+> Sintaxis y comandos. El criterio —qué sondeo elegir y por qué— está en [[MOC - Reconocimiento de red]]; qué manda cada sondeo y qué significa cada respuesta, en [[Sondeos de red - matriz de referencia]]; el porqué protocolar, en [[TCP - respuestas a segmentos inesperados]].
 
-## 1. Tipos de sondeo
+## 1. La escalera — los cuatro comandos que se corren de verdad
+
+En este orden. Cada uno se apoya en la salida del anterior.
+
+```sh
+# 1. Qué existe (dentro del segmento; ARP, exacto, segundos)
+nmap -sn -PR 10.10.10.0/24 -oA 1-vivos
+
+# 2. Qué escucha, TODOS los puertos, sin identificar nada todavía
+nmap -sS -p- --min-rate 2000 -Pn -n -oA 2-puertos 10.10.10.5
+
+# 3. Identificar SOLO lo que apareció abierto
+PUERTOS=$(grep -oP '\d+(?=/open)' 2-puertos.gnmap | sort -un | paste -sd,)
+nmap -sS -sV -sC -p "$PUERTOS" -oA 3-servicios 10.10.10.5
+
+# 4. La mitad que nadie mira
+nmap -sU --top-ports 50 -Pn -oA 4-udp 10.10.10.5
+```
+
+**Por qué en dos pasos y no `-A -p-` de una:** identificar versión sobre 65535 puertos tarda horas y toca todo lo que hay. La pasada rápida es un `SYN` puro contra todo; la lenta es sólo contra la docena que abrió. Es la diferencia entre veinte minutos y una tarde.
+
+`--min-rate 2000` es lo que acelera de verdad — más que `-T4`, que ajusta varias cosas a la vez y no fija el piso de paquetes por segundo.
+
+## 2. Cómo leer la salida
+
+Nmap imprime seis estados, no tres. Confundir los tres de en medio es el error de lectura más caro.
+
+| Estado | Qué pasó | Qué hacer |
+|---|---|---|
+| `open` | Alguien contestó aceptando | Identificar servicio |
+| `closed` | Llegó `RST`: el host existe, nadie escucha | El host está vivo — dato útil |
+| `filtered` | Nada volvió, o volvió ICMP prohibido | Reintentar por otra vía, `--reason` |
+| `unfiltered` | Llegó `RST` a un `-sA`: pasa el filtro, estado desconocido | Volver con `-sS` |
+| `open\|filtered` | Silencio, y en este sondeo el silencio es ambiguo | Típico de UDP y de FIN/NULL/Xmas |
+| `closed\|filtered` | Sólo del `-sI` (idle scan) | — |
+
+`--reason` agrega por qué: `syn-ack`, `reset`, `no-response`, `admin-prohibited`, `host-unreach`. Distingue *filtrado porque nadie contestó* de *filtrado porque un firewall lo dijo*, y eso cambia la conclusión.
+
+Un host con todo `filtered` menos dos puertos `closed` **está vivo**, aunque el descubrimiento lo haya dado por muerto.
+
+## 3. Tipos de sondeo
 
 | Flag | Sondeo |
 |---|---|
@@ -25,91 +65,175 @@ tags:
 | `-sF` `-sN` `-sX` | `FIN`, sin banderas, Xmas |
 | `-sn` | Sin escaneo de puertos |
 | `-Pn` | Sin descubrimiento |
+| `-6` | IPv6 |
 
-Qué manda cada uno, qué significa cada respuesta y qué cuesta: [[Sondeos de red - matriz de referencia]]. Acá sólo la traducción a flags, para no tener dos fuentes de verdad.
-
-## 2. Selección de objetivos y puertos
+## 4. Objetivos y puertos
 
 ```
--p-                  los 65535
--p 1-1000            rango
--p 22,80,443,3389    lista
---top-ports 1000     los más frecuentes
--iL objetivos.txt    desde archivo
---exclude 10.0.0.1   excluir
+-p-                    los 65535
+-p 1-1000              rango
+-p 22,80,443,3389      lista
+-p U:53,161,T:80,445   mezclar UDP y TCP en una corrida
+--top-ports 1000       los más frecuentes
+--open                 mostrar sólo los abiertos
+-iL objetivos.txt      desde archivo
+-iL <(...)             desde la salida de otro comando
+--exclude 10.0.0.1     excluir
+-n                     sin resolución DNS inversa (mucho más rápido)
 ```
 
 Por defecto son **1000 puertos, no todos**: el falso negativo más común del dominio.
 
-## 3. Descubrimiento
+## 5. Descubrimiento
 
 ```
+-PR             ARP (por defecto dentro del segmento)
 -PS22,80,443    SYN a esos puertos
 -PA80           ACK
 -PE             echo ICMP
 -PP             marca de tiempo ICMP
--PR             ARP (por defecto dentro del segmento)
--n              sin resolución DNS inversa
+-PU40125        UDP a un puerto improbable
 ```
 
-`-PR` es exacto y no lo filtra nadie: el firewall vive por encima de la capa de enlace. Fuera del segmento, combinar varios sondeos — basta que uno vuelva.
+`-PR` es exacto y no lo filtra nadie: el firewall vive por encima de la capa de enlace. Fuera del segmento se combinan varios — basta que uno vuelva.
 
-## 4. Identificación
+## 6. Identificación
 
 ```
--sV                  versión de servicio
---version-intensity 0-9
--O                   sistema operativo
--A                   -sV -O --script=default --traceroute
---reason             por qué nmap clasificó así cada puerto
+-sV                      versión de servicio
+--version-intensity 0-9  0 = sólo banner, 9 = todas las sondas
+-sC                      = --script=default
+-O                       sistema operativo
+--osscan-guess           adivinar cuando no está seguro
+-A                       -sV -O -sC --traceroute
+--reason                 por qué clasificó así cada puerto
 ```
-
-`--reason` es la opción más subestimada: distingue *filtrado porque no vino nada* de *filtrado porque vino un ICMP prohibido*, y eso cambia la conclusión.
 
 `-A` es lo más ruidoso que se puede escribir en una sola letra.
 
-## 5. Temporización y evasión
+## 7. Temporización y evasión
 
 | Flag | Efecto |
 |---|---|
 | `-T0`…`-T5` | De paranoico a insensato. `-T4` es el uso normal |
-| `--max-rate 50` | Tope de paquetes por segundo |
+| `--min-rate 2000` | Piso de paquetes por segundo — lo que acelera de verdad |
+| `--max-rate 50` | Techo, para no tumbar nada |
 | `--scan-delay 1s` | Espera entre sondeos |
+| `--max-retries 1` | Menos reintentos: rápido, más falsos `filtered` |
+| `--host-timeout 15m` | Abandonar un host que no termina |
 | `-f` | Fragmentar el sondeo |
 | `-D señuelo1,ME,señuelo2` | Señuelos: mezclar el origen real entre falsos |
 | `-S dirección` | Origen falsificado (sin respuesta de vuelta) |
 | `--source-port 53` | Origen 53: pasa filtros que confían en el puerto |
 | `--data-length 25` | Cambiar el largo, romper firmas por tamaño |
+| `--spoof-mac 0` | MAC aleatoria (sólo sirve dentro del segmento) |
 
 En UDP la velocidad **corrompe el resultado**, no sólo hace ruido: la limitación de tasa de ICMP hace que los puertos cerrados dejen de contestar y empiecen a parecer abiertos.
 
 Los señuelos no ocultan nada frente a una detección por agregación en el host que escanea: el proceso local sigue abriendo el mismo abanico. Ver [[Abanico de conexiones fallidas desde un host]].
 
-## 6. NSE
+## 8. NSE por servicio
+
+Lo que paga, por puerto. `-sC` corre la categoría `default`, que ya cubre bastante de esto.
+
+| Puerto | Scripts |
+|---|---|
+| 21 FTP | `ftp-anon` `ftp-syst` |
+| 22 SSH | `ssh-auth-methods` `ssh2-enum-algos` `ssh-hostkey` |
+| 25 SMTP | `smtp-commands` `smtp-enum-users` `smtp-open-relay` |
+| 53 DNS | `dns-nsid` `dns-zone-transfer` `dns-recursion` |
+| 88 Kerberos | `krb5-enum-users` |
+| 111 RPC | `rpcinfo` `nfs-showmount` `nfs-ls` |
+| 161 SNMP | `snmp-info` `snmp-interfaces` `snmp-win32-services` |
+| 389 LDAP | `ldap-rootdse` `ldap-search` |
+| 445 SMB | `smb-os-discovery` `smb-enum-shares` `smb-enum-users` `smb-security-mode` |
+| 1433 MSSQL | `ms-sql-info` `ms-sql-empty-password` |
+| 3306 MySQL | `mysql-info` `mysql-empty-password` `mysql-users` |
+| 3389 RDP | `rdp-ntlm-info` `rdp-enum-encryption` |
+| 5432 Postgres | `pgsql-brute` |
+| 5985 WinRM | `http-title` |
+| 6379 Redis | `redis-info` |
+| 80/443 HTTP | `http-title` `http-headers` `http-methods` `http-enum` `http-robots.txt` |
+| 443 TLS | `ssl-cert` `ssl-enum-ciphers` |
+
+`ssl-cert` y `rdp-ntlm-info` son de los de mayor retorno del reconocimiento entero: regalan nombres de host internos, dominio de AD y nombre de la máquina sin autenticarse.
+
+```sh
+nmap --script-help "smb-enum*"         # qué hace, antes de correrlo
+nmap --script-updatedb                 # tras agregar scripts propios
+nmap --script smb-enum-shares --script-args smbusername=u,smbpassword=p -p445 IP
+```
+
+Categorías por agresividad: `safe` · `default` · `discovery` · `intrusive` · `vuln` · `exploit` · `dos`.
+
+> [!warning] `vuln` y `exploit` no son reconocimiento
+> Mandan cargas de explotación. Correrlos sin autorización explícita para explotar es salirse del alcance de un engagement de reconocimiento.
+
+## 9. Puerto abierto → a dónde seguir en el vault
+
+El escaneo termina donde empieza otro dominio. Esta tabla es el enrutamiento.
+
+| Puerto | Servicio | Seguir en |
+|---|---|---|
+| 80 · 443 · 8080 | HTTP | [[MOC - HTTP]], y de ahí la familia web de [[Inicio]] |
+| 88 · 464 | Kerberos | [[MOC - AD roasting]] |
+| 135 · 139 · 445 | RPC / SMB | [[MOC - AD envenenamiento y relay]] · [[MOC - AD movimiento lateral]] |
+| 389 · 636 · 3268 | LDAP | [[MOC - AD enumeración]] · [[MOC - LDAP injection]] |
+| 3389 | RDP | [[MOC - AD movimiento lateral]] |
+| 5985 · 5986 | WinRM | [[MOC - AD movimiento lateral]] |
+| 1433 · 3306 · 5432 | Bases SQL | [[MOC - SQL injection]] |
+| 27017 | MongoDB | [[MOC - NoSQL injection]] |
+| 25 · 587 | SMTP | [[MOC - Email header injection]] |
+| 6379 · 11211 | Redis / memcached | [[MOC - SSRF]] — destinos internos |
+| 443 con AD detrás | ADCS web enrollment | [[MOC - ADCS]] |
+
+Un `ssl-cert` en el 443 de un controlador de dominio suele dar el FQDN y el dominio: es la entrada más barata a [[MOC - AD enumeración]].
+
+## 10. Salida y reanudación
 
 ```
---script=default
---script=vuln
---script=smb-enum-shares --script-args=...
---script-help=smb-enum-shares
-```
-
-Categorías por orden de agresividad: `safe` · `default` · `discovery` · `intrusive` · `vuln` · `exploit` · `dos`.
-
-`vuln` y `exploit` **no son reconocimiento**: mandan cargas de explotación. Correrlos sin autorización explícita para explotación es salirse del alcance de un engagement de reconocimiento.
-
-## 7. Salida
-
-```
--oA base        los tres formatos a la vez
--oN base.nmap   legible
--oG base.gnmap  grepeable
--oX base.xml    XML
+-oA base         los tres formatos a la vez
+-oN base.nmap    legible
+-oG base.gnmap   grepeable
+-oX base.xml     XML
+--append-output  no pisar
 --resume base.nmap
+-v / -vv         resultados a medida que aparecen
+--packet-trace   cada paquete: para depurar por qué no sale nada
 ```
 
 `-oA` siempre: rehacer un escaneo largo porque se perdió la salida es el error caro evitable del dominio.
 
-## 8. Cargas UDP por puerto
+Extraer de la salida:
 
-Un datagrama vacío casi nunca obtiene respuesta. Nmap manda una carga válida por protocolo cuando la conoce — `-sV` sobre UDP mejora mucho el resultado justamente por eso. Los puertos que vale la pena barrer, en orden de retorno: `53` DNS · `161` SNMP · `137` NetBIOS · `88` Kerberos · `500` IKE · `69` TFTP · `123` NTP · `1900` SSDP · `623` IPMI.
+```sh
+grep -oP '\d+(?=/open)' base.gnmap | sort -un | paste -sd,   # puertos abiertos, para -p
+grep '/open' base.gnmap | cut -d' ' -f2                      # hosts con algo abierto
+awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para -iL
+```
+
+En gnmap los puertos **no** están al principio de línea —van después de `Ports:`—, así que anclar con `^` devuelve vacío en silencio. Es el error que hace parecer que el escaneo no encontró nada.
+
+## 11. Cargas UDP por puerto
+
+Un datagrama vacío casi nunca obtiene respuesta. Nmap manda una carga válida por protocolo cuando la conoce — `-sV` sobre UDP mejora mucho el resultado por eso. Los que vale la pena barrer, en orden de retorno: `53` DNS · `161` SNMP · `137` NetBIOS · `88` Kerberos · `500` IKE · `69` TFTP · `123` NTP · `1900` SSDP · `623` IPMI.
+
+## 12. Cuando nmap no alcanza
+
+```sh
+masscan -p1-65535 10.10.10.0/24 --rate 10000 -oL masscan.txt   # barrido enorme, después nmap encima
+rustscan -a 10.10.10.5 -- -sV -sC                              # frente rápido que delega en nmap
+```
+
+Sin poder subir binarios al host comprometido, el sondeo se hace a mano:
+
+```bash
+# bash, no zsh: /dev/tcp es una construcción del propio bash, no un archivo
+for p in 22 80 443 445 3389; do (echo >/dev/tcp/10.10.10.5/$p) 2>/dev/null && echo "$p abierto"; done
+```
+
+```powershell
+445,3389,5985 | % { if ((New-Object Net.Sockets.TcpClient).ConnectAsync("10.10.10.5",$_).Wait(300)) {"$_ abierto"} }
+```
+
+Los dos usan `connect()` completo: llegan a la aplicación y pueden quedar en su log.
