@@ -148,6 +148,7 @@ Si estás trabajando desde un MOC al que volvés todo el tiempo, fijalo y limpi�
 
 - **`revalidacion`** — tradecraft con más de seis meses sin probar. Es el backlog de laboratorio de [[Validación de tradecraft en laboratorio]].
 - **`higiene`** — frontmatter inválido y enlaces rotos.
+- **`indice`** — nombre, tipo y aliases de cada nota. Acepta un término y filtra por nombre **o** alias: `consultas.py indice handshake`. Es la vista de terminal de lo que busca `<leader>oq`, y sirve para ver de una si a un lote de notas nuevas le falta el alias del otro idioma.
 
 `<leader>om` apaga el render para ver el markdown crudo. `<leader>oz` es modo zen para escribir largo.
 

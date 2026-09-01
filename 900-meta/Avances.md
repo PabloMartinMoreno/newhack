@@ -22,12 +22,12 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
 - **Teoría (`050-teoria/`)** — 7 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2) y [[MOC - HTTP]] (3 piezas de 14). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, SMB, el DOM
-- **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 1 matriz, la entidad [[nmap]] y su cara azul. Sin cubrir: reconocimiento pasivo
+- **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 2 matrices, las entidades [[nmap]] · [[masscan]] · [[rustscan]], y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
-- **Cheatsheets** — 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio
-- **Contenido rojo — web (cont.)** — 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules
+- **Cheatsheets** — 98 matrices: 83 web, 9 AD, 4 azules, 2 de red (nmap y sondeos). Indexadas desde el MOC de su dominio
+- **Contenido rojo — total** — 148 tradecraft, 59 técnicas, 31 detecciones, 49 MOCs, 4 entidades
 - **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
-- **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
+- **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos (`indice` incluido). `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
 - **Vault de engagements** — Sin crear
 
 ## Bitácora
@@ -882,6 +882,8 @@ Así que se abrió el dominio entero, y el reparto siguió las reglas que ya est
 - [ ] **Teoría, sistemas siguientes**: DNS es el de mayor deuda ([[Exfiltración por subdominios de alta entropía]] y [[Sysmon EID 22 - DnsQuery]] ya existen sin nota que explique la resolución). Después TLS (SNI, cadena, ALPN), IPv6/NDP, Kerberos como protocolo, el DOM
 - [ ] **Telemetría de red**: `550-telemetria/` no modela ninguna fuente por debajo del endpoint. Flow logs, conntrack y DAI del switch son el hueco que destaparon [[MOC - Red]] y [[MOC - Reconocimiento de red]]; sin ellos no se puede escribir la cara azul de ARP, ni la del escaneo desde fuera del parque instrumentado
 - [ ] **Reconocimiento pasivo**: lo que se averigua sin mandar un paquete al objetivo (certificate transparency, DNS histórico, metadatos). Es otro eje del mismo dominio, no otro sondeo
+- [ ] **Herramientas sin entidad**, contadas por notas que las nombran en texto plano: Burp (20), Responder (15), mimikatz (12), BloodHound (11), hashcat (5), impacket (4), ysoserial (4). Con `400-entidades/` en 4 notas, la regla 6 se cumple en la estructura pero no en el contenido
+- [ ] **Las cinco de reconocimiento son el laboratorio más barato del vault.** Un escaneo contra una VM propia valida `Escaneo - descubrimiento de hosts`, los tres sondeos y la identificación de servicio en una tarde, y son las únicas 5 de las 148 con `probado: nunca` que no necesitan montar un dominio ni un WAF
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
