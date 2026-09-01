@@ -71,7 +71,8 @@ Tres cosas que este orden codifica:
 
 ## Cheatsheets
 
-- [[Nmap - matriz de referencia]] — tipos de sondeo, selección de objetivos, temporización, evasión y NSE
+- [[Sondeos de red - matriz de referencia]] — qué manda cada sondeo, qué significa cada respuesta y cada silencio, coste y qué ve el defensor. Sin herramienta de por medio
+- [[Nmap - matriz de referencia]] — la traducción a flags: objetivos, temporización, evasión y NSE
 
 ## Cara roja
 

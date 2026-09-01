@@ -16,17 +16,17 @@ tags:
 
 ## 1. Tipos de sondeo
 
-| Flag | Sondeo | Privilegios | Cuándo |
-|---|---|---|---|
-| `-sS` | `SYN`, medio abierto | root | Caso base |
-| `-sT` | `connect()` completo | ninguno | Sin privilegios; deja log en la app |
-| `-sU` | UDP | root | Servicios que sólo viven en UDP |
-| `-sA` | `ACK` | root | Mapear el firewall, no el puerto |
-| `-sF` `-sN` `-sX` | `FIN`, sin banderas, Xmas | root | Sólo si la pila cumple el RFC |
-| `-sn` | Sin escaneo de puertos | — | Sólo descubrimiento |
-| `-Pn` | Sin descubrimiento | — | Tratar todo el rango como vivo |
+| Flag | Sondeo |
+|---|---|
+| `-sS` | `SYN`, medio abierto |
+| `-sT` | `connect()` completo |
+| `-sU` | UDP |
+| `-sA` | `ACK` |
+| `-sF` `-sN` `-sX` | `FIN`, sin banderas, Xmas |
+| `-sn` | Sin escaneo de puertos |
+| `-Pn` | Sin descubrimiento |
 
-`-sS` y `-sT` clasifican igual; la diferencia es el rastro. `-sA` no dice si el puerto está abierto: dice si el `RST` volvió.
+Qué manda cada uno, qué significa cada respuesta y qué cuesta: [[Sondeos de red - matriz de referencia]]. Acá sólo la traducción a flags, para no tener dos fuentes de verdad.
 
 ## 2. Selección de objetivos y puertos
 

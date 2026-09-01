@@ -4,7 +4,7 @@ habilita: ["[[Escaneo - sondeo SYN de puertos TCP]]", "[[Escaneo - sondeos de ba
 relacionadas: ["[[TCP - establecimiento de la conexión]]", "[[ICMP - el canal de error de IP]]"]
 aliases:
   - RST behaviour
-  - scan types
+  - segment arrives
 tags: []
 ---
 
