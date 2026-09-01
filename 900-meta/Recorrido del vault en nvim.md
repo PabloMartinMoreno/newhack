@@ -43,12 +43,18 @@ Cuatro entradas, según qué recordás:
 
 | Recordás | Tecla |
 |---|---|
-| El nombre o un alias | `<leader>oq` |
+| El nombre del archivo | `<leader>oq` |
+| Un alias | `<leader>oa` |
 | Una frase del contenido | `<leader>oo` |
 | El tag | `<leader>og` |
 | Nada, querés mirar | `<leader>e` |
 
-`<leader>oq` cubre casi todo. Busca por nombre **y por alias**, así que `time-based` llega a [[SQLi - canal temporal ciego]] aunque el archivo no se llame así. Por eso [[Convenciones de nombres]] exige el alias en el otro idioma.
+> [!warning] `<leader>oq` **no** busca por alias
+> `Obsidian quick_switch` es un picker de archivos: filtra por ruta y nombre, y no abre el frontmatter. Buscar `handshake` ahí no encuentra [[TCP - establecimiento de la conexión]] por más que lo tenga de alias.
+
+Los alias los resuelve el **LSP** del plugin, que sí lee frontmatter. `<leader>oa` abre sus símbolos de espacio de trabajo, y ahí `time-based` llega a [[SQLi - canal temporal ciego]] y `handshake` a la nota de TCP. Por eso [[Convenciones de nombres]] exige el alias en el otro idioma — pero hay que buscarlo por la tecla correcta.
+
+Dónde sí funcionan los alias sin hacer nada: al **seguir un wikilink** con `<CR>`. `[[three-way handshake]]` abre la nota aunque no se llame así, porque esa resolución va por otro camino que el picker.
 
 Los de LazyVim siguen disponibles y a veces sirven más: `<leader>ff` archivos, `<leader>/` grep crudo, `<leader>fr` recientes, `<leader>,` buffers abiertos.
 
