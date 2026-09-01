@@ -28,7 +28,8 @@ Tres piezas concentran la mayoría de los dominios:
 ¿Qué parte del mensaje está en juego?
 ├─ El límite entre un mensaje y el siguiente
 │  ├─ ¿Cuántos bytes tiene el cuerpo? → [[HTTP - delimitación del cuerpo]]
-│  └─ ¿Quién comparte el socket?      → [[HTTP - el modelo de conexión]]
+│  ├─ ¿Quién comparte el socket?      → [[HTTP - el modelo de conexión]]
+│  └─ ¿Por qué hay que delimitar?     → [[TCP - establecimiento de la conexión]]
 ├─ La primera línea
 │  ├─ Forma de la URI (origin / absolute / authority) → [[HTTP - la línea de petición]]
 │  └─ Método y sus garantías                          → [[HTTP - métodos y sus garantías]]
@@ -100,5 +101,7 @@ La conclusión transversal es de [[La detección vive en el agregado, no en el e
 ## Huecos conocidos
 
 Escritas 3 de 14. Faltan las once del orden de aprendizaje que todavía no tienen nota — el enlace queda igual, es roadmap explícito. Prioridad por deuda: sintaxis de cabeceras y la línea de petición, porque son las dos que más dominios ya escritos presuponen.
+
+**TCP** tiene su primera pieza escrita ([[TCP - establecimiento de la conexión]]) y todavía no tiene MOC propio: con una sola nota, un árbol de decisión de una rama sería ceremonia vacía. Cuando llegue a cuatro o cinco piezas —ventana y control de flujo, cierre y estados, fragmentación y MSS— se abre `MOC - TCP` y este mapa lo enlaza como sistema hermano en lugar de alojarlo.
 
 Sistemas sin abrir: TLS, DNS, Kerberos, LDAP, SMB, el DOM.

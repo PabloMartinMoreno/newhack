@@ -21,7 +21,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Contenido rojo — AD** — Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
-- **Teoría (`050-teoria/`)** — HTTP abierto: 3 piezas de 14 + [[MOC - HTTP]]. Sistemas sin abrir: TLS, DNS, Kerberos, LDAP, SMB, el DOM
+- **Teoría (`050-teoria/`)** — HTTP abierto: 3 piezas de 14 + [[MOC - HTTP]]. TCP con su primera pieza, sin MOC todavía. Sistemas sin abrir: TLS, DNS, Kerberos, LDAP, SMB, el DOM
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
 - **Cheatsheets** — 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio
 - **Contenido rojo — web (cont.)** — 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules

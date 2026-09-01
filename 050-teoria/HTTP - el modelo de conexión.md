@@ -1,7 +1,7 @@
 ---
 tipo: teoria
 habilita: ["[[Request smuggling - CL.TE y TE.CL]]", "[[Race - superación de límite]]", "[[Web cache - envenenamiento por entrada sin clave]]"]
-relacionadas: ["[[HTTP - delimitación del cuerpo]]", "[[HTTP - el modelo de caché]]"]
+relacionadas: ["[[HTTP - delimitación del cuerpo]]", "[[HTTP - el modelo de caché]]", "[[TCP - establecimiento de la conexión]]"]
 aliases:
   - keep-alive
   - connection reuse
@@ -13,6 +13,8 @@ tags: []
 ## Qué dice la especificación
 
 HTTP/1.0 abría una conexión TCP por petición. HTTP/1.1 la deja abierta por defecto (`keep-alive`) y envía varias peticiones seguidas por el mismo socket, con las respuestas en el mismo orden. HTTP/2 va más lejos: multiplexa peticiones concurrentes en marcos sobre una sola conexión, sin orden garantizado entre ellas.
+
+Debajo de todo eso hay una conexión TCP que costó un handshake y que no marca el final de ningún mensaje — ver [[TCP - establecimiento de la conexión]]. Ese es el motivo de que HTTP reutilice el socket y de que tenga que delimitar sus mensajes por su cuenta.
 
 La consecuencia estructural: **la conexión es un recurso compartido y con estado, aunque el protocolo se describa como sin estado**. Lo que no tiene estado es el par petición/respuesta; el canal por el que viaja sí lo tiene, y es un canal que la cadena de intermediarios reutiliza entre usuarios distintos.
 
