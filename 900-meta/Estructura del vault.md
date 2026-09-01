@@ -72,6 +72,14 @@ Y no queda en retórica: se declara en el campo `habilita:`, con enlaces a trade
 
 La dirección importa: si el enlace fuera de tradecraft hacia teoría, agregar una pieza de HTTP obligaría a editar decenas de notas. Así, agregar teoría cuesta una nota.
 
+## Qué lleva una matriz de referencia
+
+La matriz es sintaxis, no criterio — el criterio vive en el MOC. Pero sintaxis sola es una lista de flags que no enseña a leer nada, así que lleva además:
+
+- **Uno o dos ejemplos completos por matriz**, no más: comando, salida recortada y **qué se concluye de esa salida**. Se ponen donde la tabla no alcanza —lo que hay que interpretar, no lo que hay que tipear— y valen más que diez filas nuevas.
+- **Direcciones y dominios de laboratorio, siempre.** Un ejemplo con datos de un objetivo real convierte la matriz en evidencia de cliente y la saca de este vault. Ver la regla de arriba.
+- **Nada de la herramienta de al lado.** Si aparece otra, va como enlace a su entidad.
+
 ## Una nota por eje, no por combinación
 
 Las técnicas grandes son intersecciones de ejes ortogonales. SQLi, por ejemplo: canal de extracción × contexto de inyección × motor × obstáculo × impacto. El producto cartesiano son cientos de combinaciones; **se escribe una nota por valor de cada eje** (~25 notas) y la combinación se resuelve en tiempo de explotación siguiendo enlaces desde el MOC.

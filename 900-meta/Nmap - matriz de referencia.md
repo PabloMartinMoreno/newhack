@@ -13,6 +13,8 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Sintaxis y comandos. El criterio —qué sondeo elegir y por qué— está en [[MOC - Reconocimiento de red]]; qué manda cada sondeo y qué significa cada respuesta, en [[Sondeos de red - matriz de referencia]]; el porqué protocolar, en [[TCP - respuestas a segmentos inesperados]].
+>
+> Los ejemplos usan `10.10.10.0/24` y un dominio `corp.local` inventados, y las salidas van recortadas a lo que se lee. Nunca datos de un objetivo real: eso va al vault de engagements.
 
 ## 1. La escalera — los cuatro comandos que se corren de verdad
 
@@ -52,7 +54,26 @@ Nmap imprime seis estados, no tres. Confundir los tres de en medio es el error d
 
 `--reason` agrega por qué: `syn-ack`, `reset`, `no-response`, `admin-prohibited`, `host-unreach`. Distingue *filtrado porque nadie contestó* de *filtrado porque un firewall lo dijo*, y eso cambia la conclusión.
 
-Un host con todo `filtered` menos dos puertos `closed` **está vivo**, aunque el descubrimiento lo haya dado por muerto.
+> [!example] El host que el descubrimiento dio por muerto
+> `-sn` no devolvió nada para `10.10.10.7`, así que se insiste con `-Pn --reason`:
+>
+> ```
+> $ nmap -Pn -p 22,80,443,445 --reason 10.10.10.7
+>
+> PORT    STATE    SERVICE  REASON
+> 22/tcp  filtered ssh      no-response
+> 80/tcp  filtered http     admin-prohibited from 10.10.10.1
+> 443/tcp closed   https    reset ttl 63
+> 445/tcp filtered microsoft-ds no-response
+> ```
+>
+> Tres conclusiones que la tabla de estados sola no da:
+>
+> - **El host existe.** El `reset` del 443 salió de él, no de un intermediario. El descubrimiento se equivocó y `-Pn` era obligatorio.
+> - **Hay un firewall en `10.10.10.1`** y se identificó solo: el `admin-prohibited` del 80 lleva la dirección de quien lo dijo.
+> - **El 22 y el 445 no son lo mismo que el 80.** Silencio no es lo mismo que prohibición: pueden estar bloqueados en otro punto, o el host puede estar descartando. Vale reintentarlos con `--source-port 53` o desde otro origen.
+>
+> Sin `--reason` los tres `filtered` se leían igual y el `ttl 63` —un salto de router— tampoco aparecía.
 
 ## 3. Tipos de sondeo
 
@@ -158,6 +179,27 @@ Lo que paga, por puerto. `-sC` corre la categoría `default`, que ya cubre basta
 
 `ssl-cert` y `rdp-ntlm-info` son de los de mayor retorno del reconocimiento entero: regalan nombres de host internos, dominio de AD y nombre de la máquina sin autenticarse.
 
+> [!example] Un puerto RDP que entrega el dominio entero
+> ```
+> $ nmap -p3389 --script rdp-ntlm-info 10.10.10.5
+>
+> PORT     STATE SERVICE
+> 3389/tcp open  ms-wbt-server
+> | rdp-ntlm-info:
+> |   Target_Name: CORP
+> |   NetBIOS_Domain_Name: CORP
+> |   NetBIOS_Computer_Name: DC01
+> |   DNS_Domain_Name: corp.local
+> |   DNS_Computer_Name: DC01.corp.local
+> |_  Product_Version: 10.0.17763
+> ```
+>
+> Sin una credencial y sin tocar nada más: el nombre del dominio (`corp.local`), que la máquina es un controlador (`DC01`), y la versión de Windows (`10.0.17763` = Server 2019).
+>
+> Con eso ya se puede entrar a [[MOC - AD enumeración]] —hace falta el FQDN del dominio para casi todo— y a [[MOC - AD roasting]], que sólo necesita el dominio y una lista de usuarios para probar AS-REP.
+>
+> `ssl-cert` sobre el 443 de esa misma máquina suele confirmar lo mismo por otra vía, y a veces agrega nombres de otros hosts en el campo SAN.
+
 ```sh
 nmap --script-help "smb-enum*"         # qué hace, antes de correrlo
 nmap --script-updatedb                 # tras agregar scripts propios
@@ -212,7 +254,26 @@ grep '/open' base.gnmap | cut -d' ' -f2                      # hosts con algo ab
 awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para -iL
 ```
 
-En gnmap los puertos **no** están al principio de línea —van después de `Ports:`—, así que anclar con `^` devuelve vacío en silencio. Es el error que hace parecer que el escaneo no encontró nada.
+> [!example] Por qué anclar con `^` rompe el parseo
+> Así se ve un gnmap por dentro — los puertos van **después** de `Ports:`, nunca al principio de línea:
+>
+> ```
+> Host: 10.10.10.5 ()	Status: Up
+> Host: 10.10.10.5 ()	Ports: 22/open/tcp//ssh///, 80/open/tcp//http///, 443/closed/tcp//https///, 445/open/tcp//microsoft-ds///
+> Host: 10.10.10.9 ()	Status: Up
+> ```
+>
+> ```sh
+> $ grep -oP '^\d+(?=/open)' 2-puertos.gnmap | paste -sd,
+>                                    # ← vacío, y sin error
+>
+> $ grep -oP '\d+(?=/open)' 2-puertos.gnmap | sort -un | paste -sd,
+> 22,80,445
+> ```
+>
+> El ancla no falla: devuelve nada. Parece que el escaneo no encontró puertos y se pierde la tarde reescaneando.
+>
+> `sort -un` importa cuando hay varios hosts en el mismo archivo: sin él los puertos repetidos se pasan repetidos a `-p`.
 
 ## 11. Cargas UDP por puerto
 
