@@ -105,7 +105,7 @@ Sólo reconoce protocolos en sus **puertos estándar**: HTTP, FTP, IMAP4, POP3, 
 |---|---|
 | `-oL` | Lista — el que se parsea |
 | `-oG` | Grepeable |
-| `-oX` | XML |
+| `-oX` | XML compatible con nmap → [[XML de escaneo - matriz de referencia]] |
 | `-oJ` | JSON |
 | `-oB` | Binario, el más chico y rápido |
 | `--readscan` | Convertir el binario a otro formato después |

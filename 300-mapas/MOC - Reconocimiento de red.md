@@ -75,6 +75,7 @@ Tres cosas que este orden codifica:
 - [[Nmap - matriz de referencia]] — la traducción a flags: objetivos, temporización, evasión y NSE
 - [[Rustscan - matriz de referencia]] — lote, timeout y `ulimit`, el `-Pn` que agrega solo, y el motor de scripts
 - [[Masscan - matriz de referencia]] — tasa, exclusiones, el `RST` del kernel que rompe `--banners`, y el formato de `-oL`
+- [[XML de escaneo - matriz de referencia]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja
 
