@@ -17,6 +17,11 @@ El sustrato que los ataques presuponen. Va primero porque casi ningún dominio a
 - [[MOC - Red]] — ARP, ICMP y TCP: el segmento como frontera, y de dónde sale cada estado del escaneo
 - [[MOC - HTTP]] — delimitación, conexión, cabeceras, caché, intermediarios
 
+### Reconocimiento
+
+La fase que precede a todo y la única que no explota nada: se leen las respuestas que el protocolo está obligado a dar.
+- [[MOC - Reconocimiento de red]] — descubrimiento, sondeos TCP y UDP, identificación de servicio
+
 ### Web
 
 Dentro de web, los MOCs están por **mecanismo**, no por nombre: la pregunta que abre cada familia es dónde falla la aplicación, no cómo se llama el bug. El orden va de lo clásico a lo avanzado.

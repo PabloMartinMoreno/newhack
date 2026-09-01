@@ -21,7 +21,8 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Contenido rojo — AD** — Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
-- **Teoría (`050-teoria/`)** — 6 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP) y [[MOC - HTTP]] (3 piezas de 14). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, SMB, el DOM
+- **Teoría (`050-teoria/`)** — 7 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2) y [[MOC - HTTP]] (3 piezas de 14). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, SMB, el DOM
+- **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 1 matriz, la entidad [[nmap]] y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
 - **Cheatsheets** — 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio
 - **Contenido rojo — web (cont.)** — 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules
@@ -814,6 +815,24 @@ Tres notas de red (ARP, ICMP, TCP) y el mapa que las ordena. Lo que se aprendió
 
 **El hueco que destapó:** las tres capas comparten un punto ciego y no es de configuración. La telemetría de endpoint del vault arranca por encima de ellas — [[Sysmon EID 3 - NetworkConnect]] ve la conexión, no el ARP que la desvió ni el ICMP que explica los cien fallos. Cubrirlas pide artefactos que `550-telemetria/` no modela: flow logs, conntrack, DAI del switch. Es deuda de telemetría, no de detecciones, y queda anotada en la cara azul del mapa.
 
+### 2026-09-01 — Reconocimiento de red: el dominio que faltaba, y la herramienta que no manda
+
+Se pidió "una nota de nmap" y la regla 6 ya tenía decidido dónde va —`400-entidades/`, nunca una carpeta—. Lo que la pregunta destapó es otra cosa: **nmap no tenía a qué apuntar**. `400-entidades/sqlmap.md` es corta porque enlaza cinco notas de canal de SQLi que existen; con 143 notas de tradecraft y cero sobre reconocimiento, la nota de nmap habría sido un cheatsheet con frontmatter.
+
+Así que se abrió el dominio entero, y el reparto siguió las reglas que ya estaban escritas: la herramienta a entidad, la sintaxis a matriz, **el criterio a tradecraft** y el porqué protocolar a teoría.
+
+**El eje raíz es el sondeo**, y las cinco notas son valores suyos y de dos ejes más (alcance, profundidad). El sigilo —velocidad, fragmentación, señuelos— quedó en matriz por ortogonal: cualquier sondeo se puede hacer lento, así que no es una decisión distinta sino un parámetro de todas.
+
+**Tres cosas que el dominio dejó escritas y que valen más que las notas:**
+
+- **`SYN` no es sigiloso, es preciso.** La fama de *half-open* viene de cuando lo único que registraba conexiones era la aplicación. Se elige por rápido y exacto.
+- **En UDP, apurarse corrompe el resultado.** La limitación de tasa de ICMP hace que los puertos cerrados dejen de contestar y empiecen a parecer abiertos. Es el único sondeo del vault donde la velocidad no sólo hace ruido: miente.
+- **La asimetría que ordena la cara azul.** El escaneo se ve mucho mejor en el que escanea que en el escaneado: un sondeo `SYN` no completa el handshake, no llega a ninguna aplicación y no hay log de servicio. Por eso [[Abanico de conexiones fallidas desde un host]] mira el tráfico saliente del host que corre la herramienta, y por eso es `forma: agregado` con dos umbrales —cardinalidad de destinos **y** proporción de fallos—: el primero solo no separa un escáner de un navegador.
+
+**La pieza de teoría que faltaba** es [[TCP - respuestas a segmentos inesperados]]: la tabla de qué responde cada estado a cada bandera. De ahí sale *cada* tipo de sondeo, incluida la inversión de los FIN/NULL/Xmas —silencio es abierto— y su modo de falla, que es el peor posible: contra pilas que responden `RST` con el puerto abierto, todo aparece cerrado y nada en la salida avisa que la premisa no se cumple.
+
+`huecos` sigue en cero: el ciclo rojo↔azul del dominio cerró con la telemetría que ya existía. Lo que **no** cerró, y queda anotado en el MOC, es el escaneo desde fuera del parque instrumentado y el barrido ARP: no falta la regla, falta la fuente.
+
 ## Pendientes
 
 ### Inmediatos
@@ -861,7 +880,8 @@ Tres notas de red (ARP, ICMP, TCP) y el mapa que las ordena. Lo que se aprendió
 - [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
 - [ ] **Teoría de HTTP**: faltan 11 de las 14 piezas. Prioridad por deuda: sintaxis de cabeceras y la línea de petición, que son las que más dominios ya escritos presuponen
 - [ ] **Teoría, sistemas siguientes**: DNS es el de mayor deuda ([[Exfiltración por subdominios de alta entropía]] y [[Sysmon EID 22 - DnsQuery]] ya existen sin nota que explique la resolución). Después TLS (SNI, cadena, ALPN), IPv6/NDP, Kerberos como protocolo, el DOM
-- [ ] **Telemetría de red**: `550-telemetria/` no modela ninguna fuente por debajo del endpoint. Flow logs, conntrack y DAI del switch son el hueco que destapó [[MOC - Red]]; sin ellos la cara azul de ARP e ICMP no se puede escribir
+- [ ] **Telemetría de red**: `550-telemetria/` no modela ninguna fuente por debajo del endpoint. Flow logs, conntrack y DAI del switch son el hueco que destaparon [[MOC - Red]] y [[MOC - Reconocimiento de red]]; sin ellos no se puede escribir la cara azul de ARP, ni la del escaneo desde fuera del parque instrumentado
+- [ ] **Reconocimiento pasivo**: lo que se averigua sin mandar un paquete al objetivo (certificate transparency, DNS histórico, metadatos). Es otro eje del mismo dominio, no otro sondeo
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables
