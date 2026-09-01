@@ -275,6 +275,33 @@ awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para
 >
 > `sort -un` importa cuando hay varios hosts en el mismo archivo: sin él los puertos repetidos se pasan repetidos a `-p`.
 
+### El XML a HTML legible
+
+`-oX` no es sólo para importar a otra herramienta: nmap le mete al XML una instrucción `xml-stylesheet` que apunta a `nmap.xsl`, así que se convierte a un informe HTML de una línea, sin escribir plantilla.
+
+```sh
+xsltproc target.xml -o target.html    # usa la hoja que el XML ya declara
+lynx target.html                      # leerlo sin salir de la terminal
+```
+
+Un solo argumento alcanza: xsltproc respeta la instrucción embebida. `-o` puede ir antes o después.
+
+| Situación | Comando |
+|---|---|
+| La hoja está donde el XML dice | `xsltproc target.xml -o target.html` |
+| Apuntar a una hoja concreta | `xsltproc -o target.html /usr/share/nmap/nmap.xsl target.xml` |
+| Leerlo en la terminal | `lynx target.html` |
+| Volcarlo a texto plano | `lynx -dump -nolist target.html` |
+
+En la forma explícita **`-o` va antes** de los posicionales. Con `xsltproc hoja.xsl target.xml -o salida.html` el `-o` se lee como otro archivo de entrada y falla con `unable to parse -o`.
+
+> [!warning] El XML se lleva la ruta de la hoja adentro
+> Si escaneás en una máquina y armás el informe en otra, la ruta a `nmap.xsl` del XML no existe del otro lado. No falla en silencio —sale con código 5 y dice `failed to load external entity`— pero corta el flujo justo cuando estás cerrando el informe.
+>
+> Se resuelve al escanear, no al convertir: `--webxml` deja apuntada la hoja pública y el HTML se arma en cualquier máquina; `--stylesheet ruta` fija una propia; `--no-stylesheet` la saca del todo.
+
+`xsltproc` y `lynx` no son entidades del vault: no implementan ninguna técnica, son utilitarios como `grep` o `awk`.
+
 ## 11. Cargas UDP por puerto
 
 Un datagrama vacío casi nunca obtiene respuesta. Nmap manda una carga válida por protocolo cuando la conoce — por eso `-sV` sobre UDP mejora tanto el resultado.
