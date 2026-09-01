@@ -182,25 +182,11 @@ Categorías, de menos a más agresiva:
 > [!warning] `vuln` y `exploit` no son reconocimiento
 > Mandan cargas de explotación. Correrlos sin autorización explícita para explotar es salirse del alcance de un engagement de reconocimiento.
 
-## 9. Puerto abierto → a dónde seguir en el vault
+## 9. Qué hacer con lo que encontraste
 
-El escaneo termina donde empieza otro dominio. Esta tabla es el enrutamiento.
+El enrutamiento de puerto abierto → dominio del vault no es de nmap: sirve igual si el puerto lo encontró [[masscan]] o un `for` en bash. Vive en [[Sondeos de red - matriz de referencia]] § 8.
 
-| Puerto | Servicio | Seguir en |
-|---|---|---|
-| 80 · 443 · 8080 | HTTP | [[MOC - HTTP]], y de ahí la familia web de [[Inicio]] |
-| 88 · 464 | Kerberos | [[MOC - AD roasting]] |
-| 135 · 139 · 445 | RPC / SMB | [[MOC - AD envenenamiento y relay]] · [[MOC - AD movimiento lateral]] |
-| 389 · 636 · 3268 | LDAP | [[MOC - AD enumeración]] · [[MOC - LDAP injection]] |
-| 3389 | RDP | [[MOC - AD movimiento lateral]] |
-| 5985 · 5986 | WinRM | [[MOC - AD movimiento lateral]] |
-| 1433 · 3306 · 5432 | Bases SQL | [[MOC - SQL injection]] |
-| 27017 | MongoDB | [[MOC - NoSQL injection]] |
-| 25 · 587 | SMTP | [[MOC - Email header injection]] |
-| 6379 · 11211 | Redis / memcached | [[MOC - SSRF]] — destinos internos |
-| 443 con AD detrás | ADCS web enrollment | [[MOC - ADCS]] |
-
-Un `ssl-cert` en el 443 de un controlador de dominio suele dar el FQDN y el dominio: es la entrada más barata a [[MOC - AD enumeración]].
+Lo que sí es de nmap: `ssl-cert` en el 443 de un controlador de dominio suele dar el FQDN y el dominio, y es la entrada más barata a [[MOC - AD enumeración]].
 
 ## 10. Salida y reanudación
 
@@ -248,26 +234,10 @@ Los que vale la pena barrer, en orden de retorno:
 
 ## 12. Cuando nmap no alcanza
 
-| Herramienta | Cuándo | Qué resigna |
-|---|---|---|
-| `masscan` | Rangos enormes, /16 para arriba | Precisión: relee con nmap |
-| `rustscan` | Un host, quiero los abiertos ya | Nada: delega en nmap |
-| `/dev/tcp`, PowerShell | No se puede subir binario | Todo salvo abierto/cerrado |
+| Situación | Ir a |
+|---|---|
+| Rango enorme, /16 para arriba | [[masscan]] |
+| Un host y quiero los abiertos ya | [[rustscan]] |
+| No se puede subir un binario al host | [[Sondeos de red - matriz de referencia]] § sondeo sin herramienta |
 
-```sh
-masscan -p1-65535 10.10.10.0/24 --rate 10000 -oL masscan.txt
-rustscan -a 10.10.10.5 -- -sV -sC
-```
-
-Sin poder subir binarios al host comprometido, el sondeo se hace a mano:
-
-```bash
-# bash, no zsh: /dev/tcp es una construcción del propio bash, no un archivo
-for p in 22 80 443 445 3389; do (echo >/dev/tcp/10.10.10.5/$p) 2>/dev/null && echo "$p abierto"; done
-```
-
-```powershell
-445,3389,5985 | % { if ((New-Object Net.Sockets.TcpClient).ConnectAsync("10.10.10.5",$_).Wait(300)) {"$_ abierto"} }
-```
-
-Los dos usan `connect()` completo: llegan a la aplicación y pueden quedar en su log.
+Cada una tiene su nota con su sintaxis y su cuándo-no. Acá sólo el desvío.

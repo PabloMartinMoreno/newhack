@@ -32,7 +32,7 @@ Y cuando no hay privilegios: sin *raw sockets* cae a `connect()`, que completa e
 
 Mantenida y activa. Es el estándar de facto y lo que un informe da por sentado.
 
-Alternativas por si el contexto la descarta: `masscan` cuando importa la velocidad sobre rangos grandes y no la precisión; `rustscan` como frente rápido que después delega en nmap; y la implementación a mano —`/dev/tcp`, PowerShell— cuando no se puede subir un binario al host comprometido.
+Alternativas por si el contexto la descarta: [[masscan]] · [[rustscan]] · el sondeo a mano de [[Sondeos de red - matriz de referencia]] § 7.
 
 > [!tip] Por qué esta nota es corta
 > El vault **no se organiza por herramienta**. El criterio vive en [[MOC - Reconocimiento de red]] y la sintaxis en la matriz; esta nota sólo mapea qué cubre nmap y cuándo estorba. Si nmap desaparece mañana, no se pierde nada más que este archivo.

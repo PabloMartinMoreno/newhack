@@ -26,7 +26,7 @@ Si algo de este archivo contradice esas notas, **ganan esas notas** — se actua
 3. **`telemetria:`** es el mismo campo en tradecraft y en detecciones. Es la bisagra operativa; sin ella la fusión es nominal.
 4. **`opsec:`, `probado:`, `contexto:`** en toda nota de tradecraft. El conocimiento rojo caduca; sin esos campos el vault miente. `probado:` nace en `nunca` y **solo** cambia a una fecha cuando la técnica se corrió en un laboratorio y funcionó — poner ahí la fecha de escritura miente peor que dejar el campo vacío.
 5. **Cero datos de cliente.** Hostnames, IPs, credenciales y evidencia van al vault de engagements, aparte y cifrado.
-6. **Nada organizado por herramienta.** La herramienta es una entidad en `400-entidades/`, nunca una carpeta.
+6. **Nada organizado por herramienta.** La herramienta es una entidad en `400-entidades/`, nunca una carpeta — ni contenido inline dentro de la nota de otra herramienta. Si aparece mencionada, va como enlace a su entidad: el contenido duplicado se corrige en un solo lado y se pudre en el otro.
 7. **Idioma — la regla del corpus externo.** Si el término aparece literal en una fuente externa (ATT&CK, CWE, WSTG, docs de vendor, Sigma), el nombre va en **inglés**; si lo escribiste vos, en **español**. `500-tecnicas/` usa el nombre oficial en inglés sin excepción. El término del otro idioma va siempre como alias.
 8. **Los MOCs son árboles de decisión**, no listas de enlaces. Se escriben ordenados por dependencia conceptual porque también son temario de clase.
 

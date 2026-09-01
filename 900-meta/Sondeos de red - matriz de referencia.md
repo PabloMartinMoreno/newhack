@@ -94,3 +94,36 @@ En UDP la lentitud no es del escáner: es la limitación de tasa de errores ICMP
 Ninguno de los sondeos que no completan el handshake llega a una aplicación, así que del lado escaneado no hay log de servicio que los registre. La señal vive en el host que escanea — la asimetría que explica [[Abanico de conexiones fallidas desde un host]].
 
 Y una advertencia contraintuitiva: los sondeos de bandera anómala son **más** detectables que un `SYN`, no menos. No existe tráfico legítimo con esa forma, así que cualquier IDS tiene firma.
+
+## 7. Sondeo sin herramienta
+
+Sin poder subir un binario al host comprometido, queda el `connect()` que ya trae el sistema. Los dos completan el handshake: llegan a la aplicación y pueden quedar en su log.
+
+```bash
+# bash, no zsh: /dev/tcp es una construcción del propio bash, no un archivo
+for p in 22 80 443 445 3389; do (echo >/dev/tcp/10.10.10.5/$p) 2>/dev/null && echo "$p abierto"; done
+```
+
+```powershell
+445,3389,5985 | % { if ((New-Object Net.Sockets.TcpClient).ConnectAsync("10.10.10.5",$_).Wait(300)) {"$_ abierto"} }
+```
+
+Sólo distinguen abierto de todo lo demás: sin `raw sockets` no hay forma de separar *cerrado* de *filtrado*, porque el sistema devuelve un error único para las dos cosas.
+
+## 8. Puerto abierto → a dónde seguir en el vault
+
+El reconocimiento termina donde empieza otro dominio, sea cual sea la herramienta que encontró el puerto.
+
+| Puerto | Servicio | Seguir en |
+|---|---|---|
+| 80 · 443 · 8080 | HTTP | [[MOC - HTTP]], y la familia web de [[Inicio]] |
+| 88 · 464 | Kerberos | [[MOC - AD roasting]] |
+| 135 · 139 · 445 | RPC / SMB | [[MOC - AD envenenamiento y relay]] |
+| 389 · 636 · 3268 | LDAP | [[MOC - AD enumeración]] · [[MOC - LDAP injection]] |
+| 3389 | RDP | [[MOC - AD movimiento lateral]] |
+| 5985 · 5986 | WinRM | [[MOC - AD movimiento lateral]] |
+| 1433 · 3306 · 5432 | Bases SQL | [[MOC - SQL injection]] |
+| 27017 | MongoDB | [[MOC - NoSQL injection]] |
+| 25 · 587 | SMTP | [[MOC - Email header injection]] |
+| 6379 · 11211 | Redis / memcached | [[MOC - SSRF]] — destinos internos |
+| 443 con AD detrás | ADCS web enrollment | [[MOC - ADCS]] |

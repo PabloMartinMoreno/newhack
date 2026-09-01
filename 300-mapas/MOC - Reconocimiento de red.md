@@ -76,7 +76,11 @@ Tres cosas que este orden codifica:
 
 ## Cara roja
 
-- [[nmap]] es la herramienta de referencia, no la organización del conocimiento: si desaparece mañana, las ocho notas de arriba siguen valiendo. Ver la entidad para qué cubre y cuándo estorba.
+Las herramientas son entidades, no la organización del conocimiento: si desaparecen mañana, las ocho notas de arriba siguen valiendo.
+
+- [[nmap]] — la de referencia, y la única que identifica servicio
+- [[masscan]] — sólo velocidad sobre rangos enormes; resigna precisión
+- [[rustscan]] — frente rápido que delega en nmap
 
 ## Cara azul
 

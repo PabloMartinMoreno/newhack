@@ -82,6 +82,7 @@ Las técnicas grandes son intersecciones de ejes ortogonales. SQLi, por ejemplo:
 |---|---|
 | **Vault-cheatsheet** | Sin el "cuándo elijo esto" son snippets. Los snippets van a un repo. |
 | **Organizar por herramienta** (`Mimikatz/`, `BloodHound/`) | Cuando la herramienta muere o cambia de API, el conocimiento muere con ella. Organizá por técnica y enlazá la herramienta como entidad en `400-entidades/`. |
+| **Explicar una herramienta dentro de la nota de otra** | La matriz de nmap que describe masscan adentro. El día que masscan tenga su nota hay dos versiones del mismo contenido, y la que se corrige es siempre una sola. Se menciona con un enlace; el contenido vive en la entidad. Vale igual para lo que **no** es de la herramienta: una tabla de puerto → dominio sirve sin importar quién encontró el puerto, así que no vive en la matriz de un escáner. |
 | **Una nota por máquina de HTB** | Un box da de 3 a 6 zettels atómicos + una nota índice del writeup en `200-fuentes/`. La nota monolítica no se relee nunca. |
 | **Mezclar evidencia de cliente** | Problema legal + contamina búsqueda y grafo. |
 | **Nota por payload** | 200 notas de variaciones sintácticas sin ninguna idea adentro. |
