@@ -56,7 +56,7 @@ Casos límite resueltos:
 
 **Título en el idioma en que pensás, alias en el idioma en que buscás.** Cuesta una línea de frontmatter y elimina el conflicto: `[[time-based blind]]` resuelve a `SQLi - canal temporal ciego`. Obsidian, `obsidian.nvim` y [[Consultas del vault]] resuelven los tres por alias.
 
-Con una salvedad que hay que tener presente en nvim: el **quick switch** de `obsidian.nvim` es un picker de archivos y no lee frontmatter, así que no encuentra por alias. Sí lo hacen seguir un wikilink y el picker del LSP. Cuál es cuál, en [[Recorrido del vault en nvim]].
+Con una salvedad de implementación: el `quick_switch` que trae `obsidian.nvim` es un picker de archivos y **no** lee frontmatter, así que por sí solo no encuentra por alias. Por eso `<leader>oq` no lo usa — ver [[Recorrido del vault en nvim]].
 
 Toda nota cuyo título esté en un idioma **debe** llevar el término del otro idioma como alias, siempre que ese término exista.
 

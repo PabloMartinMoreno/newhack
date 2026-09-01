@@ -24,7 +24,10 @@ Las consultas que **solo existen porque los dos lados están en el mismo vault**
 900-meta/consultas.py huecos
 900-meta/consultas.py contradicciones
 900-meta/consultas.py higiene
+900-meta/consultas.py indice handshake
 ```
+
+`indice` es la única que no responde una pregunta rojo↔azul: lista nombre, tipo y aliases, y filtra por cualquiera de los dos. Es la vista de terminal de lo mismo que busca `<leader>oq` — sirve para auditar con qué palabras se llega a una nota, y para ver de una si a un lote de notas nuevas le falta el alias del otro idioma. Sin argumento lista el vault entero; queda fuera de `todo` para no tapar el barrido de salud.
 
 Funciona desde cualquier directorio (resuelve el vault relativo al propio script) y acepta `--vault`. Desde nvim: `:!%:h/consultas.py todo` o `:!900-meta/consultas.py huecos`.
 

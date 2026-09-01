@@ -16,7 +16,8 @@ Comandos:
     spof             telemetría ordenada por detecciones que dependen de ella
     cobertura        técnicas y cuántas caras tiene cada una
     higiene          frontmatter, enlaces rotos, alias duplicados, MOC sin indexar, inbox
-    todo             todas las anteriores
+    indice [término] nombre, tipo y aliases de cada nota; filtra por nombre o alias
+    todo             todas las anteriores menos indice
 
 `higiene` sale con código distinto de cero si encuentra algo que rompe el índice,
 para que sirva de pre-commit y de CI. No cuentan como error los enlaces rotos en
@@ -38,6 +39,7 @@ WIKILINK = re.compile(r"\[\[([^\]|#^]+)")
 EXCLUIDAS = ("999-plantillas", ".obsidian", ".git")
 
 LISTAR_NUNCA = False
+FILTRO = ""
 
 ENUMS = {
     "opsec": {"limpio", "ruidoso", "requiere-bypass", "quemado"},
@@ -300,6 +302,23 @@ def fecha_o_nunca(nota, campo):
     return []
 
 
+def indice(vault, _):
+    titulo(
+        "8. Índice de nombres y aliases",
+        "Con qué palabras se llega a cada nota. El quick switch de nvim solo ve la columna Nota.",
+    )
+    filas = []
+    for n in sorted(vault.notas, key=lambda x: x.rel):
+        if FILTRO:
+            campos = [n.nombre] + n.aliases
+            if not any(FILTRO in c.lower() for c in campos):
+                continue
+        filas.append((n.nombre, n.tipo or "—", " · ".join(n.aliases) or "—"))
+    vacio = f"nada coincide con «{FILTRO}»" if FILTRO else "vault vacío"
+    tabla(["Nota", "Tipo", "Aliases"], filas, vacio)
+    print(f"  {len(filas)} nota(s)\n")
+
+
 def higiene(vault, _):
     titulo("7. Higiene", "Frontmatter inválido, enlaces rotos, inbox estancado.")
 
@@ -388,7 +407,12 @@ COMANDOS = {
     "spof": spof,
     "cobertura": cobertura,
     "higiene": higiene,
+    "indice": indice,
 }
+
+# `todo` es el barrido de salud del vault; el índice es una consulta de búsqueda
+# y listar 448 notas ahí adentro tapa el resto.
+FUERA_DE_TODO = {"indice"}
 
 
 def main():
@@ -408,14 +432,21 @@ def main():
 
     vault_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
     meses = 6
+    global LISTAR_NUNCA, FILTRO
+    saltar = set()
     for i, a in enumerate(args):
         if a == "--vault" and i + 1 < len(args):
             vault_dir = args[i + 1]
+            saltar.add(i + 1)
         if a == "--meses" and i + 1 < len(args):
             meses = int(args[i + 1])
+            saltar.add(i + 1)
         if a == "--nunca":
-            global LISTAR_NUNCA
             LISTAR_NUNCA = True
+    FILTRO = next(
+        (a.lower() for i, a in enumerate(args[1:], 1) if not a.startswith("-") and i not in saltar),
+        "",
+    )
 
     if comando not in COMANDOS and comando != "todo":
         print(f"comando desconocido: {comando}\n")
@@ -426,7 +457,11 @@ def main():
     print(f"\033[2mvault: {vault.raiz} — {len(vault.notas)} notas\033[0m")
 
     problemas = 0
-    for fn in (COMANDOS.values() if comando == "todo" else [COMANDOS[comando]]):
+    if comando == "todo":
+        elegidas = [fn for nombre, fn in COMANDOS.items() if nombre not in FUERA_DE_TODO]
+    else:
+        elegidas = [COMANDOS[comando]]
+    for fn in elegidas:
         problemas += fn(vault, meses) or 0
     if problemas:
         print(f"\033[1m{problemas} problema(s) de higiene — el índice está roto\033[0m")

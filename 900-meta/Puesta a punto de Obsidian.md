@@ -38,7 +38,7 @@ El flujo de trabajo y el orden en que se usan están en [[Recorrido del vault en
 | `<leader>ob` / `<leader>ol` | Backlinks / enlaces salientes |
 | `<leader>og` | Tags |
 | `<leader>or` | Renombrar arrastrando los enlaces |
-| `<leader>oc` | **`consultas.py`** — menú de las siete consultas |
+| `<leader>oc` | **`consultas.py`** — menú de las consultas |
 | `<leader>ot` `<leader>oi` `<leader>ox` | Plantilla acá · índice de la nota · alternar checkbox |
 | `<leader>om` / `<leader>oz` | Render on/off · modo zen |
 | `<leader>os` | Corrector es+en on/off. Sugerencias con `z=`, agregar palabra con `zg` |

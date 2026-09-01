@@ -43,18 +43,17 @@ Cuatro entradas, según qué recordás:
 
 | Recordás | Tecla |
 |---|---|
-| El nombre del archivo | `<leader>oq` |
-| Un alias | `<leader>oa` |
+| El nombre o un alias | `<leader>oq` |
 | Una frase del contenido | `<leader>oo` |
 | El tag | `<leader>og` |
 | Nada, querés mirar | `<leader>e` |
 
-> [!warning] `<leader>oq` **no** busca por alias
-> `Obsidian quick_switch` es un picker de archivos: filtra por ruta y nombre, y no abre el frontmatter. Buscar `handshake` ahí no encuentra [[TCP - establecimiento de la conexión]] por más que lo tenga de alias.
+`<leader>oq` cubre casi todo. Busca por nombre **y por alias en la misma lista**, así que `time-based` llega a [[SQLi - canal temporal ciego]] y `handshake` a [[TCP - establecimiento de la conexión]] aunque ninguno de los dos archivos se llame así. Por eso [[Convenciones de nombres]] exige el alias en el otro idioma.
 
-Los alias los resuelve el **LSP** del plugin, que sí lee frontmatter. `<leader>oa` abre sus símbolos de espacio de trabajo, y ahí `time-based` llega a [[SQLi - canal temporal ciego]] y `handshake` a la nota de TCP. Por eso [[Convenciones de nombres]] exige el alias en el otro idioma — pero hay que buscarlo por la tecla correcta.
+> [!note] Por qué no es el `quick_switch` del plugin
+> `Obsidian quick_switch` es un picker de **archivos**: filtra ruta y nombre y no abre el frontmatter, así que ningún alias era alcanzable desde ahí. `<leader>oq` usa en su lugar un picker propio que lee los `aliases:` de cada nota y los suma al texto buscable. Una sola búsqueda, no dos.
 
-Dónde sí funcionan los alias sin hacer nada: al **seguir un wikilink** con `<CR>`. `[[three-way handshake]]` abre la nota aunque no se llame así, porque esa resolución va por otro camino que el picker.
+Los alias también resuelven al **seguir un wikilink** con `<CR>`: `[[three-way handshake]]` abre la nota aunque no se llame así.
 
 Los de LazyVim siguen disponibles y a veces sirven más: `<leader>ff` archivos, `<leader>/` grep crudo, `<leader>fr` recientes, `<leader>,` buffers abiertos.
 

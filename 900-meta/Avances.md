@@ -27,7 +27,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Cheatsheets** — 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio
 - **Contenido rojo — web (cont.)** — 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules
 - **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
-- **Consultas cruzadas** — `900-meta/consultas.py`, siete comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
+- **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos. `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
 - **Vault de engagements** — Sin crear
 
 ## Bitácora

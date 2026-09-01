@@ -109,7 +109,7 @@ Las dos de rutina:
 | `revalidacion` | Qué tradecraft lleva más de seis meses sin probar |
 | `higiene` | Frontmatter inválido y enlaces rotos |
 
-Las siete están explicadas en [[Consultas del vault]].
+Están todas explicadas en [[Consultas del vault]].
 
 ## Cómo se usa esto
 
