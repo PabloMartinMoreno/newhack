@@ -110,7 +110,25 @@ for p in 22 80 443 445 3389; do (echo >/dev/tcp/10.10.10.5/$p) 2>/dev/null && ec
 
 Sólo distinguen abierto de todo lo demás: sin `raw sockets` no hay forma de separar *cerrado* de *filtrado*, porque el sistema devuelve un error único para las dos cosas.
 
-## 8. Puerto abierto → a dónde seguir en el vault
+## 8. Qué entrega cada puerto UDP
+
+Vale sin importar con qué se haya escaneado. En orden de retorno:
+
+| Puerto | Servicio | Qué se saca |
+|---|---|---|
+| 161 | SNMP | Con `public`: interfaces, procesos, usuarios |
+| 53 | DNS | Versión, recursión abierta, transferencia de zona |
+| 137 | NetBIOS | Nombre de máquina y de dominio, sin credencial |
+| 88 | Kerberos | Confirma controlador de dominio |
+| 500 | IKE | VPN, y a veces modo agresivo |
+| 623 | IPMI | Gestión fuera de banda; hashes sin autenticar |
+| 69 | TFTP | Archivos sin autenticación |
+| 123 | NTP | `monlist`: lista de pares que hablaron |
+| 1900 | SSDP | Inventario de dispositivos de la red |
+
+Son los que justifican pagar el coste del sondeo UDP de § 5: pocos, conocidos, y varios entregan sin credencial.
+
+## 9. Puerto abierto → a dónde seguir en el vault
 
 El reconocimiento termina donde empieza otro dominio, sea cual sea la herramienta que encontró el puerto.
 

@@ -75,7 +75,7 @@ Nmap imprime seis estados, no tres. Confundir los tres de en medio es el error d
 >
 > Sin `--reason` los tres `filtered` se leían igual y el `ttl 63` —un salto de router— tampoco aparecía.
 
-## 3. Tipos de sondeo
+## 3. Qué sondeo y contra qué
 
 | Flag | Sondeo |
 |---|---|
@@ -84,11 +84,14 @@ Nmap imprime seis estados, no tres. Confundir los tres de en medio es el error d
 | `-sU` | UDP |
 | `-sA` | `ACK` |
 | `-sF` `-sN` `-sX` | `FIN`, sin banderas, Xmas |
+| `-sI` | Idle scan, por host zombi |
 | `-sn` | Sin escaneo de puertos |
 | `-Pn` | Sin descubrimiento |
 | `-6` | IPv6 |
 
-## 4. Objetivos y puertos
+Qué manda cada uno y qué significa cada respuesta: [[Sondeos de red - matriz de referencia]].
+
+**`-sU` conviene con `-sV`.** Un datagrama vacío casi nunca obtiene respuesta; nmap trae cargas válidas por protocolo y las manda cuando reconoce el puerto, así que la identificación mejora mucho el resultado en vez de sólo agregarle detalle. Los puertos UDP que pagan están en [[Sondeos de red - matriz de referencia]] § 8.
 
 | Flag | Qué hace |
 |---|---|
@@ -105,7 +108,7 @@ Nmap imprime seis estados, no tres. Confundir los tres de en medio es el error d
 
 Por defecto son **1000 puertos, no todos**: el falso negativo más común del dominio.
 
-## 5. Descubrimiento
+## 4. Descubrimiento
 
 | Flag | Sondeo | Atraviesa |
 |---|---|---|
@@ -118,7 +121,7 @@ Por defecto son **1000 puertos, no todos**: el falso negativo más común del do
 
 `-PR` es exacto y no lo filtra nadie: el firewall vive por encima de la capa de enlace. Fuera del segmento se combinan varios — basta que uno vuelva.
 
-## 6. Identificación
+## 5. Identificación
 
 | Flag | Qué hace | Ruido |
 |---|---|---|
@@ -132,7 +135,7 @@ Por defecto son **1000 puertos, no todos**: el falso negativo más común del do
 
 `-A` es lo más ruidoso que se puede escribir en una sola letra. `--reason` no manda un paquete de más: sólo imprime lo que ya sabía.
 
-## 7. Temporización y evasión
+## 6. Temporización y evasión
 
 | Flag | Efecto |
 |---|---|
@@ -153,7 +156,7 @@ En UDP la velocidad **corrompe el resultado**, no sólo hace ruido: la limitaci�
 
 Los señuelos no ocultan nada frente a una detección por agregación en el host que escanea: el proceso local sigue abriendo el mismo abanico. Ver [[Abanico de conexiones fallidas desde un host]].
 
-## 8. NSE por servicio
+## 7. NSE por servicio
 
 Lo que paga, por puerto. `-sC` corre la categoría `default`, que ya cubre bastante de esto.
 
@@ -224,13 +227,7 @@ Categorías, de menos a más agresiva:
 > [!warning] `vuln` y `exploit` no son reconocimiento
 > Mandan cargas de explotación. Correrlos sin autorización explícita para explotar es salirse del alcance de un engagement de reconocimiento.
 
-## 9. Qué hacer con lo que encontraste
-
-El enrutamiento de puerto abierto → dominio del vault no es de nmap: sirve igual si el puerto lo encontró [[masscan]] o un `for` en bash. Vive en [[Sondeos de red - matriz de referencia]] § 8.
-
-Lo que sí es de nmap: `ssl-cert` en el 443 de un controlador de dominio suele dar el FQDN y el dominio, y es la entrada más barata a [[MOC - AD enumeración]].
-
-## 10. Salida y reanudación
+## 8. Salida y reanudación
 
 | Flag | Qué da |
 |---|---|
@@ -275,31 +272,19 @@ awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para
 >
 > `sort -un` importa cuando hay varios hosts en el mismo archivo: sin él los puertos repetidos se pasan repetidos a `-p`.
 
-### El XML a HTML legible
+## 9. El XML a HTML legible
 
 → [[XML de escaneo a HTML]]
 
 `xsltproc` y `lynx` convierten el `-oX` en un informe que se lee. Ahí viven también `--webxml`, `--stylesheet` y `--no-stylesheet`: son flags de nmap, pero sólo importan en el momento de convertir, y la conversión sirve igual para [[masscan]].
 
-## 11. Cargas UDP por puerto
+## 10. Qué hacer con lo que encontraste
 
-Un datagrama vacío casi nunca obtiene respuesta. Nmap manda una carga válida por protocolo cuando la conoce — por eso `-sV` sobre UDP mejora tanto el resultado.
+`ssl-cert` en el 443 de un controlador de dominio suele dar el FQDN y el dominio: es la entrada más barata a [[MOC - AD enumeración]].
 
-Los que vale la pena barrer, en orden de retorno:
+El enrutamiento completo de puerto abierto → dominio del vault no es de nmap —sirve igual si el puerto lo encontró [[masscan]] o un `for` en bash— y vive en [[Sondeos de red - matriz de referencia]] § 9.
 
-| Puerto | Servicio | Qué se saca |
-|---|---|---|
-| 161 | SNMP | Con `public`: interfaces, procesos, usuarios |
-| 53 | DNS | Versión, recursión abierta, transferencia de zona |
-| 137 | NetBIOS | Nombre de máquina y de dominio, sin credencial |
-| 88 | Kerberos | Confirma controlador de dominio |
-| 500 | IKE | VPN, y a veces modo agresivo |
-| 623 | IPMI | Gestión fuera de banda; hashes sin autenticar |
-| 69 | TFTP | Archivos sin autenticación |
-| 123 | NTP | `monlist`: lista de pares que hablaron |
-| 1900 | SSDP | Inventario de dispositivos de la red |
-
-## 12. Cuando nmap no alcanza
+## 11. Cuando nmap no alcanza
 
 | Situación | Ir a |
 |---|---|
