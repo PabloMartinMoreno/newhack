@@ -10,7 +10,7 @@ tags:
   - dominio/red
 ---
 
-# XML de escaneo - matriz de referencia
+# XML de escaneo a HTML
 
 > [!info] Referencia pura, no un zettel
 > Cómo se convierte la salida XML de un escaneo en algo que se lee. Sirve para [[nmap]] y para [[masscan]], que emite XML compatible — por eso vive acá y no adentro de la matriz de ninguna de las dos.

@@ -277,7 +277,7 @@ awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para
 
 ### El XML a HTML legible
 
-→ [[XML de escaneo - matriz de referencia]]
+→ [[XML de escaneo a HTML]]
 
 `xsltproc` y `lynx` convierten el `-oX` en un informe que se lee. Ahí viven también `--webxml`, `--stylesheet` y `--no-stylesheet`: son flags de nmap, pero sólo importan en el momento de convertir, y la conversión sirve igual para [[masscan]].
 
