@@ -15,6 +15,7 @@ El nombre de archivo es el identificador del enlace. Cambiarlo después cuesta; 
 
 | Carpeta | Patrón | Ejemplo |
 |---|---|---|
+| `050-teoria/` | `<sistema> - <pieza>` | `HTTP - delimitación del cuerpo` |
 | `100-notas/` | Frase declarativa, no sustantivo suelto | `La latencia como canal de datos` |
 | `200-fuentes/` | `@` + slug del origen | `@portswigger-sqli-labs` |
 | `300-mapas/` | `MOC - <dominio>` | `MOC - SQL injection` |
@@ -60,6 +61,7 @@ Toda nota cuyo título esté en un idioma **debe** llevar el término del otro i
 ## Reglas
 
 - **Prefijo de clase en tradecraft.** `SQLi - canal temporal ciego`, no `Canal temporal ciego`. Agrupa alfabéticamente y desambigua el autocompletado.
+- **Prefijo de sistema en teoría**, por la misma razón. El sistema va en inglés porque es de corpus externo (`HTTP`, `TLS`, `Kerberos`); la pieza en español porque es tu descomposición. Los nombres de campo y de cabecera se escriben con su capitalización oficial dentro del cuerpo: `Transfer-Encoding`, no `transfer encoding`. La distinción con `100-notas/` es de género: la teoría **describe un sistema externo**, el zettel **afirma un principio propio**. Si el título es una frase declarativa que podrías defender vos, es zettel.
 - **Un alias, una nota dueña.** Ningún alias puede vivir en dos notas: Obsidian resuelve `[[alias]]` arbitrariamente y los links se rompen en silencio. Dueña = la nota cuyo nombre **es** esa cosa.
 - **Aliases obligatorios** donde el nombre canónico no es el que se escribe al enlazar: en `T1003.001 - LSASS Memory` van `T1003.001` y `Volcado de memoria de LSASS`.
 - **Tildes en nombres de archivo**: sin problema en Linux y con `rg`. El único escenario que las rompe es sincronizar a macOS, que normaliza Unicode distinto y duplica archivos. Si eso nunca entra en juego, no son un tema.

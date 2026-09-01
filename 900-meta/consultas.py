@@ -321,6 +321,8 @@ def higiene(vault, _):
             if not n.fm.get("telemetria"):
                 filas.append((n.rel, "tradecraft sin telemetria — regla 3, la bisagra"))
             filas += fecha_o_nunca(n, "probado")
+        if n.tipo == "teoria" and not n.fm.get("habilita"):
+            filas.append((n.rel, "teoria sin habilita — huérfana, es un apunte"))
         if n.tipo == "deteccion":
             filas += fecha_o_nunca(n, "validada")
             forma = n.fm.get("forma")

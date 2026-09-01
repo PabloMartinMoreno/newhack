@@ -21,7 +21,7 @@ Si algo de este archivo contradice esas notas, **ganan esas notas** — se actua
 
 ## No negociable
 
-1. **Regla de filtro.** Si la nota no responde *"cuándo elijo esto en vez de la alternativa"*, es un payload. No va al vault: va a una matriz en `900-meta/` o a un repo.
+1. **Regla de filtro.** Si la nota no responde *"cuándo elijo esto en vez de la alternativa"*, es un payload. No va al vault: va a una matriz en `900-meta/` o a un repo. La teoría (`050-teoria/`) tiene su propia regla porque reprueba esta: *"¿qué ataque deja de tener sentido si no sabés esto?"*, declarada en `habilita:` y verificada por `higiene`.
 2. **Una nota por eje, no por combinación.** Las técnicas grandes son intersecciones de ejes ortogonales.
 3. **`telemetria:`** es el mismo campo en tradecraft y en detecciones. Es la bisagra operativa; sin ella la fusión es nominal.
 4. **`opsec:`, `probado:`, `contexto:`** en toda nota de tradecraft. El conocimiento rojo caduca; sin esos campos el vault miente. `probado:` nace en `nunca` y **solo** cambia a una fecha cuando la técnica se corrió en un laboratorio y funcionó — poner ahí la fecha de escritura miente peor que dejar el campo vacío.

@@ -31,6 +31,7 @@ Si solo se enlaza por técnica, el vault es dos vaults con una etiqueta común.
 | Carpeta | Contenido | Unidad atómica |
 |---|---|---|
 | `000-inbox/` | Captura cruda sin procesar. Se vacía, no se acumula. | — |
+| `050-teoria/` | El sustrato que los ataques presuponen: protocolos y tecnologías (HTTP, TLS, Kerberos, DNS, el DOM). Upstream de todo lo demás. | Una pieza de un sistema |
 | `100-notas/` | Zettels conceptuales: cómo funciona X, por qué falla Y. Agnósticos de bando. | Una idea |
 | `200-fuentes/` | Papers, writeups, charlas, código de terceros. Literatura, no conocimiento. | Una fuente |
 | `300-mapas/` | MOCs por dominio. **Árboles de decisión**, no listas de enlaces. | Un dominio |
@@ -58,6 +59,18 @@ Si solo se enlaza por técnica, el vault es dos vaults con una etiqueta común.
 > Si la respuesta es no, lo que tenés es un payload, no un zettel.
 
 Esa distinción es la que decide si el vault sigue siendo útil a las 500 notas.
+
+### La regla de filtro de la teoría
+
+La teoría **reprueba** la regla de arriba: `Transfer-Encoding` no se elige en vez de una alternativa. Necesita su propia pregunta, igual de filosa, o `050-teoria/` degenera en una copia de MDN.
+
+> [!important] Antes de crear una nota de teoría
+> **¿Qué ataque deja de tener sentido si no sabés esto?**
+> Si no hay respuesta, es un apunte de estudio, no teoría del vault.
+
+Y no queda en retórica: se declara en el campo `habilita:`, con enlaces a tradecraft, MOCs o detecciones ya escritas. Copia la **forma** de `telemetria:` —un campo declarado que `higiene` verifica— pero no es una tercera bisagra: las bisagras unen rojo con azul, y esto es una dependencia de abajo hacia arriba. La teoría apunta hacia afuera y los backlinks dan el reverso, así que ninguna nota existente necesita modificarse para que una nota de teoría se integre. `habilita: []` es teoría huérfana y `higiene` la rechaza.
+
+La dirección importa: si el enlace fuera de tradecraft hacia teoría, agregar una pieza de HTTP obligaría a editar decenas de notas. Así, agregar teoría cuesta una nota.
 
 ## Una nota por eje, no por combinación
 

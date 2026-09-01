@@ -17,7 +17,7 @@ Un solo esquema para todo el vault. La fusión rojo/azul depende de que **ambos 
 ## Campos comunes a toda nota
 
 ```yaml
-tipo:          # zettel | tradecraft | deteccion | telemetria | tecnica
+tipo:          # zettel | teoria | tradecraft | deteccion | telemetria | tecnica
                # superficie | entidad | fuente | hallazgo | moc | procedimiento | meta
 aliases: []
 tags: []
@@ -119,6 +119,20 @@ Nota paraguas: qué es, por qué existe, a qué apunta. **Sin contenido operativ
 
 > [!tip] Web usa CWE + WSTG, no ATT&CK
 > Para web, ATT&CK es demasiado grueso: todo SQLi cae en `T1190` y no sirve de nada. El identificador canónico es **CWE-89 + WSTG** (`WSTG-INPV-05`). Misma lógica que ATT&CK en infra: no inventar taxonomía propia si ya existe una compartida.
+
+### `teoria` — el sustrato
+
+```yaml
+---
+tipo: teoria
+habilita: ["[[Request smuggling - CL.TE y TE.CL]]", "[[MOC - Web cache]]"]
+relacionadas: ["[[HTTP - el modelo de conexión]]"]
+---
+```
+
+`habilita:` es **obligatorio y no puede estar vacío**. Es la regla de filtro de la teoría hecha campo: qué ataque del vault deja de tener sentido sin esta pieza. Apunta a tradecraft, MOCs o detecciones ya escritas; los backlinks dan el reverso, así que agregar teoría no obliga a editar nada aguas arriba.
+
+Cuerpo: **Qué dice la especificación · Dónde el estándar deja lugar · Qué habilita · Cómo se ve en la práctica**. Sin payloads: la sintaxis explotable sigue viviendo en las matrices.
 
 ### `hallazgo` — biblioteca de informes
 
