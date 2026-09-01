@@ -275,7 +275,11 @@ awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para
 >
 > `sort -un` importa cuando hay varios hosts en el mismo archivo: sin él los puertos repetidos se pasan repetidos a `-p`.
 
-Convertir el `-oX` a un informe HTML legible: [[XML de escaneo - matriz de referencia]]. Ahí viven también `--webxml`, `--stylesheet` y `--no-stylesheet`, que son flags de nmap pero sólo importan en el momento de convertir.
+### El XML a HTML legible
+
+→ [[XML de escaneo - matriz de referencia]]
+
+`xsltproc` y `lynx` convierten el `-oX` en un informe que se lee. Ahí viven también `--webxml`, `--stylesheet` y `--no-stylesheet`: son flags de nmap, pero sólo importan en el momento de convertir, y la conversión sirve igual para [[masscan]].
 
 ## 11. Cargas UDP por puerto
 
