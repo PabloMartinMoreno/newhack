@@ -69,47 +69,47 @@ Un host con todo `filtered` menos dos puertos `closed` **está vivo**, aunque el
 
 ## 4. Objetivos y puertos
 
-```
--p-                    los 65535
--p 1-1000              rango
--p 22,80,443,3389      lista
--p U:53,161,T:80,445   mezclar UDP y TCP en una corrida
---top-ports 1000       los más frecuentes
---open                 mostrar sólo los abiertos
--iL objetivos.txt      desde archivo
--iL <(...)             desde la salida de otro comando
---exclude 10.0.0.1     excluir
--n                     sin resolución DNS inversa (mucho más rápido)
-```
+| Flag | Qué hace |
+|---|---|
+| `-p-` | Los 65535 |
+| `-p 1-1000` | Rango |
+| `-p 22,80,443,3389` | Lista |
+| `-p U:53,161,T:80,445` | UDP y TCP en una corrida |
+| `--top-ports 1000` | Los más frecuentes |
+| `--open` | Mostrar sólo los abiertos |
+| `-iL objetivos.txt` | Desde archivo |
+| `-iL <(...)` | Desde la salida de otro comando |
+| `--exclude 10.0.0.1` | Excluir |
+| `-n` | Sin DNS inversa — mucho más rápido |
 
 Por defecto son **1000 puertos, no todos**: el falso negativo más común del dominio.
 
 ## 5. Descubrimiento
 
-```
--PR             ARP (por defecto dentro del segmento)
--PS22,80,443    SYN a esos puertos
--PA80           ACK
--PE             echo ICMP
--PP             marca de tiempo ICMP
--PU40125        UDP a un puerto improbable
-```
+| Flag | Sondeo | Atraviesa |
+|---|---|---|
+| `-PR` | ARP | Todo, dentro del segmento |
+| `-PS22,80,443` | `SYN` a esos puertos | Filtros que descartan ICMP |
+| `-PA80` | `ACK` | Firewalls sin estado |
+| `-PE` | Echo ICMP | Poco: es lo primero que se bloquea |
+| `-PP` | Marca de tiempo ICMP | A veces, donde el echo no |
+| `-PU40125` | UDP a un puerto improbable | Reglas que sólo miran TCP |
 
 `-PR` es exacto y no lo filtra nadie: el firewall vive por encima de la capa de enlace. Fuera del segmento se combinan varios — basta que uno vuelva.
 
 ## 6. Identificación
 
-```
--sV                      versión de servicio
---version-intensity 0-9  0 = sólo banner, 9 = todas las sondas
--sC                      = --script=default
--O                       sistema operativo
---osscan-guess           adivinar cuando no está seguro
--A                       -sV -O -sC --traceroute
---reason                 por qué clasificó así cada puerto
-```
+| Flag | Qué hace | Ruido |
+|---|---|---|
+| `-sV` | Versión de servicio | Alto |
+| `--version-intensity 0-9` | 0 = sólo banner, 9 = todas las sondas | Según el número |
+| `-sC` | Igual a `--script=default` | Alto |
+| `-O` | Sistema operativo | Medio |
+| `--osscan-guess` | Adivinar cuando no está seguro | Medio |
+| `-A` | `-sV -O -sC --traceroute` | **El máximo** |
+| `--reason` | Por qué clasificó así cada puerto | Ninguno |
 
-`-A` es lo más ruidoso que se puede escribir en una sola letra.
+`-A` es lo más ruidoso que se puede escribir en una sola letra. `--reason` no manda un paquete de más: sólo imprime lo que ya sabía.
 
 ## 7. Temporización y evasión
 
@@ -164,7 +164,20 @@ nmap --script-updatedb                 # tras agregar scripts propios
 nmap --script smb-enum-shares --script-args smbusername=u,smbpassword=p -p445 IP
 ```
 
-Categorías por agresividad: `safe` · `default` · `discovery` · `intrusive` · `vuln` · `exploit` · `dos`.
+Categorías, de menos a más agresiva:
+
+| Categoría | Qué hace | En reconocimiento |
+|---|---|---|
+| `safe` | No altera nada ni tumba nada | Sí |
+| `default` | Lo que corre `-sC` | Sí |
+| `discovery` | Pregunta más al servicio | Sí |
+| `version` | Auxiliares de `-sV` | Sí |
+| `auth` | Credenciales por defecto, acceso anónimo | Con cuidado |
+| `brute` | Fuerza bruta de credenciales | No, y bloquea cuentas |
+| `intrusive` | Puede alterar o hacer caer el servicio | No |
+| `vuln` | Comprueba vulnerabilidades conocidas | No |
+| `exploit` | **Explota** | No |
+| `dos` | Tumba el servicio a propósito | Nunca sin pedido escrito |
 
 > [!warning] `vuln` y `exploit` no son reconocimiento
 > Mandan cargas de explotación. Correrlos sin autorización explícita para explotar es salirse del alcance de un engagement de reconocimiento.
@@ -191,16 +204,17 @@ Un `ssl-cert` en el 443 de un controlador de dominio suele dar el FQDN y el domi
 
 ## 10. Salida y reanudación
 
-```
--oA base         los tres formatos a la vez
--oN base.nmap    legible
--oG base.gnmap   grepeable
--oX base.xml     XML
---append-output  no pisar
---resume base.nmap
--v / -vv         resultados a medida que aparecen
---packet-trace   cada paquete: para depurar por qué no sale nada
-```
+| Flag | Qué da |
+|---|---|
+| `-oA base` | Los tres formatos a la vez |
+| `-oN base.nmap` | Legible |
+| `-oG base.gnmap` | Grepeable — el que se parsea |
+| `-oX base.xml` | XML, para importar a otra herramienta |
+| `--append-output` | No pisar lo anterior |
+| `--resume base.nmap` | Retomar un escaneo cortado |
+| `-v` / `-vv` | Resultados a medida que aparecen |
+| `--packet-trace` | Cada paquete: por qué no sale nada |
+| `-d` / `-dd` | Depuración del propio nmap |
 
 `-oA` siempre: rehacer un escaneo largo porque se perdió la salida es el error caro evitable del dominio.
 
@@ -216,13 +230,33 @@ En gnmap los puertos **no** están al principio de línea —van después de `Po
 
 ## 11. Cargas UDP por puerto
 
-Un datagrama vacío casi nunca obtiene respuesta. Nmap manda una carga válida por protocolo cuando la conoce — `-sV` sobre UDP mejora mucho el resultado por eso. Los que vale la pena barrer, en orden de retorno: `53` DNS · `161` SNMP · `137` NetBIOS · `88` Kerberos · `500` IKE · `69` TFTP · `123` NTP · `1900` SSDP · `623` IPMI.
+Un datagrama vacío casi nunca obtiene respuesta. Nmap manda una carga válida por protocolo cuando la conoce — por eso `-sV` sobre UDP mejora tanto el resultado.
+
+Los que vale la pena barrer, en orden de retorno:
+
+| Puerto | Servicio | Qué se saca |
+|---|---|---|
+| 161 | SNMP | Con `public`: interfaces, procesos, usuarios |
+| 53 | DNS | Versión, recursión abierta, transferencia de zona |
+| 137 | NetBIOS | Nombre de máquina y de dominio, sin credencial |
+| 88 | Kerberos | Confirma controlador de dominio |
+| 500 | IKE | VPN, y a veces modo agresivo |
+| 623 | IPMI | Gestión fuera de banda; hashes sin autenticar |
+| 69 | TFTP | Archivos sin autenticación |
+| 123 | NTP | `monlist`: lista de pares que hablaron |
+| 1900 | SSDP | Inventario de dispositivos de la red |
 
 ## 12. Cuando nmap no alcanza
 
+| Herramienta | Cuándo | Qué resigna |
+|---|---|---|
+| `masscan` | Rangos enormes, /16 para arriba | Precisión: relee con nmap |
+| `rustscan` | Un host, quiero los abiertos ya | Nada: delega en nmap |
+| `/dev/tcp`, PowerShell | No se puede subir binario | Todo salvo abierto/cerrado |
+
 ```sh
-masscan -p1-65535 10.10.10.0/24 --rate 10000 -oL masscan.txt   # barrido enorme, después nmap encima
-rustscan -a 10.10.10.5 -- -sV -sC                              # frente rápido que delega en nmap
+masscan -p1-65535 10.10.10.0/24 --rate 10000 -oL masscan.txt
+rustscan -a 10.10.10.5 -- -sV -sC
 ```
 
 Sin poder subir binarios al host comprometido, el sondeo se hace a mano:
