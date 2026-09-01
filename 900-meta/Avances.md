@@ -24,7 +24,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Teoría (`050-teoria/`)** — 7 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2) y [[MOC - HTTP]] (3 piezas de 14). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, SMB, el DOM
 - **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 2 matrices, las entidades [[nmap]] · [[masscan]] · [[rustscan]], y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
-- **Cheatsheets** — 98 matrices: 83 web, 9 AD, 4 azules, 2 de red (nmap y sondeos). Indexadas desde el MOC de su dominio
+- **Cheatsheets** — 99 matrices: 83 web, 9 AD, 4 azules, 3 de red (nmap, rustscan y sondeos). Indexadas desde el MOC de su dominio
 - **Contenido rojo — total** — 148 tradecraft, 59 técnicas, 31 detecciones, 49 MOCs, 4 entidades
 - **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
 - **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos (`indice` incluido). `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
