@@ -1,7 +1,7 @@
 ---
 tipo: teoria
 habilita: ["[[SSRF - escaneo de la red interna]]", "[[Barrido de puertos internos desde el servidor de aplicación]]", "[[Race - superación de límite]]", "[[Request smuggling - CL.TE y TE.CL]]"]
-relacionadas: ["[[HTTP - el modelo de conexión]]", "[[HTTP - delimitación del cuerpo]]"]
+relacionadas: ["[[HTTP - el modelo de conexión]]", "[[HTTP - delimitación del cuerpo]]", "[[ICMP - el canal de error de IP]]"]
 aliases:
   - three-way handshake
   - TCP handshake
@@ -36,7 +36,7 @@ Tres consecuencias que se usan después:
 
 ## Dónde el estándar deja lugar
 
-- **La diferencia entre cerrado y filtrado no la define TCP.** Que un puerto sin servicio conteste `RST` o no conteste nada es política del host y de los equipos del medio. TCP sólo garantiza que las dos respuestas son distinguibles — y son distinguibles **por tiempo** incluso cuando la aplicación de arriba no reporta la diferencia.
+- **La diferencia entre cerrado y filtrado no la define TCP.** Que un puerto sin servicio conteste `RST` o no conteste nada es política del host y de los equipos del medio — y cuando el problema es anterior a TCP, quien contesta es [[ICMP - el canal de error de IP]]. TCP sólo garantiza que las dos respuestas son distinguibles — y son distinguibles **por tiempo** incluso cuando la aplicación de arriba no reporta la diferencia.
 - **Cuánto se espera un `SYN-ACK`** es configuración del cliente, no del protocolo. Un timeout de segundos contra un `RST` de milisegundos es una diferencia observable de tres órdenes de magnitud.
 - **Cuándo se envían los bytes.** TCP no define cuándo la capa de arriba vacía el buffer: Nagle, `TCP_NODELAY` y el MSS deciden si tres escrituras salen en tres segmentos o en uno. Nadie prometió una correspondencia entre escritura y paquete.
 - **Dónde termina un mensaje: en ningún lado.** TCP entrega bytes, no mensajes. Puede partir un envío en varios segmentos y juntar varios envíos en uno, y el receptor no tiene forma de saber cuál fue cuál. La delimitación es **enteramente** problema de la capa de arriba.

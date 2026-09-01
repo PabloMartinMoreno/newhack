@@ -21,7 +21,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Contenido rojo — AD** — Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
-- **Teoría (`050-teoria/`)** — HTTP abierto: 3 piezas de 14 + [[MOC - HTTP]]. TCP con su primera pieza, sin MOC todavía. Sistemas sin abrir: TLS, DNS, Kerberos, LDAP, SMB, el DOM
+- **Teoría (`050-teoria/`)** — 6 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP) y [[MOC - HTTP]] (3 piezas de 14). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, SMB, el DOM
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
 - **Cheatsheets** — 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio
 - **Contenido rojo — web (cont.)** — 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules
@@ -802,6 +802,18 @@ Con web prácticamente agotado y AD cerrado, el eje que quedaba sin abrir es el 
 
 `Inicio` estrena la familia **Fundamentos**, arriba de Web. Nueva plantilla, `consultas.py` con el check de teoría huérfana (verificado con una nota de prueba), y `higiene` en exit 0 sobre 431 notas.
 
+### 2026-09-01 — ARP, ICMP y el mapa de red: la teoría deja de ser sólo web
+
+Tres notas de red (ARP, ICMP, TCP) y el mapa que las ordena. Lo que se aprendió abriendo la segunda familia de teoría:
+
+**La regla de admisión funciona y ya rechazó cosas.** ICMP como canal encubierto —túneles y exfiltración sobre `echo`— quedó **sin escribir** porque no hay tradecraft en el vault que lo consuma; lo mismo con `SYN` flood en TCP, que además es DoS y no acceso. Las dos exclusiones quedaron escritas en su nota con el motivo, así que son roadmap y no olvido. Es la primera vez que `habilita:` decide qué *no* se escribe, que era exactamente el punto.
+
+**Los consumidores que justificaron cada nota:** ARP por el `requisitos: acceso-a-la-red-en-el-mismo-dominio-de-difusión` de [[Envenenamiento de resolución de nombres]] —esa línea no significa nada sin saber qué delimita un segmento, y LLMNR es ARP con nombres—; ICMP por la ternaria del escaneo de [[SSRF - escaneo de la red interna]], donde *rápido con error* contra *lento y mudo* es el único bit por petición del canal ciego.
+
+**Se abre [[MOC - Red]] con tres notas, y TCP sigue sin MOC.** No es contradictorio: la unidad de un mapa es el dominio, no el protocolo. Tres protocolos de tres capas distintas ya forman un árbol de decisión real —*¿qué capa contesta?*— mientras que TCP solo, con una pieza escrita, daría un árbol de una rama. Cuando TCP sume ventana, cierre y fragmentación se separa, y `MOC - Red` lo enlaza como hermano.
+
+**El hueco que destapó:** las tres capas comparten un punto ciego y no es de configuración. La telemetría de endpoint del vault arranca por encima de ellas — [[Sysmon EID 3 - NetworkConnect]] ve la conexión, no el ARP que la desvió ni el ICMP que explica los cien fallos. Cubrirlas pide artefactos que `550-telemetria/` no modela: flow logs, conntrack, DAI del switch. Es deuda de telemetría, no de detecciones, y queda anotada en la cara azul del mapa.
+
 ## Pendientes
 
 ### Inmediatos
@@ -848,7 +860,8 @@ Con web prácticamente agotado y AD cerrado, el eje que quedaba sin abrir es el 
 - [x] ~~SID History~~ — cerrado el 2026-08-19 agregando la persistencia por atributo ([[Persistencia por SID History]]) + `4765` + su detección. Ciclo rojo↔azul de AD completo
 - [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
 - [ ] **Teoría de HTTP**: faltan 11 de las 14 piezas. Prioridad por deuda: sintaxis de cabeceras y la línea de petición, que son las que más dominios ya escritos presuponen
-- [ ] **Teoría, sistemas siguientes**: TLS (SNI, verificación de cadena, ALPN), DNS (resolución, rebinding), Kerberos como protocolo (hoy AD lo presupone entero), el DOM y el modelo de ejecución del navegador
+- [ ] **Teoría, sistemas siguientes**: DNS es el de mayor deuda ([[Exfiltración por subdominios de alta entropía]] y [[Sysmon EID 22 - DnsQuery]] ya existen sin nota que explique la resolución). Después TLS (SNI, cadena, ALPN), IPv6/NDP, Kerberos como protocolo, el DOM
+- [ ] **Telemetría de red**: `550-telemetria/` no modela ninguna fuente por debajo del endpoint. Flow logs, conntrack y DAI del switch son el hueco que destapó [[MOC - Red]]; sin ellos la cara azul de ARP e ICMP no se puede escribir
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

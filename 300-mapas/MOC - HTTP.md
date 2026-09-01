@@ -102,6 +102,6 @@ La conclusión transversal es de [[La detección vive en el agregado, no en el e
 
 Escritas 3 de 14. Faltan las once del orden de aprendizaje que todavía no tienen nota — el enlace queda igual, es roadmap explícito. Prioridad por deuda: sintaxis de cabeceras y la línea de petición, porque son las dos que más dominios ya escritos presuponen.
 
-**TCP** tiene su primera pieza escrita ([[TCP - establecimiento de la conexión]]) y todavía no tiene MOC propio: con una sola nota, un árbol de decisión de una rama sería ceremonia vacía. Cuando llegue a cuatro o cinco piezas —ventana y control de flujo, cierre y estados, fragmentación y MSS— se abre `MOC - TCP` y este mapa lo enlaza como sistema hermano en lugar de alojarlo.
+Las capas de abajo viven en [[MOC - Red]] —ARP, ICMP y TCP—, que es lo que hay que leer antes que esto. TCP sigue sin MOC propio: cuando sume ventana y control de flujo, estados de cierre y fragmentación, se separa.
 
 Sistemas sin abrir: TLS, DNS, Kerberos, LDAP, SMB, el DOM.

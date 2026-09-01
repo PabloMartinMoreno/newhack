@@ -13,7 +13,8 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 
 ### Fundamentos
 
-El sustrato que los ataques presuponen. Va primero porque casi ningún dominio ataca al protocolo: atacan el desacuerdo entre dos lecturas del mismo mensaje, y ese desacuerdo no se ve sin la teoría.
+El sustrato que los ataques presuponen. Va primero porque casi ningún dominio ataca al protocolo: atacan el desacuerdo entre dos lecturas del mismo mensaje, y ese desacuerdo no se ve sin la teoría. Se leen de abajo hacia arriba.
+- [[MOC - Red]] — ARP, ICMP y TCP: el segmento como frontera, y de dónde sale cada estado del escaneo
 - [[MOC - HTTP]] — delimitación, conexión, cabeceras, caché, intermediarios
 
 ### Web
