@@ -15,12 +15,13 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 
 - **Estructura de carpetas** — Completa
 - **Documentación de administración (`900-meta/`)** — Completa
-- **Plantillas (`999-plantillas/`)** — 11 tipos, completas
+- **Plantillas (`999-plantillas/`)** — 12 tipos, completas
 - **Notas semilla** — Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC
 - **Contenido rojo — web** — Treinta y cuatro dominios cerrados (lista completa en la bitácora, agrupados por familia en [[Inicio]]). Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP)
 - **Contenido rojo — AD** — Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
+- **Teoría (`050-teoria/`)** — HTTP abierto: 3 piezas de 14 + [[MOC - HTTP]]. Sistemas sin abrir: TLS, DNS, Kerberos, LDAP, SMB, el DOM
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
 - **Cheatsheets** — 97 matrices: 84 web, 9 AD, 4 azules. Indexadas desde el MOC de su dominio
 - **Contenido rojo — web (cont.)** — 134 tradecraft, todos como cheatsheets de criterio; 22 detecciones azules
@@ -787,6 +788,20 @@ Extensión del criterio de la entrada anterior a todo el vault. La sección *Che
 
 Las tablas *Cara azul* de los MOCs web (5 quedan en 141-162) **no** se tocaron: a diferencia de la de AD —donde la columna *Firma* duplicaba el nombre de la detección—, acá la *Firma* es contenido real y la telemetría no tiene alias corto natural. Achicarlas sería perder contenido. `<leader>uw` las cubre. También se recortó la fila web de la tabla de estado de este archivo, que enumeraba los 34 dominios inline (640 cols) — la lista vive en la bitácora y en [[Inicio]].
 
+### 2026-08-28 — La teoría entra al vault: `050-teoria/` y la segunda regla de filtro
+
+Con web prácticamente agotado y AD cerrado, el eje que quedaba sin abrir es el de abajo: **lo que los ataques presuponen y ninguna nota explica**. Treinta y cuatro dominios web escritos y ninguno decía qué es `Transfer-Encoding`.
+
+**Carpeta y tipo nuevos: `050-teoria/`, `tipo: teoria`.** Numerada por debajo de `100-notas/` porque es upstream de todo. Se evaluó meterla en `100-notas/` y se descartó por dos razones: las nueve notas de ahí son **principios propios** en frase declarativa —otro género que una descripción de un sistema externo—, y el volumen las enterraría (HTTP solo son ~14 notas; con TLS, DNS, Kerberos, LDAP y el DOM son cientos). También se descartó `450-superficies/`: eso es producto con superficie de ataque y telemetría propia, y HTTP no emite logs.
+
+**La decisión de fondo: la teoría reprueba la regla de filtro.** "Cuándo elijo esto en vez de la alternativa" no aplica a una pieza de un protocolo. Sin una segunda regla igual de filosa, la carpeta degenera en una copia de MDN en seis meses. La regla que queda escrita en [[Estructura del vault]] es **¿qué ataque deja de tener sentido si no sabés esto?**, y no se queda en retórica: se declara en `habilita:`, obligatorio y no vacío, verificado por `higiene`.
+
+**La dirección del enlace es lo que hace barata la decisión.** `habilita:` va de teoría hacia ataque, nunca al revés. Si `600-tradecraft/` hubiera recibido un campo `teoria:`, cada pieza nueva de HTTP obligaría a editar decenas de notas; así, agregar teoría cuesta exactamente una nota y los backlinks dan el reverso. Copia la forma de `telemetria:` pero **no es una tercera bisagra**: las bisagras unen rojo con azul, esto es una dependencia de abajo hacia arriba.
+
+**Piloto: HTTP, 3 de 14.** [[MOC - HTTP]] con el árbol *qué pieza estoy mirando*, el orden de aprendizaje por dependencia y —la sección que lo salva de ser un índice de tutorial— **qué ataque habilita cada pieza**, que mapea las 14 contra los MOCs ya escritos. Escritas [[HTTP - delimitación del cuerpo]], [[HTTP - el modelo de conexión]] y [[HTTP - el modelo de caché]]: las tres de las que cuelga smuggling, cache y races. Las once restantes quedan enlazadas y vacías, como roadmap explícito.
+
+`Inicio` estrena la familia **Fundamentos**, arriba de Web. Nueva plantilla, `consultas.py` con el check de teoría huérfana (verificado con una nota de prueba), y `higiene` en exit 0 sobre 431 notas.
+
 ## Pendientes
 
 ### Inmediatos
@@ -832,6 +847,8 @@ Las tablas *Cara azul* de los MOCs web (5 quedan en 141-162) **no** se tocaron: 
 - [x] ~~Confianzas entre dominios y bosques~~ — cerrado el 2026-08-19. Cadena de AD completa (sin credencial → bosque)
 - [x] ~~SID History~~ — cerrado el 2026-08-19 agregando la persistencia por atributo ([[Persistencia por SID History]]) + `4765` + su detección. Ciclo rojo↔azul de AD completo
 - [ ] Web: prácticamente agotado (34 dominios). Quedan nichos si aparecen (GraphQL subscriptions, JWT algorithm confusion en detalle, prototype pollution en Python/Ruby)
+- [ ] **Teoría de HTTP**: faltan 11 de las 14 piezas. Prioridad por deuda: sintaxis de cabeceras y la línea de petición, que son las que más dominios ya escritos presuponen
+- [ ] **Teoría, sistemas siguientes**: TLS (SNI, verificación de cadena, ALPN), DNS (resolución, rebinding), Kerberos como protocolo (hoy AD lo presupone entero), el DOM y el modelo de ejecución del navegador
 - [x] ~~Revisar el esquema de `deteccion`~~ — resuelto con `forma:` y `ventana:` el 2026-08-08
 - [x] ~~Deuda taxonómica~~ — saldada. [[File upload - XXE por archivo]] → `CWE-611`, [[LFI - phar deserialization]] → `CWE-502`. En ambos casos la `clase:` apuntaba al vector de entrada y ahora apunta a la vulnerabilidad; el MOC de origen los sigue indexando
 - [ ] [[MOC - Active Directory]]: delegaciones, confianzas y relay NTLM. ADCS existe como técnica y como matriz, falta el resto de las plantillas abusables

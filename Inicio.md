@@ -11,6 +11,11 @@ Vault único **rojo + azul**. La técnica agrupa; la telemetría une. Ver [[Estr
 
 ## Mapas
 
+### Fundamentos
+
+El sustrato que los ataques presuponen. Va primero porque casi ningún dominio ataca al protocolo: atacan el desacuerdo entre dos lecturas del mismo mensaje, y ese desacuerdo no se ve sin la teoría.
+- [[MOC - HTTP]] — delimitación, conexión, cabeceras, caché, intermediarios
+
 ### Web
 
 Dentro de web, los MOCs están por **mecanismo**, no por nombre: la pregunta que abre cada familia es dónde falla la aplicación, no cómo se llama el bug. El orden va de lo clásico a lo avanzado.
