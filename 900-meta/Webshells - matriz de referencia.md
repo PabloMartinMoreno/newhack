@@ -47,7 +47,7 @@ Reverse shell en Python si no hay bash conveniente.
 
 ## Estabilizar la shell
 
-```
+```sh
 python3 -c 'import pty;pty.spawn("bash")'
 export TERM=xterm
 Ctrl+Z; stty raw -echo; fg; Enter

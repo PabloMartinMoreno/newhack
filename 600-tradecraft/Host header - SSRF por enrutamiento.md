@@ -29,7 +29,7 @@ Es la rama que convierte el `Host` en un vector de [[MOC - SSRF]] sin necesitar 
 
 En una infraestructura con muchos sitios detrás de un mismo proxy, el proxy usa el `Host` para saber a cuál reenviar —el enrutamiento por nombre de host virtual—. Si el proxy confía en el `Host` sin restringirlo a los dominios públicos, el atacante lo apunta a un servicio interno:
 
-```
+```http
 GET / HTTP/1.1
 Host: servicio-interno
 ```

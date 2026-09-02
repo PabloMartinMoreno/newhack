@@ -29,7 +29,7 @@ Es el uso más directo del abuso de Host y el de mayor impacto: termina en toma 
 
 El servidor genera el enlace de restablecimiento con un token de un solo uso y un dominio. Muchas implementaciones toman ese dominio del **`Host` de la petición** en vez de una configuración fija, porque es lo más cómodo —"usá el host con el que te pidieron"—. El atacante pide el reset de la cuenta de la víctima con un `Host` propio:
 
-```
+```http
 POST /reset HTTP/1.1
 Host: atacante.com
 ...

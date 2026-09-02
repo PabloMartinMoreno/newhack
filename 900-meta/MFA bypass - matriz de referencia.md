@@ -39,7 +39,7 @@ Lo más barato y lo que más veces funciona.
 
 Si el paso 3 responde, la sesión ya era válida y el segundo factor era decorativo.
 
-```
+```http
 POST /login/2fa/skip
 GET  /login/2fa?skip=true
 ```
@@ -55,7 +55,7 @@ Manipulación de la respuesta del lado del cliente: solo funciona si la decisió
 
 ## 2. Manipular la verificación
 
-```
+```http
 POST /login/2fa
 {"code": "123456", "user": "victima"}
 ```

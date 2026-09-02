@@ -19,7 +19,7 @@ tags:
 
 Todos estos tocan la lista de cuentas. Alcanza con que uno filtre:
 
-```
+```http
 POST /login          POST /register
 POST /forgot         POST /reset
 POST /api/users/check
@@ -107,7 +107,7 @@ Y buscar las del producto concreto en su documentación, que suele publicarlas.
 
 ### Destino controlado por el atacante
 
-```
+```http
 POST /forgot
 email=victima@x.com&email=atacante@x.com
 ```
@@ -120,7 +120,7 @@ Parámetro duplicado: la validación lee el primero, el envío usa el segundo.
 
 Parámetro de destino, cuando existe.
 
-```
+```http
 POST /forgot
 Host: atacante.com
 X-Forwarded-Host: atacante.com

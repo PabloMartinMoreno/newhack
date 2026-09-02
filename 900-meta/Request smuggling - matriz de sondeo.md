@@ -28,7 +28,7 @@ No confirma el ataque, detecta la ambigüedad sin dañar nada. La idea: construi
 
 **CL.TE** — el frente usa `Content-Length`, el back `Transfer-Encoding`:
 
-```
+```http
 POST / HTTP/1.1
 Host: objetivo.com
 Content-Length: 4
@@ -43,7 +43,7 @@ El frente reenvía 4 bytes (`1\r\nA\r\n` recortado); el back sigue el chunked, l
 
 **TE.CL** — al revés:
 
-```
+```http
 POST / HTTP/1.1
 Host: objetivo.com
 Content-Length: 6
@@ -65,7 +65,7 @@ Solo después de la detección por tiempo, y con cuidado. Dos peticiones: la pri
 
 El patrón de confirmación seguro manda las dos peticiones **uno mismo**, en la misma conexión, para no tocar a terceros:
 
-```
+```http
 POST / HTTP/1.1
 Host: objetivo.com
 Content-Length: 35
@@ -127,7 +127,7 @@ Para [[Request smuggling - desincronización del cliente]]. Se buscan endpoints 
 
 Endpoints que no esperan cuerpo: archivos estáticos, redirecciones (`301`/`302`), manejadores de error, `GET` con cuerpo, `OPTIONS`, `TRACE`.
 
-```
+```http
 POST /static/imagen.png HTTP/1.1
 Host: objetivo.com
 Content-Length: 34

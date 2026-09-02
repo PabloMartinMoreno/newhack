@@ -17,7 +17,7 @@ tags:
 
 Lo evidente, y donde ya buscan todos.
 
-```
+```http
 Content-Type: application/xml
 Content-Type: text/xml
 Content-Type: application/soap+xml

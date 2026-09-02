@@ -19,7 +19,7 @@ Confirmada la desincronización, el sobrante controlado se antepone a la siguien
 
 El uso más simple: esconder en el sobrante una petición a un endpoint que el frente bloquea. El frente solo ve la petición externa —permitida—; el back procesa la escondida.
 
-```
+```http
 POST / HTTP/1.1
 Host: objetivo.com
 Content-Length: 60
@@ -38,7 +38,7 @@ El frente ve un `POST /`; el back procesa el `GET /admin` que aquel bloqueaba. S
 
 Anteponer un prefijo que hace que la petición de la víctima quede **almacenada** en algún lugar que el atacante pueda leer: un campo de comentario, un perfil, un parámetro de búsqueda que se refleje.
 
-```
+```http
 POST /comentario HTTP/1.1
 Host: objetivo.com
 Content-Length: 320

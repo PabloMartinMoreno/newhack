@@ -23,7 +23,7 @@ GET  POST  PUT  PATCH  DELETE  HEAD  OPTIONS  TRACE
 
 `OPTIONS` suele revelar qué verbos acepta la ruta, incluidos los que la interfaz nunca usa. `HEAD` a veces pasa filtros escritos solo para `GET` y confirma la existencia del recurso.
 
-```
+```http
 X-HTTP-Method-Override: PUT
 X-Method-Override: DELETE
 _method=PUT
@@ -33,14 +33,14 @@ Sobreescritura de método. Muchos marcos de trabajo la respetan y muchos filtros
 
 ## Cabeceras
 
-```
+```http
 X-Original-URL: /admin/users
 X-Rewrite-URL: /admin/users
 ```
 
 Se pide `/` con la cabecera puesta. Si hay un proxy que enruta por ella, el control aplicado a la ruta pedida no se aplica a la ruta servida. Es la discrepancia clásica proxy/aplicación.
 
-```
+```http
 X-Forwarded-For: 127.0.0.1
 X-Real-IP: 127.0.0.1
 X-Originating-IP: 127.0.0.1
@@ -49,7 +49,7 @@ X-Remote-Addr: 127.0.0.1
 
 Contra controles por IP que confían en cabeceras. Aparece en paneles restringidos "a la red interna".
 
-```
+```http
 X-Forwarded-Host: interno
 Referer: https://objetivo/admin/
 ```

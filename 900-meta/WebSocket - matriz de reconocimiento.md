@@ -30,7 +30,7 @@ Buscar en el JS: `grep -oE 'wss?://[^"'\'']*'` sobre los scripts.
 
 ## 2. Anatomía del handshake
 
-```
+```http
 GET /chat HTTP/1.1
 Host: objetivo.com
 Upgrade: websocket

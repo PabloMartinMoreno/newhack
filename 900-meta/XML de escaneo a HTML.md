@@ -37,7 +37,7 @@ Un solo argumento alcanza: xsltproc respeta la instrucción embebida en el propi
 
 **`-o` va antes de los posicionales** en la forma explícita. Si no, se lo lee como otro archivo de entrada:
 
-```
+```sh
 $ xsltproc hoja.xsl target.xml -o salida.html
 warning: failed to load external entity "-o"
 unable to parse -o
@@ -45,7 +45,7 @@ unable to parse -o
 
 **La ruta de la hoja viaja adentro del XML.** Si escaneás en una máquina y armás el informe en otra, `nmap.xsl` no existe del otro lado:
 
-```
+```sh
 $ xsltproc target.xml -o target.html
 warning: failed to load external entity "nmap.xsl"
 xsltParseStylesheetProcess : document is not a stylesheet

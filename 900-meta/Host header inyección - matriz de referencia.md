@@ -26,7 +26,7 @@ Si `canario.com` aparece en la respuesta —en un enlace, una redirección, un c
 
 ## 1. Host directo
 
-```
+```http
 GET / HTTP/1.1
 Host: atacante.com
 ```
@@ -37,7 +37,7 @@ Si se acepta y se refleja o enruta, no hay validación. Es la prueba más simple
 
 La más frecuente cuando el `Host` directo se valida pero el reenvío no:
 
-```
+```http
 GET / HTTP/1.1
 Host: objetivo.com
 X-Forwarded-Host: atacante.com
@@ -54,7 +54,7 @@ La aplicación valida el `Host` real —correcto— pero construye el enlace o t
 
 Cuando el frente y el back eligen un `Host` distinto de dos:
 
-```
+```http
 Host: objetivo.com
 Host: atacante.com
 ```
@@ -79,7 +79,7 @@ Host: objetivo.com
 
 ## 5. Host con puerto, o malformado
 
-```
+```http
 Host: objetivo.com:atacante.com
 Host: objetivo.com@atacante.com
 Host: atacante.com:80
@@ -91,7 +91,7 @@ El `@` y los dos puntos confunden el parseo del host, como en [[OAuth redirect_u
 
 Algunos parsers tratan una línea que empieza con espacio como continuación de la anterior:
 
-```
+```http
 Host: objetivo.com
  Host: atacante.com
 ```

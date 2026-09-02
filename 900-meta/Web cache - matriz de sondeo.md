@@ -62,7 +62,7 @@ Lo que **no** está en la clave y **sí** cambia la respuesta es el hueco del en
 
 Con el cache buster puesto, mandar cabezeras candidatas con un valor canario y buscar el canario en la respuesta:
 
-```
+```http
 X-Forwarded-Host: canario.com
 X-Forwarded-Scheme: nothttps
 X-Host: canario.com

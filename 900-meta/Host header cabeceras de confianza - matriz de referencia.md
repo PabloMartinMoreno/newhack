@@ -36,7 +36,7 @@ Todas las pone el cliente y muchas apps las creen del proxy.
 
 Contra recursos restringidos a "interno" o "localhost":
 
-```
+```http
 GET /admin HTTP/1.1
 Host: objetivo.com
 X-Forwarded-For: 127.0.0.1
@@ -59,7 +59,7 @@ La IP interna exacta que la app considera "de confianza" a veces hay que adivina
 
 Si el control cuenta por IP y la app lee la IP de una cabecera, rotarla anula el conteo:
 
-```
+```http
 X-Forwarded-For: 1.1.1.1     (intento 1)
 X-Forwarded-For: 1.1.1.2     (intento 2)
 X-Forwarded-For: 1.1.1.3     (intento 3)
@@ -70,7 +70,7 @@ Cada intento parece de una IP distinta. Se cruza con [[Autenticación - password
 
 Variante con lista: algunas apps toman el **primer** valor de un `X-Forwarded-For` con varias IP, otras el último. Probar las dos:
 
-```
+```http
 X-Forwarded-For: 127.0.0.1, real
 X-Forwarded-For: real, 127.0.0.1
 ```
@@ -79,7 +79,7 @@ X-Forwarded-For: real, 127.0.0.1
 
 `X-Original-URL` y `X-Rewrite-URL` engañan a un control que filtra por ruta en el frente:
 
-```
+```http
 GET /permitido HTTP/1.1
 X-Original-URL: /admin
 ```

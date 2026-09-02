@@ -34,7 +34,7 @@ Datos de arranque. Secretos incrustados con muchísima frecuencia.
 
 IMDSv2 exige token previo, y por eso corta el SSRF simple:
 
-```
+```http
 PUT /latest/api/token
 X-aws-ec2-metadata-token-ttl-seconds: 21600
 ```
