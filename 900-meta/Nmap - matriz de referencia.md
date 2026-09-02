@@ -77,47 +77,53 @@ Nmap imprime seis estados, no tres. Confundir los tres de en medio es el error d
 
 ## 3. Qué sondeo y contra qué
 
-| Flag | Sondeo |
+| Flag | Qué hace |
 |---|---|
-| `-sS` | `SYN`, medio abierto |
-| `-sT` | `connect()` completo |
-| `-sU` | UDP |
-| `-sA` | `ACK` |
-| `-sF` `-sN` `-sX` | `FIN`, sin banderas, Xmas |
-| `-sI` | Idle scan, por host zombi |
-| `-sn` | Sin escaneo de puertos |
-| `-Pn` | Sin descubrimiento |
-| `-6` | IPv6 |
+| `-sS` | Escaneo TCP `SYN`: manda `SYN` y aborta sin completar el handshake |
+| `-sT` | Escaneo TCP `connect()`: completa el handshake usando la pila del sistema |
+| `-sU` | Escaneo UDP |
+| `-sA` | Escaneo TCP `ACK`: mapea el filtro, no el estado del puerto |
+| `-sF` `-sN` `-sX` | Escaneo con `FIN`, sin banderas y Xmas: la lógica se invierte |
+| `-sI zombi` | Idle scan: sondea a través de un tercer host |
+| `-sn` | Deshabilita el escaneo de puertos: sólo descubre qué hosts hay |
+| `-Pn` | Deshabilita el descubrimiento **entero**: trata todo el rango como vivo |
+| `-6` | Escanea sobre IPv6 |
 
 Qué manda cada uno y qué significa cada respuesta: [[Sondeos de red - matriz de referencia]].
 
-**`-sU` conviene con `-sV`.** Un datagrama vacío casi nunca obtiene respuesta; nmap trae cargas válidas por protocolo y las manda cuando reconoce el puerto, así que la identificación mejora mucho el resultado en vez de sólo agregarle detalle. Los puertos UDP que pagan están en [[Sondeos de red - matriz de referencia]] § 8.
+> [!warning] `-Pn` no es "sin ping"
+> Se lo describe seguido como que deshabilita las solicitudes ICMP Echo. Eso es `-PE`. `-Pn` saltea **todo** el descubrimiento —ARP, ICMP, `SYN` y `ACK`— y escanea puertos aunque el host parezca muerto. Confundirlos hace creer que se probó lo que no se probó.
+
+**`-sU` conviene con `-sV`.** Un datagrama vacío casi nunca obtiene respuesta; nmap trae cargas válidas por protocolo y las manda cuando reconoce el puerto, así que la identificación mejora el resultado en vez de sólo agregarle detalle. Los puertos UDP que pagan están en [[Sondeos de red - matriz de referencia]] § 8.
 
 | Flag | Qué hace |
 |---|---|
-| `-p-` | Los 65535 |
-| `-p 1-1000` | Rango |
-| `-p 22,80,443,3389` | Lista |
-| `-p U:53,161,T:80,445` | UDP y TCP en una corrida |
-| `--top-ports 1000` | Los más frecuentes |
-| `--open` | Mostrar sólo los abiertos |
-| `-iL objetivos.txt` | Desde archivo |
-| `-iL <(...)` | Desde la salida de otro comando |
-| `--exclude 10.0.0.1` | Excluir |
-| `-n` | Sin DNS inversa — mucho más rápido |
+| `-p-` | Escanea los 65535 puertos |
+| `-p 22-110` | Escanea el rango indicado |
+| `-p 22,80,443` | Escanea sólo esos puertos |
+| `-p U:53,161,T:80,445` | Mezcla UDP y TCP en una corrida |
+| `--top-ports 1000` | Escanea los N definidos como más frecuentes |
+| `-F` | Escanea los 100 más comunes — el modo rápido |
+| `--open` | Muestra sólo los puertos abiertos |
+| `-iL objetivos.txt` | Toma los objetivos de un archivo |
+| `-iL <(...)` | Los toma de la salida de otro comando |
+| `--exclude 10.0.0.1` | Excluye un objetivo del rango |
+| `-n` | Deshabilita la resolución DNS inversa: mucho más rápido |
+| `--dns-server ns` | Resuelve contra el servidor de nombres indicado |
 
 Por defecto son **1000 puertos, no todos**: el falso negativo más común del dominio.
 
 ## 4. Descubrimiento
 
-| Flag | Sondeo | Atraviesa |
+| Flag | Qué hace | Atraviesa |
 |---|---|---|
-| `-PR` | ARP | Todo, dentro del segmento |
-| `-PS22,80,443` | `SYN` a esos puertos | Filtros que descartan ICMP |
-| `-PA80` | `ACK` | Firewalls sin estado |
-| `-PE` | Echo ICMP | Poco: es lo primero que se bloquea |
-| `-PP` | Marca de tiempo ICMP | A veces, donde el echo no |
-| `-PU40125` | UDP a un puerto improbable | Reglas que sólo miran TCP |
+| `-PR` | Descubre por ARP | Todo, dentro del segmento |
+| `-PS22,80,443` | Manda `SYN` a esos puertos | Filtros que descartan ICMP |
+| `-PA80` | Manda `ACK` | Firewalls sin estado |
+| `-PE` | Manda ICMP Echo — el ping clásico | Poco: es lo primero que se bloquea |
+| `-PP` | Manda marca de tiempo ICMP | A veces, donde el echo no |
+| `-PU40125` | Manda UDP a un puerto improbable | Reglas que sólo miran TCP |
+| `--disable-arp-ping` | Apaga el ARP automático del segmento | — |
 
 `-PR` es exacto y no lo filtra nadie: el firewall vive por encima de la capa de enlace. Fuera del segmento se combinan varios — basta que uno vuelva.
 
@@ -125,32 +131,44 @@ Por defecto son **1000 puertos, no todos**: el falso negativo más común del do
 
 | Flag | Qué hace | Ruido |
 |---|---|---|
-| `-sV` | Versión de servicio | Alto |
-| `--version-intensity 0-9` | 0 = sólo banner, 9 = todas las sondas | Según el número |
-| `-sC` | Igual a `--script=default` | Alto |
-| `-O` | Sistema operativo | Medio |
-| `--osscan-guess` | Adivinar cuando no está seguro | Medio |
-| `-A` | `-sV -O -sC --traceroute` | **El máximo** |
-| `--reason` | Por qué clasificó así cada puerto | Ninguno |
+| `-sV` | Interroga los servicios abiertos para determinar su versión | Alto |
+| `--version-intensity 0-9` | Gradúa las sondas: 0 sólo banner, 9 todas | Según el número |
+| `-sC` | Corre los scripts de la categoría `default` | Alto |
+| `--script nombre` | Corre los scripts indicados — nombre, categoría o comodín | Según el script |
+| `-O` | Detecta el sistema operativo por huella de la pila | Medio |
+| `--osscan-guess` | Arriesga una conjetura cuando la huella no es exacta | Medio |
+| `-A` | Hace `-sV -O -sC --traceroute` de una | **El máximo** |
+| `--reason` | Muestra por qué clasificó así cada puerto | Ninguno |
 
 `-A` es lo más ruidoso que se puede escribir en una sola letra. `--reason` no manda un paquete de más: sólo imprime lo que ya sabía.
 
 ## 6. Temporización y evasión
 
-| Flag | Efecto |
+| Flag | Qué hace |
 |---|---|
-| `-T0`…`-T5` | De paranoico a insensato. `-T4` es el uso normal |
-| `--min-rate 2000` | Piso de paquetes por segundo — lo que acelera de verdad |
-| `--max-rate 50` | Techo, para no tumbar nada |
-| `--scan-delay 1s` | Espera entre sondeos |
-| `--max-retries 1` | Menos reintentos: rápido, más falsos `filtered` |
-| `--host-timeout 15m` | Abandonar un host que no termina |
-| `-f` | Fragmentar el sondeo |
-| `-D señuelo1,ME,señuelo2` | Señuelos: mezclar el origen real entre falsos |
-| `-S dirección` | Origen falsificado (sin respuesta de vuelta) |
-| `--source-port 53` | Origen 53: pasa filtros que confían en el puerto |
-| `--data-length 25` | Cambiar el largo, romper firmas por tamaño |
-| `--spoof-mac 0` | MAC aleatoria (sólo sirve dentro del segmento) |
+| `-T0`…`-T5` | Elige la plantilla de temporización: de paranoico a insensato. `-T4` es el uso normal |
+| `--min-rate 2000` | Fija el piso de paquetes por segundo — lo que acelera de verdad |
+| `--max-rate 50` | Fija el techo, para no tumbar nada |
+| `--scan-delay 1s` | Espera ese tiempo entre sondeos |
+| `--max-retries 1` | Limita los reintentos: rápido, y más falsos `filtered` |
+| `--initial-rtt-timeout 50ms` | Arranca esperando ese RTT en vez de estimarlo |
+| `--max-rtt-timeout 100ms` | No espera más que eso por ninguna respuesta |
+| `--host-timeout 15m` | Abandona el host que no termina en ese tiempo |
+| `--stats-every 5s` | Imprime el avance cada N — para escaneos largos |
+| `-v` / `-vv` | Muestra los resultados a medida que aparecen |
+
+Evasión, que es otra cosa: cambia cómo se ve el paquete, no cuánto tarda.
+
+| Flag | Qué hace |
+|---|---|
+| `-f` | Fragmenta el sondeo |
+| `-D RND:5` | Mezcla el origen real entre 5 señuelos aleatorios |
+| `-D señuelo1,ME,señuelo2` | Ídem, con señuelos elegidos a mano |
+| `-S 10.10.10.200` | Falsifica la IP de origen — sin respuesta de vuelta |
+| `-e eth0` | Fuerza la interfaz de salida |
+| `-g 53` / `--source-port 53` | Sale desde el puerto 53: pasa filtros que confían en el origen |
+| `--data-length 25` | Cambia el largo del paquete, rompe firmas por tamaño |
+| `--spoof-mac 0` | MAC aleatoria — sólo sirve dentro del segmento |
 
 En UDP la velocidad **corrompe el resultado**, no sólo hace ruido: la limitación de tasa de ICMP hace que los puertos cerrados dejen de contestar y empiecen a parecer abiertos.
 
@@ -231,15 +249,14 @@ Categorías, de menos a más agresiva:
 
 | Flag | Qué da |
 |---|---|
-| `-oA base` | Los tres formatos a la vez |
-| `-oN base.nmap` | Legible |
-| `-oG base.gnmap` | Grepeable — el que se parsea |
-| `-oX base.xml` | XML, para importar a otra herramienta |
-| `--append-output` | No pisar lo anterior |
-| `--resume base.nmap` | Retomar un escaneo cortado |
-| `-v` / `-vv` | Resultados a medida que aparecen |
-| `--packet-trace` | Cada paquete: por qué no sale nada |
-| `-d` / `-dd` | Depuración del propio nmap |
+| `-oA base` | Guarda en los tres formatos a la vez |
+| `-oN base.nmap` | Guarda en formato normal, legible |
+| `-oG base.gnmap` | Guarda en formato grepeable — el que se parsea |
+| `-oX base.xml` | Guarda en XML, para convertir o importar |
+| `--append-output` | Agrega al archivo en vez de pisarlo |
+| `--resume base.nmap` | Retoma un escaneo cortado |
+| `--packet-trace` | Muestra cada paquete enviado y recibido |
+| `-d` / `-dd` | Sube el nivel de depuración del propio nmap |
 
 `-oA` siempre: rehacer un escaneo largo porque se perdió la salida es el error caro evitable del dominio.
 
@@ -272,7 +289,7 @@ awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para
 >
 > `sort -un` importa cuando hay varios hosts en el mismo archivo: sin él los puertos repetidos se pasan repetidos a `-p`.
 
-## 9. El XML a HTML legible
+### 9. El XML a HTML legible
 
 → [[XML de escaneo a HTML]]
 
