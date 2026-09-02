@@ -125,7 +125,9 @@ Por defecto son **1000 puertos, no todos**: el falso negativo más común del do
 | `-PU40125` | Manda UDP a un puerto improbable | Reglas que sólo miran TCP |
 | `--disable-arp-ping` | Apaga el ARP automático del segmento | — |
 
-`-PR` es exacto y no lo filtra nadie: el firewall vive por encima de la capa de enlace. Fuera del segmento se combinan varios — basta que uno vuelva.
+Los cinco preguntan lo mismo por vías distintas, y **la respuesta significa cosas distintas en cada uno**: la comparación lado a lado está en [[Sondeos de red - matriz de referencia]] § 2.
+
+`-PR` es el único exacto: el firewall vive por encima de la capa de enlace, así que nadie lo filtra y el silencio significa de verdad *no hay nadie* — ver [[ARP - resolución de direcciones en el segmento]]. En los otros cuatro el silencio es ambiguo, porque depende de si alguien decidió contestar el error o descartar callado: [[ICMP - el canal de error de IP]]. Por eso fuera del segmento se combinan varios sondeos, y basta que uno vuelva.
 
 ## 5. Identificación
 
@@ -289,7 +291,7 @@ awk '/Up$/{print $2}' 1-vivos.gnmap > vivos.txt              # hosts vivos, para
 >
 > `sort -un` importa cuando hay varios hosts en el mismo archivo: sin él los puertos repetidos se pasan repetidos a `-p`.
 
-### 9. El XML a HTML legible
+## 9. El XML a HTML legible
 
 → [[XML de escaneo a HTML]]
 
