@@ -86,6 +86,11 @@ Una sola kill chain. El [[MOC - Active Directory]] es el **hub** —el árbol *l
 - [[MOC - AD persistencia]] — golden, SID History, certificado
 - [[MOC - AD confianzas]] — del dominio al bosque
 
+### Post-explotación
+
+Transversal: se usa tras cualquier ejecución de código, venga de web o de AD.
+- [[MOC - Transferencia de archivos]] — traer herramientas (ingress) y sacar datos (exfil), por canal abierto o encubierto
+
 ### Azul
 
 La técnica agrupa el rojo; acá se agrupa por lo que la *ve*.

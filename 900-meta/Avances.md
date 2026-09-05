@@ -19,13 +19,14 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Notas semilla** — Un ciclo rojo↔azul completo + un dominio web completo a nivel MOC
 - **Contenido rojo — web** — Treinta y cuatro dominios cerrados (lista completa en la bitácora, agrupados por familia en [[Inicio]]). Las 4 hermanas de inyección de consulta completas (SQLi, NoSQL, LDAP, XPath); 3 de discrepancia de parseo (smuggling, cache, HPP)
 - **Contenido rojo — AD** — Cadena completa (sin credencial → bosque): 11 técnicas ATT&CK, 19 tradecraft. SID History en sus dos formas (escalada y persistencia). Diez MOCs: hub + nueve fases 1:1 con las matrices
+- **Contenido rojo — post-explotación** — Transferencia de archivos: 2 técnicas ATT&CK (T1105, T1048), 3 tradecraft (ingress + exfil abierta/encubierta), 2 matrices, su MOC. Cara azul propia (LOLBin) + DNS exfil cerrando ciclo. Vecinos sin abrir: pivoting/túneles, C2
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
 - **Teoría (`050-teoria/`)** — 7 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2) y [[MOC - HTTP]] (3 piezas de 14). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, SMB, el DOM
 - **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 2 matrices, las entidades [[nmap]] · [[masscan]] · [[rustscan]], y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
-- **Cheatsheets** — 100 matrices: 83 web, 9 AD, 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
-- **Contenido rojo — total** — 148 tradecraft, 59 técnicas, 31 detecciones, 49 MOCs, 4 entidades
+- **Cheatsheets** — 102 matrices: 83 web, 9 AD, 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), 2 de post-explotación (transferencia, exfiltración), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
+- **Contenido rojo — total** — 151 tradecraft, 61 técnicas, 32 detecciones, 50 MOCs, 4 entidades
 - **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
 - **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos (`indice` incluido). `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
 - **Vault de engagements** — Sin crear
@@ -832,6 +833,20 @@ Así que se abrió el dominio entero, y el reparto siguió las reglas que ya est
 **La pieza de teoría que faltaba** es [[TCP - respuestas a segmentos inesperados]]: la tabla de qué responde cada estado a cada bandera. De ahí sale *cada* tipo de sondeo, incluida la inversión de los FIN/NULL/Xmas —silencio es abierto— y su modo de falla, que es el peor posible: contra pilas que responden `RST` con el puerto abierto, todo aparece cerrado y nada en la salida avisa que la premisa no se cumple.
 
 `huecos` sigue en cero: el ciclo rojo↔azul del dominio cerró con la telemetría que ya existía. Lo que **no** cerró, y queda anotado en el MOC, es el escaneo desde fuera del parque instrumentado y el barrido ARP: no falta la regla, falta la fuente.
+
+### 2026-09-05 — Transferencia de archivos: primer dominio de post-explotación
+
+Dominio nuevo y **transversal** — se usa tras un RCE web y dentro de un compromiso de AD, así que no cuelga de web ni de AD, ni de [[MOC - Red]] (que es teoría, no ataque). Abre una sección propia en [[Inicio]]: **Post-explotación**.
+
+**Los ejes que se fijaron** (brainstorming antes de escribir, como manda el modelo): **dirección** (ingress / exfiltración) y **restricción del canal** (abierto HTTP/SMB/FTP / encubierto DNS/ICMP). Lo que se descartó como eje y se mandó a matriz: el protocolo puntual, el LOLBin disponible y el OS — cambian sintaxis, no decisión. El precedente del vault (motor de BD, shell, formato serializado) ya decía dónde va cada cosa.
+
+**Notas:** 2 técnicas ([[T1105 - Ingress Tool Transfer]], [[T1048 - Exfiltration Over Alternative Protocol]]), 3 tradecraft ([[Traer herramientas al objetivo]], [[Exfiltración por canal abierto]], [[Exfiltración por canal encubierto]]), 2 matrices (transferencia y exfiltración, por sistema), y [[MOC - Transferencia de archivos]].
+
+**Cara azul, dos lecciones que el dominio deja escritas.** El ingress se detecta por **firma** —una utilidad del sistema con una URL en la línea de comando—, y se creó [[Descarga de herramienta por utilidad del sistema]] sobre [[Sysmon EID 1 - ProcessCreate]]. La exfiltración abierta **no** se detecta por firma: es tráfico legítimo, solo la delata la línea base de destino/volumen que el vault no modela. Y la exfil por DNS es la excepción donde la firma azul rinde: cerró ciclo con [[Exfiltración por subdominios de alta entropía]], que ya existía y ahora también apunta a `T1048`.
+
+**Huecos declarados, no escondidos:** exfil abierta sin detección propia (falta flow logs), e ICMP sin artefacto en `550-telemetria/`. Pivoting/túneles y C2 quedan como vecinos sin abrir, con lugar reservado en la sección.
+
+`higiene` exit 0, `huecos` cero.
 
 ## Pendientes
 

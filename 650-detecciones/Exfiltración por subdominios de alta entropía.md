@@ -1,6 +1,6 @@
 ---
 tipo: deteccion
-tecnicas: ["[[CWE-89 - SQL Injection]]", "[[CWE-78 - OS Command Injection]]", "[[CWE-611 - XML External Entity]]"]
+tecnicas: ["[[T1048 - Exfiltration Over Alternative Protocol]]", "[[CWE-89 - SQL Injection]]", "[[CWE-78 - OS Command Injection]]", "[[CWE-611 - XML External Entity]]"]
 telemetria: ["[[Consulta DNS saliente]]"]
 forma: agregado
 ventana: "10m"
