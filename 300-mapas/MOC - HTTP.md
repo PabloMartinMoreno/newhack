@@ -104,4 +104,4 @@ Escritas 3 de 14. Faltan las once del orden de aprendizaje que todavía no tiene
 
 Las capas de abajo viven en [[MOC - Red]] —ARP, ICMP y TCP—, que es lo que hay que leer antes que esto. TCP sigue sin MOC propio: cuando sume ventana y control de flujo, estados de cierre y fragmentación, se separa.
 
-Sistemas sin abrir: TLS, DNS, Kerberos, LDAP, el DOM. SMB tiene sus dos piezas: [[SMB - dialectos y firma]] y [[SMB - sesión nula e IPC$]].
+Sistemas sin abrir: TLS, Kerberos, LDAP, el DOM. SMB tiene sus dos piezas: [[SMB - dialectos y firma]] y [[SMB - sesión nula e IPC$]]. DNS abrió con [[DNS - resolución recursiva]].

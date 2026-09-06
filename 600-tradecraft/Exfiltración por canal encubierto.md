@@ -27,7 +27,7 @@ DNS antes que ICMP: la resolución recursiva llega a mi servidor autoritativo au
 
 ## Por qué funciona
 
-El host no necesita salida directa: le basta con **resolver nombres**. Su resolutor reenvía la consulta por la cadena recursiva hasta mi servidor autoritativo del dominio, y los datos viajan codificados (base32) en las etiquetas del subdominio. ICMP es el mismo truco en el payload del echo. El perímetro deja pasar los dos porque romperían la red si los bloqueara del todo.
+El host no necesita salida directa: le basta con **resolver nombres**. Su resolutor reenvía la consulta por la cadena recursiva hasta mi servidor autoritativo del dominio (el mecanismo, en [[DNS - resolución recursiva]]), y los datos viajan codificados (base32) en las etiquetas del subdominio. ICMP es el mismo truco en el payload del echo. El perímetro deja pasar los dos porque romperían la red si los bloqueara del todo.
 
 ## Cómo falla
 

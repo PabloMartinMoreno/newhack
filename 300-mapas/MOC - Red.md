@@ -69,6 +69,6 @@ Consecuencias:
 ## Huecos conocidos
 
 - **TCP**: escrita la pieza del establecimiento. Faltan ventana y control de flujo, los estados de cierre, y MSS y fragmentación. Cuando estén, TCP se lleva su propio MOC y este mapa lo enlaza como hermano.
-- **DNS**: sin abrir, y es el que más deuda tiene — [[Exfiltración por subdominios de alta entropía]] y [[Sysmon EID 22 - DnsQuery]] ya existen y ninguna nota explica la resolución recursiva.
+- **DNS**: [[DNS - resolución recursiva]] explica la cadena —y por qué la exfil por DNS llega—; el recon y la enumeración, en [[DNS - matriz de referencia]]. Falta la cara de caché/envenenamiento y DNSSEC.
 - **TLS**: sin abrir. SNI, verificación de cadena y ALPN; ALPN además toca la degradación de HTTP/2.
 - **IPv6 / NDP**: sin abrir. Es ARP sin ARP, y en redes internas suele estar activo y sin vigilar.

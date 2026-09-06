@@ -22,11 +22,11 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Contenido rojo — post-explotación** — Transferencia de archivos: 2 técnicas ATT&CK (T1105, T1048), 3 tradecraft (ingress + exfil abierta/encubierta), 2 matrices, su MOC. Cara azul propia (LOLBin) + DNS exfil cerrando ciclo. Vecinos sin abrir: pivoting/túneles, C2
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
-- **Teoría (`050-teoria/`)** — 9 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2), [[MOC - HTTP]] (3 piezas de 14) y SMB (dialectos/firma, sesión nula/IPC$). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, el DOM
+- **Teoría (`050-teoria/`)** — 10 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2), [[MOC - HTTP]] (3 piezas de 14), SMB (dialectos/firma, sesión nula/IPC$) y DNS (resolución recursiva). Sistemas sin abrir: TLS, IPv6/NDP, Kerberos, LDAP, el DOM
 - **Superficies (`450-superficies/`)** — 2: Active Directory y SMB. El resto de las tecnologías objetivo, sin abrir
 - **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 2 matrices, las entidades [[nmap]] · [[masscan]] · [[rustscan]], y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
-- **Cheatsheets** — 105 matrices: 83 web, 10 AD (incluye [[SMB - matriz de referencia]]), 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), 4 de post-explotación (transferencia, exfiltración, [[FTP - matriz de referencia]], [[NFS - matriz de referencia]]), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
+- **Cheatsheets** — 106 matrices: 83 web, 10 AD (incluye [[SMB - matriz de referencia]]), 4 azules, 5 de red (nmap, rustscan, masscan, sondeos, [[DNS - matriz de referencia]]), 4 de post-explotación (transferencia, exfiltración, [[FTP - matriz de referencia]], [[NFS - matriz de referencia]]), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
 - **Contenido rojo — total** — 151 tradecraft, 61 técnicas, 32 detecciones, 50 MOCs, 4 entidades
 - **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
 - **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos (`indice` incluido). `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
@@ -860,6 +860,16 @@ Se llenó esa capa y solo esa: dos notas de teoría —[[SMB - dialectos y firma
 Se sumó además [[SMB - matriz de referencia]]: el cheatsheet de `nxc`/`smbclient`/`smbmap`/`rpcclient`. Organizado **por tarea** en grid (fila = tarea, columnas = las cuatro herramientas), por preferencia del usuario, aceptando cuadros anchos —con aviso en la nota y `<leader>uw`—. Descartadas una nota por comando (la sintaxis va a matriz, no a notas) y una sección por herramienta (no dejaría comparar una tarea entre las cuatro). La excepción a la convención "no tablas anchas" es deliberada y está anotada. Las herramientas como entidad (regla 6) quedan pendientes, como el resto de las que el vault menciona en texto plano.
 
 `higiene` exit 0, `huecos` cero.
+
+### 2026-09-06 — DNS: se cierra el hueco de teoría de mayor deuda
+
+[[MOC - Red]] declaraba DNS como "el que más deuda tiene — ninguna nota explica la resolución recursiva". Se cerró con [[DNS - resolución recursiva]]: la cadena stub → recursivo → raíz → TLD → autoritativo, y por qué esa obediencia del recursivo **es** el canal de exfil. Su `habilita:` apunta a [[Exfiltración por canal encubierto]], que ahora tiene su teoría enlazada —la que faltaba—.
+
+Del lado ofensivo, [[DNS - matriz de referencia]] (dominio/red): `dig`/`host`/`nslookup` en grid, registros que importan (incluido `SRV` para ubicar DC), transferencia de zona (AXFR), fuerza bruta de subdominios, y la config de BIND con `allow-transfer`/`recursion`. Indexada en [[MOC - Reconocimiento de red]].
+
+Sin MOC ni superficie propios: las decisiones de DNS ya viven repartidas —recon en Reconocimiento, exfil en Transferencia—, y un MOC sería una lista, no un árbol. Queda sin abrir la cara de caché/envenenamiento y DNSSEC.
+
+`higiene` exit 0.
 
 ## Pendientes
 
