@@ -23,7 +23,7 @@ NFS comparte directorios (*exports*) por red. El control de acceso de NFSv3 es p
 | `showmount -e HOST` | **Los exports** — lo primero que se mira |
 | `showmount -a HOST` | Qué cliente tiene montado qué |
 | `showmount -d HOST` | Directorios actualmente montados |
-| `nmap -sV --script "nfs-ls,nfs-showmount,nfs-statfs" -p 111,2049 HOST` | Exports, listado de archivos y espacio, por script |
+| `sudo nmap --script nfs* -sV -p111,2049 HOST` | Todos los scripts NFS de una: exports, listado y espacio (`nfs-showmount`, `nfs-ls`, `nfs-statfs`) |
 
 
 ## Montar
