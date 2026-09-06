@@ -39,6 +39,8 @@ Solo `nxc`; las otras tres no reportan la firma.
 
 `signing:False` marca candidato a relay ([[Relay de NTLM]]).
 
+Reconocimiento de servicio con nmap (SO, dialecto, firma y shares por script): `nmap HOST -sV -sC -p139,445`. Los scripts `smb2-security-mode`/`smb-security-mode` reportan la firma; `smb-os-discovery`, el SO.
+
 ## Enumerar
 
 | Tarea | nxc smb | smbclient | smbmap | rpcclient |
@@ -84,10 +86,39 @@ Dentro de una sesión (`rpcclient -U u%p HOST`), o con `-c 'comando'`:
 |---|---|
 | `srvinfo` | Versión y rol del servidor |
 | `enumdomains` · `lsaquery` | Dominios y SID del dominio |
-| `lsaenumsid` | SIDs conocidos por la LSA |
+| `querydominfo` | Info del dominio: política, roles, cantidad de usuarios |
+| `enumdomusers` | Usuarios del dominio |
 | `queryuser 0xRID` | Detalle de un usuario |
 | `querygroupmem 0xRID` | Miembros de un grupo |
+| `lsaenumsid` | SIDs conocidos por la LSA |
+| `netshareenumall` | Shares, incluidos los ocultos |
+| `netsharegetinfo <share>` | Permisos y detalle de un share puntual |
 | `enumprivs` | Privilegios definidos |
+
+## Archivos y configuración (con acceso al host)
+
+En Linux/Samba. Con shell en la víctima —o bajándolos de un share mal permisado—:
+
+| Archivo | Qué tiene |
+|---|---|
+| `/etc/samba/smb.conf` | Config de Samba: shares, guest, escritura (directivas de abajo) |
+| `/var/lib/samba/private/passdb.tdb` · `/etc/samba/smbpasswd` | Hashes NTLM de las cuentas Samba — loot directo |
+| `/var/log/samba/` | Logs de conexión y acceso |
+
+En Windows los shares no viven en un archivo: se configuran en el registro / `net share` — `smb.conf` es solo Samba.
+
+### Directivas peligrosas en `smb.conf`
+
+| Directiva | Por qué importa |
+|---|---|
+| `guest ok = yes` / `map to guest = Bad User` | Acceso al share sin credencial |
+| `read only = no` · `writable = yes` | Escritura en el share → subir webshell o pisar archivos |
+| `browseable = yes` | El share aparece en el listado |
+| `null passwords = yes` | Acepta cuentas con contraseña vacía |
+| `create mask`/`directory mask` laxos | Archivos creados con permisos de más |
+| `[global] security = share` (histórico) | Sin autenticación real por usuario |
+
+La combinación `guest ok` + `writable` sobre un share servido o ejecutado es el equivalente SMB del [[MOC - File upload]].
 
 ## Errores frecuentes
 
