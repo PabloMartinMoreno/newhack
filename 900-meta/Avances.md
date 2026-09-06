@@ -857,7 +857,7 @@ Se llenó esa capa y solo esa: dos notas de teoría —[[SMB - dialectos y firma
 
 `habilita:` de las dos piezas apunta a los ataques que dependen de ellas —relay y transferencia—, la regla de admisión de la teoría. Decisión de alcance registrada: **no** se abrió MOC - SMB ni tradecraft de ataque nuevo (EternalBlue, caza de shares, coerción) — quedan como pendiente si se quiere, pero SMB como clase de vuln sería el error de organizar por servicio en vez de por eje.
 
-Se sumó además [[SMB - matriz de referencia]]: el cheatsheet de `nxc`/`smbclient`/`smbmap`/`rpcclient`. Organizado **por tarea**, con las cuatro herramientas comparadas por línea —no una sección por herramienta ni una nota por comando—: así la misma nota es el cheatsheet y la comparación de diferencias. La sintaxis va a matriz (regla de filtro); las herramientas como entidad (regla 6) quedan pendientes, como el resto de las que el vault menciona en texto plano.
+Se sumó además [[SMB - matriz de referencia]]: el cheatsheet de `nxc`/`smbclient`/`smbmap`/`rpcclient`. Organizado **por tarea** en grid (fila = tarea, columnas = las cuatro herramientas), por preferencia del usuario, aceptando cuadros anchos —con aviso en la nota y `<leader>uw`—. Descartadas una nota por comando (la sintaxis va a matriz, no a notas) y una sección por herramienta (no dejaría comparar una tarea entre las cuatro). La excepción a la convención "no tablas anchas" es deliberada y está anotada. Las herramientas como entidad (regla 6) quedan pendientes, como el resto de las que el vault menciona en texto plano.
 
 `higiene` exit 0, `huecos` cero.
 
