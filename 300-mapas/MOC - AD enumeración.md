@@ -41,6 +41,7 @@ La enumeración **decide el resto del dominio**: cada rama de arriba es una cons
 
 - [[Enumeración LDAP del directorio]]
 - Comandos: [[AD enumeración - matriz de referencia]] — sin y con credencial, consultas LDAP puntuales, BloodHound, la máscara de bits de `userAccountControl`.
+- Herramientas SMB (nxc/smbclient/smbmap/rpcclient) por tarea: [[SMB - matriz de referencia]].
 
 ## Cara azul
 

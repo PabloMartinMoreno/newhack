@@ -26,7 +26,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Superficies (`450-superficies/`)** — 2: Active Directory y SMB. El resto de las tecnologías objetivo, sin abrir
 - **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 2 matrices, las entidades [[nmap]] · [[masscan]] · [[rustscan]], y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
-- **Cheatsheets** — 102 matrices: 83 web, 9 AD, 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), 2 de post-explotación (transferencia, exfiltración), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
+- **Cheatsheets** — 103 matrices: 83 web, 10 AD (incluye [[SMB - matriz de referencia]]), 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), 2 de post-explotación (transferencia, exfiltración), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
 - **Contenido rojo — total** — 151 tradecraft, 61 técnicas, 32 detecciones, 50 MOCs, 4 entidades
 - **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
 - **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos (`indice` incluido). `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones
@@ -856,6 +856,8 @@ SMB no es una clase de vulnerabilidad sino un **protocolo + servicio**, y sus at
 Se llenó esa capa y solo esa: dos notas de teoría —[[SMB - dialectos y firma]] (la negociación que decide el relay) y [[SMB - sesión nula e IPC$]] (la superficie anónima y el canal RPC)— y la superficie [[SMB]]. Los ataques quedan donde estaban, ahora con la teoría que los explica enlazada: [[Relay de NTLM]] apunta a la nota de firma, que es su precondición exacta.
 
 `habilita:` de las dos piezas apunta a los ataques que dependen de ellas —relay y transferencia—, la regla de admisión de la teoría. Decisión de alcance registrada: **no** se abrió MOC - SMB ni tradecraft de ataque nuevo (EternalBlue, caza de shares, coerción) — quedan como pendiente si se quiere, pero SMB como clase de vuln sería el error de organizar por servicio en vez de por eje.
+
+Se sumó además [[SMB - matriz de referencia]]: el cheatsheet de `nxc`/`smbclient`/`smbmap`/`rpcclient`. Organizado **por tarea**, con las cuatro herramientas comparadas por línea —no una sección por herramienta ni una nota por comando—: así la misma nota es el cheatsheet y la comparación de diferencias. La sintaxis va a matriz (regla de filtro); las herramientas como entidad (regla 6) quedan pendientes, como el resto de las que el vault menciona en texto plano.
 
 `higiene` exit 0, `huecos` cero.
 

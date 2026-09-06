@@ -42,3 +42,4 @@ Firma SMB **requerida** (corta el relay — ver [[SMB - dialectos y firma]]), SM
 
 - Teoría: [[SMB - dialectos y firma]] · [[SMB - sesión nula e IPC$]]
 - Ataque: [[MOC - AD envenenamiento y relay]] · [[MOC - AD enumeración]] · [[MOC - AD movimiento lateral]] · [[MOC - Transferencia de archivos]]
+- Cheatsheet: [[SMB - matriz de referencia]] — nxc/smbclient/smbmap/rpcclient por tarea

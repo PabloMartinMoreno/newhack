@@ -13,7 +13,7 @@ tags:
 # AD enumeración - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
-> Qué se pregunta al directorio y con qué. El criterio —cuándo conviene enumerar y qué pierde el que se saltea este paso— está en [[Enumeración LDAP del directorio]].
+> Qué se pregunta al directorio y con qué. El criterio —cuándo conviene enumerar y qué pierde el que se saltea este paso— está en [[Enumeración LDAP del directorio]]. Las herramientas SMB (nxc/smbclient/smbmap/rpcclient) por tarea, en [[SMB - matriz de referencia]].
 
 ## 0. Qué tengo
 
