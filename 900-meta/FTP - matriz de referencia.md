@@ -78,6 +78,33 @@ Si el server permite subir a un directorio que luego sirve por web, subir una we
 
 `ftp-bounce`: abuso del comando `PORT` para escanear terceros desde el server FTP — raro hoy, pero es la señal de un FTP viejo.
 
+## Archivos y configuración (con acceso al host)
+
+Con shell en la víctima —o bajándolos por el propio FTP mal permisado—, esto es lo que se mira.
+
+| Archivo | Qué tiene |
+|---|---|
+| `/etc/vsftpd.conf` | Config de vsftpd: todas las directivas de abajo |
+| `/etc/ftpusers` | Lista de **denegación**: usuarios que NO pueden loguear. Si `root` no está listado, root entra |
+| `/etc/vsftpd.user_list` | Lista allow o deny según `userlist_deny` |
+| `/etc/proftpd/proftpd.conf` · `/etc/pure-ftpd/` | Config de ProFTPD / Pure-FTPD |
+| `~/.netrc` | Credenciales FTP guardadas en claro — loot directo |
+| `/var/log/vsftpd.log` · `xferlog` | Qué se transfirió y quién |
+
+### Directivas peligrosas en `vsftpd.conf`
+
+| Directiva | Por qué importa |
+|---|---|
+| `anonymous_enable=YES` | Login anónimo habilitado |
+| `no_anon_password=YES` | El anónimo entra sin pedir contraseña |
+| `write_enable=YES` | Escritura habilitada en el server |
+| `anon_upload_enable=YES` | El anónimo puede **subir** → webshell si el directorio se sirve por web |
+| `anon_mkdir_write_enable=YES` | El anónimo puede crear directorios |
+| `anon_root=/home/username/ftp` | Raíz del anónimo; si apunta a un home real, expone los archivos del usuario |
+| `chroot_local_user=NO` | Los usuarios locales no quedan enjaulados: navegan todo el filesystem |
+
+La combinación `anonymous_enable` + `anon_upload_enable` + `write_enable` sobre un directorio servido por web es RCE directo — ver [[MOC - File upload]].
+
 ## Errores frecuentes
 
 | Síntoma | Causa | Salida |
@@ -87,3 +114,4 @@ Si el server permite subir a un directorio que luego sirve por web, subir una we
 | `530 Login incorrect` | credencial mala o anónimo deshabilitado | probar `anonymous`, verificar usuario |
 | `500 OOPS` (vsftpd) | restricción del server (chroot/seccomp) | del lado del server, no del cliente |
 | listado vacío pero conecta | modo pasivo negociado mal | alternar `passive` / `--ftp-pasv` |
+
