@@ -25,6 +25,9 @@ tags:
 | Contra un server | `dig @1.1.1.1 dominio` | `host dominio 1.1.1.1` | `nslookup dominio 1.1.1.1` |
 | Reverso (PTR) | `dig -x IP` | `host IP` | `nslookup IP` |
 | Solo el dato | `dig +short dominio` | — | — |
+| Versión del server (fingerprint) | `dig CH TXT version.bind @NS` | — | — |
+
+La última es una consulta clase CHAOS: muchos BIND responden su versión, que orienta el resto.
 
 
 ## Registros que importan
@@ -51,16 +54,26 @@ El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** 
 | host | `host -l dominio NS` |
 | dnsrecon | `dnsrecon -d dominio -t axfr` |
 
+Probá AXFR contra **cada `NS`** y contra las **zonas internas** que descubras (`dig axfr internal.dominio @NS`): la transferencia suele quedar mal cerrada justo en las zonas internas.
+
 
 ## Enumeración de subdominios
 
 | Enfoque | Comando |
 |---|---|
-| Fuerza bruta (dnsenum) | `dnsenum --enum dominio` |
+| Fuerza bruta (dnsenum) | `dnsenum --dnsserver NS --enum -f wordlist.txt -o out.txt dominio` |
 | Fuerza bruta (fierce) | `fierce --domain dominio` |
 | Fuerza bruta (dnsrecon) | `dnsrecon -d dominio -D wordlist.txt -t brt` |
 | Fuerza bruta (gobuster) | `gobuster dns -d dominio -w wordlist.txt` |
 | Pasivo (sin tocar el objetivo) | `subfinder -d dominio` · `amass enum -passive -d dominio` |
+
+Sin herramientas, solo con `dig` contra el server objetivo:
+
+```sh
+for s in $(cat wordlist.txt); do
+  dig +short "$s.dominio" @NS | grep -q . && echo "$s.dominio"
+done
+```
 
 
 ## Configuración (con acceso al host)
