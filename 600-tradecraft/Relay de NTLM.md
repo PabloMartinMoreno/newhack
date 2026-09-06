@@ -48,7 +48,7 @@ Lo que se consigue depende de a dónde se reenvíe, y ahí está la escalada:
 
 ## Cómo falla
 
-Falla contra la **firma obligatoria**: SMB signing, LDAP signing y channel binding hacen que el objetivo rechace una autenticación reenviada, porque la firma sí ata la autenticación al canal. Es la mitigación correcta, y comprobar qué objetivos la exigen es el reconocimiento clave —`nxc smb 10.0.0.0/24` muestra la columna de firma—.
+Falla contra la **firma obligatoria**: SMB signing, LDAP signing y channel binding hacen que el objetivo rechace una autenticación reenviada, porque la firma sí ata la autenticación al canal — el porqué está en [[SMB - dialectos y firma]]. Es la mitigación correcta, y comprobar qué objetivos la exigen es el reconocimiento clave —`nxc smb 10.0.0.0/24` muestra la columna de firma—.
 
 Falla cuando no hay ningún objetivo sin firma alcanzable: si todo el dominio exige firma, el relay no tiene a dónde ir y solo queda romper el hash.
 

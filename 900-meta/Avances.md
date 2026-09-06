@@ -22,7 +22,8 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Contenido rojo — post-explotación** — Transferencia de archivos: 2 técnicas ATT&CK (T1105, T1048), 3 tradecraft (ingress + exfil abierta/encubierta), 2 matrices, su MOC. Cara azul propia (LOLBin) + DNS exfil cerrando ciclo. Vecinos sin abrir: pivoting/túneles, C2
 - **Contenido azul — web** — 16 detecciones sobre 12 artefactos, todas en `estado: idea`
 - **Contenido azul — fundamentos** — 8 zettels + [[MOC - Fundamentos de detección]]
-- **Teoría (`050-teoria/`)** — 7 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2) y [[MOC - HTTP]] (3 piezas de 14). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, SMB, el DOM
+- **Teoría (`050-teoria/`)** — 9 notas y 2 mapas: [[MOC - Red]] (ARP, ICMP, TCP ×2), [[MOC - HTTP]] (3 piezas de 14) y SMB (dialectos/firma, sesión nula/IPC$). Sistemas sin abrir: DNS, TLS, IPv6/NDP, Kerberos, LDAP, el DOM
+- **Superficies (`450-superficies/`)** — 2: Active Directory y SMB. El resto de las tecnologías objetivo, sin abrir
 - **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 2 matrices, las entidades [[nmap]] · [[masscan]] · [[rustscan]], y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
 - **Cheatsheets** — 102 matrices: 83 web, 9 AD, 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), 2 de post-explotación (transferencia, exfiltración), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
@@ -845,6 +846,16 @@ Dominio nuevo y **transversal** — se usa tras un RCE web y dentro de un compro
 **Cara azul, dos lecciones que el dominio deja escritas.** El ingress se detecta por **firma** —una utilidad del sistema con una URL en la línea de comando—, y se creó [[Descarga de herramienta por utilidad del sistema]] sobre [[Sysmon EID 1 - ProcessCreate]]. La exfiltración abierta **no** se detecta por firma: es tráfico legítimo, solo la delata la línea base de destino/volumen que el vault no modela. Y la exfil por DNS es la excepción donde la firma azul rinde: cerró ciclo con [[Exfiltración por subdominios de alta entropía]], que ya existía y ahora también apunta a `T1048`.
 
 **Huecos declarados, no escondidos:** exfil abierta sin detección propia (falta flow logs), e ICMP sin artefacto en `550-telemetria/`. Pivoting/túneles y C2 quedan como vecinos sin abrir, con lugar reservado en la sección.
+
+`higiene` exit 0, `huecos` cero.
+
+### 2026-09-06 — SMB entra por la capa correcta: teoría y superficie, no un dominio nuevo
+
+SMB no es una clase de vulnerabilidad sino un **protocolo + servicio**, y sus ataques —relay, enum por sesión nula, exec lateral— **ya viven en AD**. Recrearlos habría duplicado (rompe las reglas 2 y 6). El hueco real era la capa de abajo: MOC-HTTP listaba "SMB sin abrir" y no había superficie.
+
+Se llenó esa capa y solo esa: dos notas de teoría —[[SMB - dialectos y firma]] (la negociación que decide el relay) y [[SMB - sesión nula e IPC$]] (la superficie anónima y el canal RPC)— y la superficie [[SMB]]. Los ataques quedan donde estaban, ahora con la teoría que los explica enlazada: [[Relay de NTLM]] apunta a la nota de firma, que es su precondición exacta.
+
+`habilita:` de las dos piezas apunta a los ataques que dependen de ellas —relay y transferencia—, la regla de admisión de la teoría. Decisión de alcance registrada: **no** se abrió MOC - SMB ni tradecraft de ataque nuevo (EternalBlue, caza de shares, coerción) — quedan como pendiente si se quiere, pero SMB como clase de vuln sería el error de organizar por servicio en vez de por eje.
 
 `higiene` exit 0, `huecos` cero.
 
