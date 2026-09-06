@@ -25,6 +25,15 @@ tags:
 
 Anónimo clásico: usuario `anonymous`, contraseña cualquiera (o vacía). Es la primera prueba en todo FTP.
 
+Credenciales por defecto que conviene probar antes de forzar:
+
+| Usuario | Contraseña |
+|---|---|
+| `anonymous` | `anonymous` |
+| `anonymous` | (vacía) |
+| `ftp` | `ftp` |
+| `guest` | `guest` |
+
 ## Listar y navegar
 
 | Tarea | ftp | nxc ftp | curl | lftp |
