@@ -26,6 +26,7 @@ tags:
 | Reverso (PTR) | `dig -x IP` | `host IP` | `nslookup IP` |
 | Solo el dato | `dig +short dominio` | — | — |
 
+
 ## Registros que importan
 
 | Tipo | Qué da |
@@ -39,6 +40,7 @@ tags:
 | `SRV` | Servicios: en AD, `_ldap._tcp.dc._msdcs.dominio` ubica los DC |
 | `PTR` | Reverso IP→nombre |
 
+
 ## Transferencia de zona (AXFR)
 
 El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** los registros.
@@ -48,6 +50,7 @@ El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** 
 | dig | `dig axfr @NS dominio` |
 | host | `host -l dominio NS` |
 | dnsrecon | `dnsrecon -d dominio -t axfr` |
+
 
 ## Enumeración de subdominios
 
@@ -59,6 +62,7 @@ El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** 
 | Fuerza bruta (gobuster) | `gobuster dns -d dominio -w wordlist.txt` |
 | Pasivo (sin tocar el objetivo) | `subfinder -d dominio` · `amass enum -passive -d dominio` |
 
+
 ## Configuración (con acceso al host)
 
 | Archivo | Qué tiene |
@@ -68,7 +72,17 @@ El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** 
 | `/etc/resolv.conf` | Qué resolutor usa el host — pista de la infra interna |
 | `/etc/hosts` | Resolución estática local, previa a DNS |
 
-`allow-transfer { any; }` en `named.conf` es la mala config que habilita el AXFR de arriba. `recursion yes` hacia cualquiera es un resolutor abierto.
+### Directivas peligrosas en `named.conf`
+
+| Directiva | Por qué importa |
+|---|---|
+| `allow-transfer { any; }` | Cualquiera transfiere la zona entera (AXFR de arriba) → vuelca todos los registros |
+| `allow-recursion { any; }` | Resolutor abierto: sirve recursión a cualquiera → amplificación DDoS y superficie de envenenamiento de caché |
+| `allow-query { any; }` | Cualquiera consulta el server; sobre zonas internas, expone nombres que no debían salir |
+| `recursion yes` (global, sin `allow-recursion`) | Recursión abierta por defecto — el mismo riesgo que `allow-recursion { any; }` |
+| `zone-statistics yes` | Bajo riesgo: junta estadísticas por zona; solo filtran patrones de consulta si el `statistics-channels` está expuesto |
+
+El par que más rinde en un pentest: `allow-transfer { any; }` (te da la zona completa) y `allow-recursion { any; }` (resolutor abierto).
 
 ## Errores frecuentes
 
@@ -78,3 +92,4 @@ El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** 
 | `connection timed out; no servers could be reached` | UDP 53 filtrado | `dig +tcp`, o probar otro resolutor |
 | `NXDOMAIN` en todo | dominio o resolutor equivocado | `dig @<NS-autoritativo>` directo |
 | respuesta trunca (`;; Truncated`) | pasó el límite de UDP | `dig +tcp` |
+
