@@ -39,7 +39,7 @@ Anónimo clásico: usuario `anonymous`, contraseña cualquiera (o vacía). Es la
 |---|---|---|---|---|
 | Un archivo | `get archivo` | `nxc ftp HOST -u u -p p --get archivo` | `curl -u u:p ftp://HOST/archivo -O` | `get archivo` |
 | Varios | `prompt OFF; mget *` | — | — | `mget *` |
-| Recursivo | — | — | — (usar `wget -r ftp://u:p@HOST/`) | `mirror dir local` |
+| Recursivo | — | — | — (usar `wget -m ftp://u:p@HOST/`; `--no-passive` si el pasivo falla) | `mirror dir local` |
 
 ## Subir
 
@@ -61,9 +61,11 @@ Si el server permite subir a un directorio que luego sirve por web, subir una we
 
 | Tarea | Comando |
 |---|---|
+| Fingerprint (versión + scripts) | `sudo nmap -sC -sV -p21 -v HOST` — ruidoso; `-sC` ya incluye `ftp-anon` |
+| Banner / conexión cruda | `nc -nv HOST 21` · `telnet HOST 21` |
 | Anónimo masivo | `nxc ftp 10.0.0.0/24 -u anonymous -p ''` |
 | Password spraying | `nxc ftp HOST -u usuarios.txt -p pass.txt --continue-on-success` |
-| Scripts nmap | `nmap --script ftp-anon,ftp-bounce,ftp-syst -p 21 HOST` |
+| Scripts nmap puntuales | `nmap --script ftp-anon,ftp-bounce,ftp-syst -p 21 HOST` |
 
 `ftp-bounce`: abuso del comando `PORT` para escanear terceros desde el server FTP — raro hoy, pero es la señal de un FTP viejo.
 
