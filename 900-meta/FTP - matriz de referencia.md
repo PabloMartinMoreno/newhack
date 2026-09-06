@@ -11,6 +11,7 @@ tags:
 # FTP - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
+> **Puertos: 21/tcp** (control, donde se autentica y se dan los comandos) y **20/tcp** (datos, solo en modo activo; el pasivo usa un puerto alto negociado). El escaneo va al 21.
 > Las cuatro herramientas —`ftp` (cliente nativo), `nxc ftp` (NetExec), `curl`, `lftp`— comparadas en grid por tarea. FTP como canal de transferencia: [[Transferencia de archivos - matriz de referencia]] y [[MOC - Transferencia de archivos]].
 
 `HOST`, `u`, `p` son marcadores. `—` = la herramienta no hace esa tarea. En `ftp` y `lftp` los verbos van **dentro** de la sesión; en `nxc` y `curl` son de una línea.

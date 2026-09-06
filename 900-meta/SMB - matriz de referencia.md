@@ -12,6 +12,7 @@ tags:
 # SMB - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
+> **Puertos: 445/tcp** (SMB directo sobre TCP) y **139/tcp** (SMB sobre NetBIOS, heredado). El escaneo mira los dos.
 > Las cuatro herramientas —`nxc smb` (NetExec), `smbclient`, `smbmap`, `rpcclient`— comparadas en grid por tarea. El criterio vive en [[SMB]] y [[MOC - AD enumeración]]; la teoría, en [[SMB - dialectos y firma]] y [[SMB - sesión nula e IPC$]]. Ejecución remota (psexec/smbexec): [[AD movimiento lateral - matriz de referencia]].
 
 > [!warning] Cuadros anchos a propósito
@@ -27,6 +28,7 @@ tags:
 | Usuario/contraseña | `nxc smb HOST -u u -p p` | `smbclient //HOST/share -U 'DOM\u%p'` | `smbmap -H HOST -u u -p p -d DOM` | `rpcclient -U 'DOM\u%p' HOST` |
 | Pass-the-hash | `nxc smb HOST -u u -H LM:NT` | `smbclient //HOST/share -U u --pw-nt-hash NT` | `smbmap -H HOST -u u -p 'LM:NT'` | `rpcclient -U u --pw-nt-hash NT HOST` |
 | Kerberos | `nxc smb HOST -u u -k` | `smbclient //HOST/share -k` | `smbmap -H HOST -k` | `rpcclient -k HOST` |
+
 
 ## Comprobar host, firma y dialecto
 
@@ -78,6 +80,7 @@ Terreno de `nxc` (requiere admin para exec). Para psexec/smbexec/wmiexec: [[AD m
 | Password spraying | `nxc smb HOST -u usuarios.txt -p 'Verano2026!' --continue-on-success` |
 | Pares usuario:pass 1 a 1 | `nxc smb HOST -u usuarios.txt -p pass.txt --no-bruteforce` |
 
+
 ## rpcclient — consultas puntuales de RPC
 
 Dentro de una sesión (`rpcclient -U u%p HOST`), o con `-c 'comando'`:
@@ -94,6 +97,7 @@ Dentro de una sesión (`rpcclient -U u%p HOST`), o con `-c 'comando'`:
 | `netshareenumall` | Shares, incluidos los ocultos |
 | `netsharegetinfo <share>` | Permisos y detalle de un share puntual |
 | `enumprivs` | Privilegios definidos |
+
 
 ## Archivos y configuración (con acceso al host)
 
@@ -129,3 +133,4 @@ La combinación `guest ok` + `writable` sobre un share servido o ejecutado es el
 | smbclient: `protocol negotiation failed` | server exige SMB2+, cliente ofrece SMB1 | `-m SMB3` |
 | `NT_STATUS_MORE_PROCESSING_REQUIRED` (kerberos) | reloj desfasado con el DC | sincronizar hora (`ntpdate`/`faketime`) |
 | RID cycling vacío | anónimo restringido | usar credencial de dominio cualquiera |
+
