@@ -26,7 +26,7 @@ Bitácora de construcción del vault. Decisiones y pendientes, no changelog de a
 - **Superficies (`450-superficies/`)** — 2: Active Directory y SMB. El resto de las tecnologías objetivo, sin abrir
 - **Contenido rojo — reconocimiento** — Dominio abierto: 2 técnicas ATT&CK, 5 tradecraft, 2 matrices, las entidades [[nmap]] · [[masscan]] · [[rustscan]], y su cara azul. Sin cubrir: reconocimiento pasivo
 - **Contenido azul — Windows** — 16 artefactos, 13 detecciones de AD. Ciclo rojo↔azul cerrado. `huecos` en **cero**
-- **Cheatsheets** — 103 matrices: 83 web, 10 AD (incluye [[SMB - matriz de referencia]]), 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), 2 de post-explotación (transferencia, exfiltración), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
+- **Cheatsheets** — 104 matrices: 83 web, 10 AD (incluye [[SMB - matriz de referencia]]), 4 azules, 4 de red (nmap, rustscan, masscan y sondeos), 3 de post-explotación (transferencia, exfiltración, [[FTP - matriz de referencia]]), más [[XML de escaneo a HTML]], que no es matriz. Indexadas desde el MOC de su dominio
 - **Contenido rojo — total** — 151 tradecraft, 61 técnicas, 32 detecciones, 50 MOCs, 4 entidades
 - **Cliente** — **nvim/LazyVim**, configurado y verificado. Obsidian y sus plugins descartados
 - **Consultas cruzadas** — `900-meta/consultas.py`, ocho comandos (`indice` incluido). `higiene` valida además alias duplicados, MOC sin indexar y `forma:` de las detecciones

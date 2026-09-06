@@ -48,6 +48,7 @@ La decisión de fondo, en las dos direcciones, es la misma: **usar el canal más
 
 - [[Traer herramientas al objetivo]] · [[Exfiltración por canal abierto]] · [[Exfiltración por canal encubierto]]
 - Comandos por sistema: [[Transferencia de archivos - matriz de referencia]] (traer) · [[Exfiltración - matriz de referencia]] (sacar).
+- Interacción con un servicio FTP (anónimo, subir/bajar, modo binario): [[FTP - matriz de referencia]].
 
 ## Cara azul
 

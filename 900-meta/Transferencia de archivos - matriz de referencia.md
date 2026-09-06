@@ -11,7 +11,7 @@ tags:
 # Transferencia de archivos - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
-> Comandos para **traer** un archivo al objetivo (ingress). El criterio —qué canal según el entorno— vive en [[MOC - Transferencia de archivos]] y [[Traer herramientas al objetivo]]. Para sacar datos, [[Exfiltración - matriz de referencia]].
+> Comandos para **traer** un archivo al objetivo (ingress). El criterio —qué canal según el entorno— vive en [[MOC - Transferencia de archivos]] y [[Traer herramientas al objetivo]]. Para sacar datos, [[Exfiltración - matriz de referencia]]; para hablar con un servicio FTP puntual, [[FTP - matriz de referencia]].
 
 ## Servir el archivo desde el box del atacante
 
