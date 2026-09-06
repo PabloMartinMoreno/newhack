@@ -25,6 +25,7 @@ NFS comparte directorios (*exports*) por red. El control de acceso de NFSv3 es p
 | `showmount -d HOST` | Directorios actualmente montados |
 | `nmap -sV --script "nfs-ls,nfs-showmount,nfs-statfs" -p 111,2049 HOST` | Exports, listado de archivos y espacio, por script |
 
+
 ## Montar
 
 | Acción | Comando |
@@ -70,6 +71,7 @@ El archivo de exports y sus opciones peligrosas.
 | `/etc/exports.d/` | Exports adicionales por fragmento |
 | `/var/lib/nfs/etab` | Tabla efectiva de lo que se está exportando de verdad |
 
+
 ### Opciones peligrosas en `/etc/exports`
 
 | Opción | Por qué importa |
@@ -78,6 +80,7 @@ El archivo de exports y sus opciones peligrosas.
 | `rw` | Escritura: plantar binarios, pisar archivos |
 | `insecure` | Permite montar desde puertos > 1024 → un cliente sin privilegios monta |
 | `no_all_squash` | Conserva los UID del cliente → habilita el truco de UID |
+| `nohide` | Expone los sistemas de archivos montados **debajo** del export → el cliente cruza a datos no previstos |
 | `no_subtree_check` | Menor riesgo, pero afloja la verificación de ruta |
 
 `rw` + `no_root_squash` sobre un export accesible es root casi seguro.
@@ -91,3 +94,4 @@ El archivo de exports y sus opciones peligrosas.
 | `rpcbind: server not responding` | 111 filtrado o v4-only | `-o vers=3` / `vers=4` según responda |
 | `Permission denied` al leer | UID del cliente ≠ dueño del archivo | crear usuario con el UID correcto |
 | `showmount` vacío pero 2049 abierto | NFSv4 (no usa mountd) | montar directo `HOST:/` con `vers=4` |
+
