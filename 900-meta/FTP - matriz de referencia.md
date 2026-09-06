@@ -40,7 +40,7 @@ Credenciales por defecto que conviene probar antes de forzar:
 |---|---|---|---|---|
 | Listar | `ls` / `dir` | `nxc ftp HOST -u u -p p --ls` | `curl -u u:p ftp://HOST/` | `ls` |
 | Cambiar directorio | `cd dir` | — | `curl -u u:p ftp://HOST/dir/` | `cd dir` |
-| Recorrer todo | manual | — | — | `find` / `du -a` |
+| Recorrer todo | `ls -R` (recursivo, si el server lo permite) | — | — | `find` / `du -a` |
 
 ## Descargar
 
