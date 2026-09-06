@@ -29,6 +29,8 @@ tags:
 
 La última es una consulta clase CHAOS: muchos BIND responden su versión, que orienta el resto.
 
+Recon estándar de una, con `dnsrecon`: `dnsrecon -d dominio -n NS` recolecta registros (SOA/NS/MX/A/TXT/SRV) e intenta la transferencia de zona. Buen primer disparo antes de ir a lo puntual. (dnsrecon también hace AXFR y fuerza bruta — abajo.)
+
 
 ## Registros que importan
 
@@ -68,13 +70,11 @@ Probá AXFR contra **cada `NS`** y contra las **zonas internas** que descubras (
 | Pasivo (sin tocar el objetivo) | `subfinder -d dominio` · `amass enum -passive -d dominio` |
 
 Sin herramientas, solo con `dig` contra el server objetivo:
-
 ```sh
 for s in $(cat wordlist.txt); do
   dig +short "$s.dominio" @NS | grep -q . && echo "$s.dominio"
 done
 ```
-
 
 ## Configuración (con acceso al host)
 
