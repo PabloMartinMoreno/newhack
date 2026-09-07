@@ -15,6 +15,9 @@ tags:
 
 `dominio` y `NS` son marcadores (el dominio objetivo y su servidor de nombres).
 
+> [!warning] `@NS` no es opcional en zonas internas
+> `dig ... @10.129.14.128` pregunta **a ese server**; sin `@`, usás tu resolutor por defecto (`/etc/resolv.conf`). Una zona interna o de lab (`.htb`, dominios privados) **no existe en internet**, así que el resolutor por defecto devuelve `NXDOMAIN`. Para verla hay que preguntarle al server que la hostea: `@<IP-del-objetivo>`.
+
 ## Consultas básicas
 
 | Tarea | dig | host | nslookup |
@@ -30,7 +33,6 @@ tags:
 La última es una consulta clase CHAOS: muchos BIND responden su versión, que orienta el resto.
 
 Recon estándar de una, con `dnsrecon`: `dnsrecon -d dominio -n NS` recolecta registros (SOA/NS/MX/A/TXT/SRV) e intenta la transferencia de zona. Buen primer disparo antes de ir a lo puntual. (dnsrecon también hace AXFR y fuerza bruta — abajo.)
-
 
 ## Registros que importan
 
@@ -84,6 +86,7 @@ done
 | Archivos de zona (`/var/lib/bind/`, `/etc/bind/db.*`) | Todos los registros de la zona — mapa interno |
 | `/etc/resolv.conf` | Qué resolutor usa el host — pista de la infra interna |
 | `/etc/hosts` | Resolución estática local, previa a DNS |
+
 
 ### Directivas peligrosas en `named.conf`
 
