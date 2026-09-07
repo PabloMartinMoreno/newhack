@@ -76,6 +76,7 @@ Tres cosas que este orden codifica:
 - [[Rustscan - matriz de referencia]] — lote, timeout y `ulimit`, el `-Pn` que agrega solo, y el motor de scripts
 - [[Masscan - matriz de referencia]] — tasa, exclusiones, el `RST` del kernel que rompe `--banners`, y el formato de `-oL`
 - [[DNS - matriz de referencia]] — `dig`/`host`/`nslookup`, registros, transferencia de zona (AXFR) y fuerza bruta de subdominios
+- [[SMTP - matriz de referencia]] — enumeración de usuarios (VRFY/EXPN/RCPT), open relay y envío/spoofing con `swaks`
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja

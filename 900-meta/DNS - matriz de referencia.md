@@ -72,6 +72,7 @@ Probá AXFR contra **cada `NS`** y contra las **zonas internas** que descubras (
 | Pasivo (sin tocar el objetivo) | `subfinder -d dominio` · `amass enum -passive -d dominio` |
 
 En `dnsenum`, `-p 0 -s 0` apagan el scraping de Google y el whois/reverse: queda fuerza bruta pura por wordlist, más rápida y sin tocar terceros.
+La wordlist recomendada para la ocasión es: `/opt/useful/seclists/Discovery/DNS/subdomains-top1million-110000.txt`
 
 Sin herramientas, solo con `dig` contra el server objetivo:
 ```sh
