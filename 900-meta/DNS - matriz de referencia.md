@@ -65,11 +65,13 @@ Probá AXFR contra **cada `NS`** y contra las **zonas internas** que descubras (
 
 | Enfoque | Comando |
 |---|---|
-| Fuerza bruta (dnsenum) | `dnsenum --dnsserver NS --enum -f wordlist.txt -o out.txt dominio` |
+| Fuerza bruta (dnsenum) | `dnsenum --dnsserver NS --enum -p 0 -s 0 -f wordlist.txt -o out.txt dominio` |
 | Fuerza bruta (fierce) | `fierce --domain dominio` |
 | Fuerza bruta (dnsrecon) | `dnsrecon -d dominio -D wordlist.txt -t brt` |
 | Fuerza bruta (gobuster) | `gobuster dns -d dominio -w wordlist.txt` |
 | Pasivo (sin tocar el objetivo) | `subfinder -d dominio` · `amass enum -passive -d dominio` |
+
+En `dnsenum`, `-p 0 -s 0` apagan el scraping de Google y el whois/reverse: queda fuerza bruta pura por wordlist, más rápida y sin tocar terceros.
 
 Sin herramientas, solo con `dig` contra el server objetivo:
 ```sh
