@@ -122,7 +122,7 @@ class Vault:
             if any(x in root for x in EXCLUIDAS):
                 continue
             for f in sorted(archivos):
-                if f.endswith(".md") and f != "CLAUDE.md":
+                if f.endswith(".md") and f not in ("CLAUDE.md", "README.md"):
                     self.notas.append(Nota(os.path.join(root, f), self.raiz))
 
     def _indexar(self):
