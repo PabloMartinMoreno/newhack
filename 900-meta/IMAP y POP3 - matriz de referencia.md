@@ -22,7 +22,7 @@ tags:
 |---|---|
 | `nc -nv HOST 110` · `nc -nv HOST 143` | Banner y conversación cruda (sin cifrar) |
 | `openssl s_client -connect HOST:993` · `HOST:995` | Igual pero sobre TLS (IMAPS / POP3S) |
-| `nmap -sV --script "imap-capabilities,pop3-capabilities,imap-ntlm-info,pop3-ntlm-info" -p110,143,993,995 HOST` | Capacidades, mecanismos de auth y, en Exchange, info NTLM |
+| `nmap -sV --script 'pop3*,imap*' -p110,143,993,995 HOST` | Capacidades, mecanismos de auth y, en Exchange, info NTLM |
 
 `CAPABILITY` (IMAP) / `CAPA` (POP3) listan qué auth soporta y si exige TLS.
 
@@ -43,13 +43,15 @@ tags:
 La diferencia que importa en un pentest: **POP3 baja y (por defecto) borra, solo ve INBOX; IMAP deja todo en el server, con carpetas y `SEARCH`**. Con credenciales, `a SEARCH BODY "password"` sobre IMAP es la vía directa al loot.
 
 ## Autenticar sobre TLS
-
 Cuando el plano está deshabilitado, se habla el protocolo dentro de la sesión TLS:
 
 | Protocolo | Comando |
 |---|---|
-| IMAPS | `openssl s_client -connect HOST:993` → luego `a LOGIN u p` |
-| POP3S | `openssl s_client -connect HOST:995` → luego `USER u` / `PASS p` |
+| IMAPS | `openssl s_client -connect HOST:993` (o `HOST:imaps`) → luego `a LOGIN u p` |
+| POP3S | `openssl s_client -connect HOST:995` (o `HOST:pop3s`) → luego `USER u` / `PASS p` |
+
+El nombre de servicio (`imaps`/`pop3s`) lo resuelve `openssl` por `/etc/services` — equivale al número de puerto.
+
 
 ## Fuerza bruta
 
@@ -59,8 +61,8 @@ Cuando el plano está deshabilitado, se habla el protocolo dentro de la sesión 
 | hydra (IMAP) | `hydra -L users.txt -P pass.txt imap://HOST` |
 | nmap | `nmap --script pop3-brute -p110 HOST` |
 
-## Configuración (con acceso al host)
 
+## Configuración (con acceso al host)
 Casi siempre Dovecot.
 
 | Archivo | Qué tiene |
@@ -70,6 +72,7 @@ Casi siempre Dovecot.
 | `/etc/dovecot/conf.d/10-ssl.conf` | `ssl` (required/no) y certificados |
 | `/var/mail/<user>` · `/home/<user>/Maildir/` | Los buzones — correo en claro |
 
+
 ### Configuraciones peligrosas
 
 | Config | Por qué importa |
@@ -77,6 +80,7 @@ Casi siempre Dovecot.
 | `disable_plaintext_auth = no` | Acepta `USER`/`PASS`/`LOGIN` en claro sin TLS → credenciales capturables en red |
 | `ssl = no` | Todo el correo y la auth viajan sin cifrar |
 | `auth_mechanisms = plain login` sin TLS | Igual que arriba: login en texto plano |
+
 
 ## Errores frecuentes
 
@@ -86,3 +90,4 @@ Casi siempre Dovecot.
 | `NO [PRIVACYREQUIRED]` / login rechazado en claro | exige TLS | usar `openssl s_client` a 993/995 |
 | POP3 `-ERR` al `PASS` | credencial mala, o buzón bloqueado por otra sesión | reintentar, verificar credencial |
 | conexión pero sin banner | puerto TLS implícito | usar `openssl s_client`, no `nc` |
+
