@@ -52,6 +52,21 @@ Cuando el plano está deshabilitado, se habla el protocolo dentro de la sesión 
 
 El nombre de servicio (`imaps`/`pop3s`) lo resuelve `openssl` por `/etc/services` — equivale al número de puerto.
 
+## Con curl (una línea)
+
+`curl` habla los cuatro protocolos por URL — más rápido que la sesión cruda para listar y bajar. `-k` salta la verificación del certificado (útil con el self-signed del lab).
+
+| Tarea | Comando |
+|---|---|
+| Listar carpetas (IMAP) | `curl -k 'imaps://HOST' --user u:p` |
+| Ver una carpeta | `curl -k 'imaps://HOST/INBOX?NEW' --user u:p` |
+| Bajar un mensaje (IMAP) | `curl -k 'imaps://HOST/INBOX;UID=1' --user u:p` |
+| Buscar (IMAP) | `curl -k 'imaps://HOST/INBOX' -X 'SEARCH SUBJECT "password"' --user u:p` |
+| Listar mensajes (POP3) | `curl -k 'pop3s://HOST' --user u:p` |
+| Bajar un mensaje (POP3) | `curl -k 'pop3s://HOST/1' --user u:p` |
+
+Para el plano (sin TLS), cambiar `imaps`/`pop3s` por `imap`/`pop3`.
+
 
 ## Fuerza bruta
 
