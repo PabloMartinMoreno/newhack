@@ -52,6 +52,13 @@ El uso ofensivo clásico: sacar cuentas válidas para spray o phishing.
 
 `RCPT TO` funciona aunque `VRFY`/`EXPN` estén deshabilitados, porque el server igual acepta o rechaza destinatarios.
 
+Wordlists de usuarios para el `-U`:
+
+| Wordlist | Cuándo |
+|---|---|
+| `/usr/share/wordlists/seclists/Usernames/top-usernames-shortlist.txt` | Corta — primera pasada |
+| `/usr/share/wordlists/seclists/Usernames/xato-net-10-million-usernames.txt` | Muy larga — segunda vuelta si la corta no dio |
+
 ## Open relay — reenviar correo ajeno
 Un server que acepta `MAIL FROM` y `RCPT TO` **ambos externos** es un relay abierto: spam y spoofing.
 
