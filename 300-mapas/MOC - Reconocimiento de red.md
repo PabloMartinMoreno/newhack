@@ -81,6 +81,7 @@ Tres cosas que este orden codifica:
 - [[SNMP - matriz de referencia]] — community brute, enum por OID (incluida la fuga de credenciales en la línea de comando) y escritura con RW
 - [[MySQL - matriz de referencia]] — conectar, enumerar, `LOAD_FILE`/`OUTFILE` (webshell → RCE) y credenciales en config
 - [[MSSQL - matriz de referencia]] — `mssqlclient`, `xp_cmdshell` (RCE), impersonación, linked servers y captura/relay de NetNTLM
+- [[Oracle TNS - matriz de referencia]] — listener TNS, adivinar el SID, `odat` para credenciales y RCE (utlfile/externaltable/scheduler)
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja

