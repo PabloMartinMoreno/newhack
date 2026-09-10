@@ -56,7 +56,6 @@ Wordlist típica: `/usr/share/seclists/Discovery/SNMP/snmp.txt`.
 El de mayor retorno es `25.4.2.1.5`: muchos servicios reciben la contraseña como argumento y SNMP la muestra en claro.
 
 ## Escritura (community RW)
-
 Si la community de escritura (`private` y compañía) es válida, se puede **modificar** la configuración vía SNMP.
 
 | Tarea | Comando |
@@ -72,6 +71,7 @@ Poco común, pero con RW se puede llegar a cambiar rutas, tablas o —según el 
 | `/etc/snmp/snmpd.conf` | Config del demonio: communities, ACL, vistas, `extend` |
 | `/var/lib/snmp/` | Datos persistentes del agente |
 
+
 ### Configuraciones peligrosas
 
 | Config | Por qué importa |
@@ -81,6 +81,7 @@ Poco común, pero con RW se puede llegar a cambiar rutas, tablas o —según el 
 | `com2sec ... default ...` | Acepta desde cualquier IP en vez de una red concreta |
 | `extend`/`exec` en el `.conf` | Ejecuta comandos del SO; con RW o community adivinable, es RCE |
 
+
 ## Errores frecuentes
 
 | Síntoma | Causa | Salida |
@@ -89,3 +90,4 @@ Poco común, pero con RW se puede llegar a cambiar rutas, tablas o —según el 
 | walk cortísimo | la community solo ve una vista limitada | probar otras communities (RW ve más) |
 | nmap dice 161 `open|filtered` | UDP no confirma sin respuesta | mandar una consulta real (`snmpwalk`) para decidir |
 | `snmpset` falla con RO | usaste la community de lectura | necesitás la de escritura (`rwcommunity`) |
+
