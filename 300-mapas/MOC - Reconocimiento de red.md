@@ -79,6 +79,7 @@ Tres cosas que este orden codifica:
 - [[SMTP - matriz de referencia]] — enumeración de usuarios (VRFY/EXPN/RCPT), open relay y envío/spoofing con `swaks`
 - [[IMAP y POP3 - matriz de referencia]] — leer buzones: comandos por protocolo, `SEARCH` de IMAP, TLS y fuerza bruta
 - [[SNMP - matriz de referencia]] — community brute, enum por OID (incluida la fuga de credenciales en la línea de comando) y escritura con RW
+- [[MySQL - matriz de referencia]] — conectar, enumerar, `LOAD_FILE`/`OUTFILE` (webshell → RCE) y credenciales en config
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja
