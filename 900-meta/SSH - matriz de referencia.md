@@ -22,16 +22,17 @@ tags:
 | `nc -nv HOST 22` | Banner → versión de OpenSSH (mapea a CVEs) |
 | `nmap -sV --script "ssh2-enum-algos,ssh-hostkey,ssh-auth-methods" -p22 HOST` | Algoritmos, host key y **qué métodos de auth acepta** |
 | `ssh -v u@HOST` | Los métodos ofrecidos, en la salida de debug |
+| `ssh-audit HOST` | Auditoría completa: algoritmos, host keys, MACs y **CVEs conocidos** de esa versión, con lo débil marcado |
 
 `ssh-auth-methods` dice si acepta `password` (se puede forzar) o solo `publickey` (necesitás una clave).
 
 ## Enumeración de usuarios
-
 OpenSSH viejo (CVE-2018-15473) filtra usuarios válidos por diferencia de tiempo.
 
 | Comando | Qué da |
 |---|---|
 | `msf> use auxiliary/scanner/ssh/ssh_enumusers` | Usuarios válidos por timing |
+
 
 ## Fuerza bruta
 
@@ -54,7 +55,6 @@ Credenciales por defecto que valen probar: `root:root`, `root:toor`, `admin:admi
 `ssh` **exige permisos 600** en la clave o la ignora ("UNPROTECTED PRIVATE KEY FILE"). Una `id_rsa` encontrada en un share o backup es acceso directo.
 
 ## Túneles / pivoting
-
 Los flags de reenvío de SSH — el pivoting real vive en su propio dominio (pendiente), pero la sintaxis es esta.
 
 | Tipo | Comando | Para qué |
@@ -63,6 +63,7 @@ Los flags de reenvío de SSH — el pivoting real vive en su propio dominio (pen
 | Remoto (`-R`) | `ssh -R 8080:localhost:80 u@HOST` | Expongo mi servicio en el HOST |
 | Dinámico (`-D`) | `ssh -D 1080 u@HOST` | SOCKS por el HOST (+ `proxychains`) |
 | Jump (`-J`) | `ssh -J u@PIVOTE u@DESTINO` | Salto a través de un host intermedio |
+
 
 ## Configuración (con acceso al host)
 
@@ -73,6 +74,7 @@ Los flags de reenvío de SSH — el pivoting real vive en su propio dominio (pen
 | `~/.ssh/id_rsa` · `id_ed25519` | Claves privadas del usuario — loot y movimiento lateral |
 | `~/.ssh/known_hosts` | A qué hosts se conectó — mapa de objetivos siguientes |
 
+
 ### Configuraciones peligrosas en `sshd_config`
 
 | Directiva | Por qué importa |
@@ -82,6 +84,7 @@ Los flags de reenvío de SSH — el pivoting real vive en su propio dominio (pen
 | `PermitEmptyPasswords yes` | Cuentas sin contraseña entran |
 | `AllowTcpForwarding yes` | Habilita el pivoting por túnel |
 
+
 ## Errores frecuentes
 
 | Síntoma | Causa | Salida |
@@ -90,3 +93,4 @@ Los flags de reenvío de SSH — el pivoting real vive en su propio dominio (pen
 | `Permission denied (publickey)` | solo acepta clave, no tenés una | conseguir una `id_rsa`, o revisar auth-methods |
 | `no matching host key type` | cliente nuevo vs server viejo | `-o HostKeyAlgorithms=+ssh-rsa` |
 | `no matching key exchange method` | ídem con el KEX | `-o KexAlgorithms=+diffie-hellman-group1-sha1` |
+
