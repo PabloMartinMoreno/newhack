@@ -22,7 +22,7 @@ tags:
 | `nc -nv HOST 22` | Banner → versión de OpenSSH (mapea a CVEs) |
 | `nmap -sV --script "ssh2-enum-algos,ssh-hostkey,ssh-auth-methods" -p22 HOST` | Algoritmos, host key y **qué métodos de auth acepta** |
 | `ssh -v u@HOST` | Los métodos ofrecidos, en la salida de debug |
-| `ssh-audit HOST` | Auditoría completa: algoritmos, host keys, MACs y **CVEs conocidos** de esa versión, con lo débil marcado |
+| `ssh-audit HOST` | Auditoría completa |
 
 `ssh-auth-methods` dice si acepta `password` (se puede forzar) o solo `publickey` (necesitás una clave).
 
