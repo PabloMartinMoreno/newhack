@@ -84,6 +84,7 @@ Tres cosas que este orden codifica:
 - [[Oracle TNS - matriz de referencia]] — listener TNS, adivinar el SID, `odat` para credenciales y RCE (utlfile/externaltable/scheduler)
 - [[IPMI - matriz de referencia]] — BMC (iDRAC/iLO/Supermicro): volcado de hash RAKP, cipher zero y credenciales por defecto
 - [[SSH - matriz de referencia]] — acceso remoto: métodos de auth, brute, clave privada (+ crack), túneles/pivoting y `sshd_config`
+- [[rsync - matriz de referencia]] — demonio 873: listar módulos, bajar/subir (anónimo o con `rsyncd.secrets`)
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja
