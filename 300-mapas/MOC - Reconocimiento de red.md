@@ -86,6 +86,7 @@ Tres cosas que este orden codifica:
 - [[SSH - matriz de referencia]] — acceso remoto: métodos de auth, brute, clave privada (+ crack), túneles/pivoting y `sshd_config`
 - [[rsync - matriz de referencia]] — demonio 873: listar módulos, bajar/subir (anónimo o con `rsyncd.secrets`)
 - [[R-services - matriz de referencia]] — rlogin/rsh/rexec/rcp (512-514): confianza por `.rhosts`, acceso passwordless
+- [[RDP - matriz de referencia]] — escritorio remoto (3389): `xfreerdp`, PtH con Restricted Admin, BlueKeep y robo de sesión con `tscon`
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja
