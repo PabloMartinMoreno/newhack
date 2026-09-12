@@ -35,7 +35,7 @@ tags:
 | Portapapeles + disco (transferir) | `xfreerdp ... +clipboard /drive:loot,/tmp` |
 | Alternativas | `rdesktop -u u -p p HOST` · Remmina (GUI) |
 
-El PtH por RDP **necesita Restricted Admin habilitado** en el objetivo; si no, hay que la contraseña. `/drive` monta una carpeta local dentro de la sesión — vía de transferencia limpia.
+El PtH por RDP **necesita Restricted Admin habilitado** en el objetivo; si no, hay que la contraseña. `/drive` monta una carpeta local dentro de la sesión — vía de transferencia limpia. Todos los flags de `xfreerdp` (pantalla, redirección, gateway, seguridad), en [[xfreerdp - matriz de referencia]].
 
 ## Fuerza bruta
 
