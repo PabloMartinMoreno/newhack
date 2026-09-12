@@ -87,6 +87,7 @@ Tres cosas que este orden codifica:
 - [[rsync - matriz de referencia]] — demonio 873: listar módulos, bajar/subir (anónimo o con `rsyncd.secrets`)
 - [[R-services - matriz de referencia]] — rlogin/rsh/rexec/rcp (512-514): confianza por `.rhosts`, acceso passwordless
 - [[RDP - matriz de referencia]] — escritorio remoto (3389): `xfreerdp`, PtH con Restricted Admin, BlueKeep y robo de sesión con `tscon`
+- [[WinRM - matriz de referencia]] — PowerShell remoting (5985/5986): `evil-winrm`, PtH nativo, `nxc winrm` (Pwn3d!)
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja
