@@ -72,7 +72,13 @@ echo "IP vhost.dominio" | sudo tee -a /etc/hosts
 curl -s http://vhost.dominio/
 ```
 
-Wordlists: `/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt`, o listas de vhosts de SecLists.
+Wordlists (SecLists, `Discovery/DNS/`):
+
+| Wordlist | Cuándo |
+|---|---|
+| `subdomains-top1million-5000.txt` | Corta — primera pasada rápida |
+| `subdomains-top1million-110000.txt` | Grande — segunda vuelta |
+| `namelist.txt` | Alternativa clásica de nombres de host |
 
 ## Errores frecuentes
 
