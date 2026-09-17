@@ -34,11 +34,12 @@ tags:
 | En masa + título/server | `httpx -u HOST -td -title -server -status-code` |
 | Cabeceras reveladoras | `curl -sI http://HOST` → `Server`, `X-Powered-By`, `X-AspNet-Version` |
 | Navegador | extensión Wappalyzer |
-| Server + vulns conocidas | `nikto -h http://HOST` |
+| Solo fingerprint (nikto) | `nikto -h http://HOST -Tuning b` |
+| Server + vulns conocidas (nikto completo) | `nikto -h http://HOST` |
 
 `Server` y `X-Powered-By` son el fingerprint más barato; muchos los dejan puestos.
 
-`nikto` va más allá del fingerprint: además del server y su versión, marca archivos peligrosos, software viejo y misconfigs conocidas. Útil como primer barrido, pero **muy ruidoso** (cientos de peticiones, fácil de loguear/bloquear).
+`nikto` completo va más allá del fingerprint: marca archivos peligrosos, software viejo y misconfigs — útil como primer barrido, pero **muy ruidoso** (cientos de peticiones). Para usarlo **solo como fingerprint**, `-Tuning b` limita al módulo de identificación de software (mucho menos ruido). Otros valores de `-Tuning`: `2` misconfig, `3` info disclosure, `x` para excluir.
 
 ## CMS
 
