@@ -75,8 +75,8 @@ Con `-oL` de puertos abiertos no molesta. **Con `--banners` lo rompe todo**, por
 > # 2. decirle a masscan que use exactamente ese puerto
 > sudo masscan 10.10.10.0/24 -p80,443 --banners --adapter-port 44444 --rate 5000
 > ```
->
 > Sin el paso 1, `--banners` devuelve poco y nada y parece que los servicios no responden. El síntoma no dice nada de la causa.
+
 
 | Flag | Para qué |
 |---|---|

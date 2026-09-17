@@ -27,12 +27,14 @@ tags:
 | `rwho` | 513/udp | Quién está logueado en la red local (`rwhod`) |
 | `rstat` · `ruptime` | RPC (111) | Estadísticas y uptime vía `rstatd` |
 
+
 ## Reconocimiento
 
 | Comando | Qué da |
 |---|---|
 | `nmap -sV -p512,513,514 HOST` | Detecta exec/login/shell y sus versiones |
 | `rusers -l HOST` | Usuarios logueados en el objetivo (RPC) |
+
 
 ## Ejecutar y entrar
 
@@ -44,8 +46,8 @@ tags:
 | `rexec -l u -p p HOST "id"` | Ejecuta con credencial (viaja en claro) |
 | `rcp archivo u@HOST:/ruta` | Copia (como `cp` pero remoto) |
 
-## El ataque: confianza por `.rhosts` / `hosts.equiv`
 
+## El ataque: confianza por `.rhosts` / `hosts.equiv`
 El corazón de los r-services. Si el objetivo confía en tu host+usuario, entrás **sin contraseña**.
 
 - `hosts.equiv` (global) o `~/.rhosts` (por usuario) listan `host usuario` de confianza.
@@ -62,6 +64,7 @@ Si tenés escritura sobre el home de un usuario (por otra vía), **crear su `~/.
 | `ruptime` | Uptime y carga de esos hosts |
 | `rusers -al HOST` | Usuarios en un host puntual |
 
+
 ## Configuración (con acceso al host)
 
 | Archivo | Qué tiene |
@@ -70,6 +73,7 @@ Si tenés escritura sobre el home de un usuario (por otra vía), **crear su `~/.
 | `~/.rhosts` | Confianza por usuario — **`+ +` = acceso passwordless** |
 | `/etc/inetd.conf` · `xinetd.d/` | Dónde se habilitan `shell`/`login`/`exec` |
 
+
 ### Configuraciones peligrosas
 
 | Config | Por qué importa |
@@ -77,6 +81,7 @@ Si tenés escritura sobre el home de un usuario (por otra vía), **crear su `~/.
 | `+ +` en `.rhosts`/`hosts.equiv` | Confía en cualquier host y usuario → acceso libre |
 | Un `.rhosts` de root | Login de root sin contraseña |
 | Los servicios habilitados | Todo el tráfico (incluida la credencial de `rexec`) viaja en claro |
+
 
 ## Errores frecuentes
 
