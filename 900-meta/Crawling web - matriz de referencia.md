@@ -41,7 +41,7 @@ URLs que ya conocen terceros — no genera tráfico contra el objetivo.
 | robots.txt | `curl -s https://HOST/robots.txt` (rutas que pidieron **no** indexar) |
 | sitemap | `curl -s https://HOST/sitemap.xml` |
 
-`robots.txt` es oro barato: lista rutas que el dueño quiso esconder de los buscadores. La lista completa de rutas/archivos que conviene pedir a mano, en [[Archivos y rutas conocidas - matriz de referencia]].
+`robots.txt` es oro barato: lista rutas que el dueño quiso esconder de los buscadores. La lista completa de rutas/archivos que conviene pedir a mano, en [[Rutas web sensibles - matriz de referencia]].
 
 ## Extraer de JavaScript
 

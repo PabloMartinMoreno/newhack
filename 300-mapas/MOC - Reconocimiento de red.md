@@ -94,7 +94,7 @@ Tres cosas que este orden codifica:
 - [[Fuzzing de subdominios y vhosts - matriz de referencia]] — brute con ffuf/gobuster: subdominios (capa DNS) y vhosts (capa HTTP), y qué encuentra cada uno
 - [[Fingerprinting - matriz de referencia]] — identificar SO, servidor web, framework, CMS y WAF (versión → CVE)
 - [[Crawling web - matriz de referencia]] — mapear URLs/endpoints/JS/params siguiendo enlaces (katana/hakrawler, pasivo, JS)
-- [[Archivos y rutas conocidas - matriz de referencia]] — checklist de rutas a pedir a mano: robots, `.git`, `.env`, actuator, swagger, paneles
+- [[Rutas web sensibles - matriz de referencia]] — checklist de rutas a pedir a mano: robots, `.git`, `.env`, actuator, swagger, paneles
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja

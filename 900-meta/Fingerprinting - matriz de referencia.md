@@ -63,7 +63,6 @@ tags:
 El hash del favicon identifica la tecnología (paneles, productos) y, en Shodan, encuentra **todos** los hosts con el mismo favicon — pivote de infraestructura.
 
 ## De la versión al exploit
-
 Con producto y versión, buscar el fallo conocido.
 
 | Tarea | Comando |

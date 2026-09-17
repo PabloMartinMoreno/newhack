@@ -1,15 +1,15 @@
 ---
 tipo: meta
 aliases:
-  - Archivos y rutas conocidas - matriz
+  - Rutas web sensibles - matriz
   - well-known files - matriz
-  - rutas a revisar
+  - rutas web a revisar
 tags:
   - meta/referencia
   - dominio/red
 ---
 
-# Archivos y rutas conocidas - matriz de referencia
+# Rutas web sensibles - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
 > Rutas y archivos que conviene pedir **a mano** en todo objetivo web: filtran estructura, config, secretos y paneles sin necesidad de fuzzear. Complementa el [[Crawling web - matriz de referencia]] (que sigue enlaces) y el content discovery (que brute-ea rutas). `HOST` es el objetivo.
