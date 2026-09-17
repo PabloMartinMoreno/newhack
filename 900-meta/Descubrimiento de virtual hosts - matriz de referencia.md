@@ -12,7 +12,7 @@ tags:
 # Descubrimiento de virtual hosts - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
-> Un servidor web sirve **varios sitios en una misma IP** y elige cuál por la cabecera `Host`. Descubrir vhosts = fuzzear ese `Host` contra la IP y ver qué responde distinto. **Distinto de la enum de subdominios**: un vhost puede **no tener registro DNS** (interno, staging) y por eso no aparece en [[Enumeración pasiva de subdominios - matriz de referencia]] — solo se ve forzando el `Host`. El mecanismo del `Host`, en [[MOC - Host header]]. Criterio de recon en [[MOC - Reconocimiento de red]].
+> Un servidor web sirve **varios sitios en una misma IP** y elige cuál por la cabecera `Host`. Descubrir vhosts = fuzzear ese `Host` contra la IP y ver qué responde distinto. **No confundir con el fuzzing de subdominios**: aquel trabaja en capa **DNS** (¿qué nombre resuelve?) y vive en [[DNS - matriz de referencia]]; esto trabaja en capa **HTTP** (¿qué sirve esta IP?). Un vhost puede **no tener registro DNS** (interno, staging) y por eso el brute de subdominios no lo ve — solo aparece forzando el `Host`. El mecanismo del `Host`, en [[MOC - Host header]]. Criterio de recon en [[MOC - Reconocimiento de red]].
 
 `IP` es el objetivo; `dominio` el dominio base; `FUZZ` el marcador de la palabra.
 
@@ -20,7 +20,6 @@ tags:
 
 1. **Baseline**: pedir con un `Host` inexistente y anotar el tamaño/estado de la respuesta por defecto.
 2. **Fuzzear** el `Host` con una wordlist, **filtrando** ese baseline. Lo que sobra son vhosts reales.
-
 ```sh
 # baseline: qué devuelve el server ante un host que no existe
 curl -s -H "Host: noexiste123.dominio" http://IP | wc -c
@@ -49,12 +48,10 @@ En TLS puede importar el **SNI**: algunos servers responden según el SNI, no so
 ## Confirmar y usar
 
 Encontrado un vhost, mapearlo a la IP para navegarlo:
-
 ```sh
 echo "IP vhost.dominio" | sudo tee -a /etc/hosts
 curl -s http://vhost.dominio/    # o el navegador
 ```
-
 Wordlists: `/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt`, o listas de vhosts de SecLists.
 
 ## Errores frecuentes
@@ -65,3 +62,4 @@ Wordlists: `/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt`
 | Nada matchea | el baseline varía por respuesta (tamaño dinámico) | filtrar por palabras/líneas (`-fw`/`-fl`) en vez de tamaño |
 | el vhost redirige a otro | el server responde con `Location` por `Host` | seguir el redirect y ajustar el filtro al nuevo tamaño |
 | en 443 no cambia nada | el server enruta por SNI | poner el nombre en el SNI, no solo en el `Host` |
+

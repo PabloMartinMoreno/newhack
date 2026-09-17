@@ -60,7 +60,6 @@ El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** 
 
 Probá AXFR contra **cada `NS`** y contra las **zonas internas** que descubras (`dig axfr internal.dominio @NS`): la transferencia suele quedar mal cerrada justo en las zonas internas.
 
-
 ## Enumeración de subdominios
 
 | Enfoque | Comando |
@@ -73,6 +72,8 @@ Probá AXFR contra **cada `NS`** y contra las **zonas internas** que descubras (
 
 En `dnsenum`, `-p 0 -s 0` apagan el scraping de Google y el whois/reverse: queda fuerza bruta pura por wordlist, más rápida y sin tocar terceros.
 La wordlist recomendada para la ocasión es: `/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt`
+
+Esto es brute en capa **DNS**: encuentra nombres que **resuelven**. Los sitios que una IP sirve **sin** registro DNS (vhosts) se descubren en capa HTTP, fuzzeando el `Host`: [[Descubrimiento de virtual hosts - matriz de referencia]].
 
 Sin herramientas, solo con `dig` contra el server objetivo:
 ```sh
