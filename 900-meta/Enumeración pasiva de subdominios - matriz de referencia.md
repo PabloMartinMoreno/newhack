@@ -11,7 +11,7 @@ tags:
 # Enumeración pasiva de subdominios - matriz de referencia
 
 > [!info] Referencia pura, no un zettel
-> **Pasiva = no se toca la infra del objetivo**: todo sale de fuentes de terceros (OSINT). Sin ruido, ideal para recon externo y bug bounty. El brute **activo** (que sí consulta al DNS del objetivo) vive en [[DNS - matriz de referencia]]. Criterio de recon en [[MOC - Reconocimiento de red]].
+> **Pasiva = no se toca la infra del objetivo**: todo sale de fuentes de terceros (OSINT). Sin ruido, ideal para recon externo y bug bounty. El brute **activo** (que sí consulta al DNS del objetivo) vive en [[DNS - matriz de referencia]]. Los nombres que **no tienen DNS** pero sí sirve el server (vhosts) se ven en [[Descubrimiento de virtual hosts - matriz de referencia]]. Criterio de recon en [[MOC - Reconocimiento de red]].
 
 `dominio` es el objetivo (ej. `ejemplo.com`).
 
