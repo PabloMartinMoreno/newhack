@@ -16,7 +16,10 @@ tags:
 > Fuerza bruta de nombres con `ffuf`/`gobuster` — las mismas herramientas para dos cosas que **se confunden pero encuentran distinto**. La enum pasiva (OSINT) está en [[Enumeración pasiva de subdominios - matriz de referencia]]; las herramientas DNS-nativas (dnsenum, dnsrecon), en [[DNS - matriz de referencia]]. Criterio de recon en [[MOC - Reconocimiento de red]].
 
 > [!warning] Subdominio ≠ vhost
-> **Fuzzing de subdominios** (capa **DNS**): adivinás nombres y ves cuáles **resuelven** en el DNS. **Fuzzing de vhosts** (capa **HTTP**): fuzzeás la cabecera `Host` contra una **IP fija** y ves qué sirve distinto — encuentra sitios que la IP sirve **aunque no tengan registro DNS** (internos, staging). Un vhost sin DNS es invisible al fuzz de subdominios, y al revés.
+> **Subdominio** = concepto de **DNS**: un nombre (`blog.ejemplo.com`) con registro que **resuelve a una IP** — puede apuntar a cualquier server. Está en el directorio público; cualquiera lo resuelve.
+> **Vhost** = concepto del **servidor web**: una IP sirve varios sitios y elige cuál según la cabecera **`Host`** de la petición. Cada sitio es un vhost.
+> Se solapan —un subdominio suele ser también vhost de esa IP—, pero son independientes: un subdominio puede apuntar a **otra** IP, y un **vhost puede no tener DNS** (interno, staging): el server lo sirve si mandás ese `Host`, pero no figura en el directorio público.
+> Por eso las dos técnicas: el brute de subdominios pregunta *"¿qué nombres existen en DNS?"* (capa DNS); el fuzz de vhosts, *"¿qué sirve esta IP aunque no esté en DNS?"* (capa HTTP). Cada uno ve lo que el otro no.
 
 `IP` es el objetivo; `dominio` el dominio base; `FUZZ` el marcador de la palabra.
 
