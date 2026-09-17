@@ -25,6 +25,7 @@ tags:
 | Banner crudo | `nc -nv HOST PORT` · `curl -sI http://HOST` |
 | Pasivo (por tráfico) | `p0f -i eth0` (SO de quien te habla, sin tocar) |
 
+
 ## Stack web
 
 | Tarea | Comando |
@@ -33,8 +34,11 @@ tags:
 | En masa + título/server | `httpx -u HOST -td -title -server -status-code` |
 | Cabeceras reveladoras | `curl -sI http://HOST` → `Server`, `X-Powered-By`, `X-AspNet-Version` |
 | Navegador | extensión Wappalyzer |
+| Server + vulns conocidas | `nikto -h http://HOST` |
 
 `Server` y `X-Powered-By` son el fingerprint más barato; muchos los dejan puestos.
+
+`nikto` va más allá del fingerprint: además del server y su versión, marca archivos peligrosos, software viejo y misconfigs conocidas. Útil como primer barrido, pero **muy ruidoso** (cientos de peticiones, fácil de loguear/bloquear).
 
 ## CMS
 
@@ -44,6 +48,7 @@ tags:
 | Genérico | `cmseek -u http://HOST` |
 | Drupal | `droopescan scan drupal -u http://HOST` |
 | Joomla | `joomscan -u http://HOST` |
+
 
 ## WAF y TLS
 
@@ -65,6 +70,7 @@ Con producto y versión, buscar el fallo conocido.
 | Buscar exploit local | `searchsploit <producto> <versión>` |
 | Scripts de vuln (nmap) | `nmap -sV --script vuln -p PORT HOST` |
 
+
 ## Errores / notas
 
 | Punto | Detalle |
@@ -73,3 +79,4 @@ Con producto y versión, buscar el fallo conocido.
 | `-sV`/`-O` son intrusivos | mandan sondas; en sigilo, preferir pasivo (banners, `p0f`, `whatweb` liviano) |
 | `-O` necesita root y un puerto abierto y uno cerrado | si no, la detección de SO falla o es imprecisa |
 | Versión oculta | inferir por rutas, errores, orden de cabeceras, o `jarm` |
+
