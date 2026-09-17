@@ -69,7 +69,7 @@ Probá AXFR contra **cada `NS`** y contra las **zonas internas** que descubras (
 | Fuerza bruta (fierce) | `fierce --domain dominio` |
 | Fuerza bruta (dnsrecon) | `dnsrecon -d dominio -D wordlist.txt -t brt` |
 | Fuerza bruta (gobuster) | `gobuster dns -d dominio -w wordlist.txt` |
-| Pasivo (sin tocar el objetivo) | `subfinder -d dominio` · `amass enum -passive -d dominio` |
+| Pasivo (sin tocar el objetivo) | `subfinder -d dominio` · `amass enum -passive -d dominio` — todas las fuentes en [[Enumeración pasiva de subdominios - matriz de referencia]] |
 
 En `dnsenum`, `-p 0 -s 0` apagan el scraping de Google y el whois/reverse: queda fuerza bruta pura por wordlist, más rápida y sin tocar terceros.
 La wordlist recomendada para la ocasión es: `/usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt`

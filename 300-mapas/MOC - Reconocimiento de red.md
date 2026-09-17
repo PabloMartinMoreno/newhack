@@ -89,6 +89,7 @@ Tres cosas que este orden codifica:
 - [[RDP - matriz de referencia]] — escritorio remoto (3389): `xfreerdp`, PtH con Restricted Admin, BlueKeep y robo de sesión con `tscon`
 - [[WinRM - matriz de referencia]] — PowerShell remoting (5985/5986): `evil-winrm`, PtH nativo, `nxc winrm` (Pwn3d!)
 - [[WMI - matriz de referencia]] — DCOM (135): `wmiexec` (exec sin servicio), consultas WQL y persistencia fileless por eventos
+- [[Enumeración pasiva de subdominios - matriz de referencia]] — OSINT sin tocar el objetivo: agregadores, cert transparency, archivos web y APIs
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja
