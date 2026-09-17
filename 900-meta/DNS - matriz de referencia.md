@@ -54,7 +54,7 @@ El error jugoso: un `NS` que permite transferir la zona entera vuelca **todos** 
 
 | Herramienta | Comando |
 |---|---|
-| dig | `dig axfr dominio @NS` (o `dig axfr @NS dominio` — el orden da igual) |
+| dig | `dig axfr @NS dominio` |
 | host | `host -l dominio NS` |
 | dnsrecon | `dnsrecon -d dominio -t axfr` |
 
