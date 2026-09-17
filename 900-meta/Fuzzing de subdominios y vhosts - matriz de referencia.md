@@ -24,7 +24,6 @@ tags:
 `IP` es el objetivo; `dominio` el dominio base; `FUZZ` el marcador de la palabra.
 
 ## Fuzzing de subdominios (capa DNS)
-
 Encuentra nombres que **resuelven**. Requiere que el `dominio` resuelva por tu resolutor (o `-r` apuntando al DNS del objetivo).
 
 | Herramienta | Comando |
@@ -35,12 +34,9 @@ Encuentra nombres que **resuelven**. Requiere que el `dominio` resuelva por tu r
 Si el `dominio` es interno/lab (`.htb`), apuntá la resolución al DNS del objetivo: `ffuf ... ` con `/etc/hosts` o `gobuster dns -r NS`. Las herramientas DNS-nativas (dnsenum/dnsrecon/fierce) y el brute contra un `NS` puntual están en [[DNS - matriz de referencia]].
 
 ## Fuzzing de vhosts (capa HTTP)
-
 Encuentra sitios servidos por la IP según el `Host`, tengan DNS o no.
-
 1. **Baseline**: pedir con un `Host` inexistente y anotar el tamaño/estado por defecto.
 2. **Fuzzear** el `Host` filtrando ese baseline. Lo que sobra son vhosts reales.
-
 ```sh
 # baseline: qué devuelve ante un host que no existe
 curl -s -H "Host: noexiste123.dominio" http://IP | wc -c
@@ -54,6 +50,8 @@ curl -s -H "Host: noexiste123.dominio" http://IP | wc -c
 
 El `-fs` (filter size) de ffuf es la clave: sin filtrar el baseline **todo matchea**. También `-fc` (código), `-fw` (palabras), `-fl` (líneas).
 
+**Por qué ffuf cambia entre los dos modos:** en subdominio el `FUZZ` va en la **URL** (`-u https://FUZZ.dominio`) y ffuf resuelve por DNS — el que no existe no conecta y se filtra solo, no hace falta `-fs`. En vhost el `FUZZ` va en el **`Host`** contra la **IP fija** (`-u http://IP -H "Host: FUZZ..."`): siempre conecta, así que todo responde y **hay que** filtrar con `-fs`.
+
 ### HTTPS y SNI
 
 | Caso | Comando |
@@ -64,14 +62,11 @@ El `-fs` (filter size) de ffuf es la clave: sin filtrar el baseline **todo match
 En TLS puede importar el **SNI**: algunos servers responden según el SNI, no solo el `Host`. Si el fuzz por `Host` no rinde, probar con el nombre en el SNI.
 
 ## Confirmar y usar
-
 Encontrado un nombre/vhost, mapearlo a la IP para navegarlo:
-
 ```sh
 echo "IP vhost.dominio" | sudo tee -a /etc/hosts
 curl -s http://vhost.dominio/
 ```
-
 Wordlists (SecLists, `Discovery/DNS/`):
 
 | Wordlist | Cuándo |
@@ -79,6 +74,7 @@ Wordlists (SecLists, `Discovery/DNS/`):
 | `subdomains-top1million-5000.txt` | Corta — primera pasada rápida |
 | `subdomains-top1million-110000.txt` | Grande — segunda vuelta |
 | `namelist.txt` | Alternativa clásica de nombres de host |
+
 
 ## Errores frecuentes
 
