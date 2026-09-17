@@ -53,8 +53,11 @@ Sacan subdominios de URLs archivadas (Wayback, Common Crawl) — aparecen hosts 
 | Fuente | Cómo |
 |---|---|
 | Chaos (ProjectDiscovery) | `chaos -d dominio` (API key) |
-| SecurityTrails · VirusTotal | por API o web; subfinder las integra |
+| SecurityTrails · VirusTotal | por API o web (`virustotal.com/gui/domain/`); subfinder las integra |
 | Shodan · Censys | `shodan domain dominio`; búsqueda por org/cert en Censys |
+| domain.glass | `domain.glass` — intel de dominio (infra, tecnologías) en la web |
+
+Adyacente (no subdominios, pero misma superficie externa): `buckets.grayhatwarfare.com/files` busca buckets S3/cloud públicos del objetivo.
 
 ## Buscadores y dorking
 
@@ -62,6 +65,16 @@ Sacan subdominios de URLs archivadas (Wayback, Common Crawl) — aparecen hosts 
 |---|---|
 | Google | `site:*.dominio -www` |
 | GitHub | buscar `dominio` en código: subdominios en configs y variables |
+
+## De dominio a IPs (pivote pasivo)
+
+`whois` da registrante, netblocks y contactos; resolver los subdominios y pasar cada IP por Shodan da servicios y puertos **sin escanear**.
+
+| Tarea | Comando |
+|---|---|
+| WHOIS del dominio o IP | `whois dominio` · `whois <ip>` · `whois -h <server> <consulta>` |
+| Resolver subdominios a IPs | `for s in $(cat subs.txt); do host $s \| grep "has address" \| cut -d" " -f4; done \| sort -u > ips.txt` |
+| Servicios de cada IP (Shodan) | `for ip in $(cat ips.txt); do shodan host $ip; done` |
 
 ## Consolidar y validar
 
