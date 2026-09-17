@@ -92,6 +92,7 @@ Tres cosas que este orden codifica:
 - [[Enumeración pasiva de subdominios - matriz de referencia]] — OSINT sin tocar el objetivo: agregadores, cert transparency, archivos web y APIs
 - [[Footprinting pasivo - matriz de referencia]] — recon externo de la org: whois, ASN/netblocks, `shodan host`, domain.glass y buckets
 - [[Fuzzing de subdominios y vhosts - matriz de referencia]] — brute con ffuf/gobuster: subdominios (capa DNS) y vhosts (capa HTTP), y qué encuentra cada uno
+- [[Fingerprinting - matriz de referencia]] — identificar SO, servidor web, framework, CMS y WAF (versión → CVE)
 - [[XML de escaneo a HTML]] — del `-oX` a un informe HTML legible. Sirve para las dos herramientas
 
 ## Cara roja
