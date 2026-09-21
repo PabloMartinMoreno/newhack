@@ -25,6 +25,7 @@ tags:
 | `/.well-known/openid-configuration` | Endpoints OIDC → [[OAuth - matriz de reconocimiento]] |
 | `/.well-known/jwks.json` | Claves públicas JWT → [[JWT - matriz de referencia]] |
 
+
 ## Config y secretos expuestos
 
 | Ruta | Qué da |
@@ -34,6 +35,7 @@ tags:
 | `/.svn/` · `/.hg/` · `/.DS_Store` | Metadatos de control de versiones / listados de directorio |
 | Backups: `index.php.bak`, `config.php~`, `.old`, `site.zip`, `backup.tar.gz` | Código o config en claro |
 | `/wp-config.php.bak` · `/web.config` · `/.htaccess` | Config del server / de la app |
+
 
 ## Estado y diagnóstico
 
@@ -45,6 +47,7 @@ tags:
 | `/metrics` (Prometheus) | Métricas, a veces con datos internos |
 | `/actuator` (Spring Boot) | `/actuator/env`, `/actuator/health`, `/actuator/heapdump` (¡memoria!) |
 
+
 ## Paneles y admin
 
 | Ruta | Qué es |
@@ -54,6 +57,7 @@ tags:
 | `/phpmyadmin` · `/adminer.php` | Gestión de base de datos |
 | `/console` · `/_console` | Consolas de framework (a veces con REPL) |
 
+
 ## API y documentación
 
 | Ruta | Qué da |
@@ -61,6 +65,7 @@ tags:
 | `/api` · `/api/v1` | Base de la API |
 | `/swagger-ui` · `/swagger.json` · `/openapi.json` · `/api-docs` | Especificación completa de la API — todos los endpoints |
 | `/graphql` · `/graphiql` | Endpoint GraphQL → [[MOC - GraphQL]] |
+
 
 ## Barrido rápido
 
@@ -73,3 +78,4 @@ Wordlists de SecLists que juntan muchas de estas: `Discovery/Web-Content/common.
 | `/.git/` sin listado | igual sirve: `git-dumper` reconstruye desde `/.git/HEAD` y objetos |
 | `200` en todo | catch-all que responde siempre — mirar el contenido, no el código |
 | paneles detrás de WAF | probar variantes de ruta y método; ver [[Fingerprinting - matriz de referencia]] |
+
