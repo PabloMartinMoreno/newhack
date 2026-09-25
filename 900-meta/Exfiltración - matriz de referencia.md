@@ -13,6 +13,9 @@ tags:
 > [!info] Referencia pura, no un zettel
 > Comandos para **sacar** datos del objetivo. El criterio —canal abierto contra encubierto— vive en [[MOC - Transferencia de archivos]], [[Exfiltración por canal abierto]] y [[Exfiltración por canal encubierto]]. Para traer, [[Transferencia de archivos - matriz de referencia]].
 
+> [!warning] No exfiltres datos reales del cliente
+> PII, datos financieros, secretos comerciales y credenciales reales no salen del entorno salvo que el contrato lo pida explícito. Para probar DLP o filtrado de egress, generá un archivo con datos **ficticios** que imiten lo que el cliente protege. Una fuga tuya durante el test es un incidente, no un hallazgo.
+
 ## Probar qué sale (egress)
 
 Antes de exfiltrar, medir qué protocolo/puerto llega a tu box.
@@ -62,7 +65,7 @@ Túnel completo: `ptunnel-ng` (servidor en el box, cliente en el objetivo).
 ## Reducir volumen y firma
 
 Comprimir antes: `tar czf - dir | ...` reduce trozos y tiempo.
-Cifrar para que el contenido no dispare DLP: `... | openssl enc -aes-256-cbc -pbkdf2 -k clave`.
+Cifrar para que el contenido no dispare DLP: `... | openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -k clave`. Se descifra en tu box con los mismos flags: `openssl enc -d -aes-256-cbc -pbkdf2 -iter 100000 -in loot.enc -out loot`. En Windows no hay openssl nativo — cifrá en tu box tras traer el archivo.
 La entropía alta en DNS es justo lo que detecta [[Exfiltración por subdominios de alta entropía]] — comprimir sube el retorno pero también la entropía; es un compromiso, no una evasión.
 
 ## Errores frecuentes
