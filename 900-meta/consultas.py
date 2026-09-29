@@ -379,10 +379,35 @@ def higiene(vault, _):
             inicio = f.read()
     except OSError:
         inicio = ""
+
+    # Indexación transitiva: un MOC está indexado si Inicio lo cita, o si lo cita
+    # otro MOC ya alcanzable. Permite hubs (Inicio → MOC - Web → MOC - SQL injection)
+    # sin listar cada dominio en Inicio. BFS sobre enlaces MOC→MOC, resueltos por
+    # nombre o alias.
+    def mocs_citados(txt):
+        out = set()
+        for t in WIKILINK.findall(txt):
+            d = vault.indice.get(t.strip().lower())
+            if d is not None and d.tipo == "moc":
+                out.add(d.nombre)
+        return out
+
+    moc_por_nombre = {n.nombre: n for n in vault.notas if n.tipo == "moc"}
+    alcanzables = set()
+    cola = list(mocs_citados(inicio))
+    while cola:
+        nombre = cola.pop()
+        if nombre in alcanzables:
+            continue
+        alcanzables.add(nombre)
+        n = moc_por_nombre.get(nombre)
+        if n:
+            cola.extend(mocs_citados(open(n.ruta, encoding="utf-8").read()))
+
     sin_indexar = [(n.nombre, n.fm.get("dominio", "—"))
                    for n in vault.notas
-                   if n.tipo == "moc" and f"[[{n.nombre}]]" not in inicio]
-    print("  MOC no indexados en Inicio.md:")
+                   if n.tipo == "moc" and n.nombre not in alcanzables]
+    print("  MOC no indexados en Inicio.md (directo o vía otro MOC):")
     tabla(["MOC", "Dominio"], sin_indexar, "todos los dominios indexados")
 
     corte = datetime.date.today() - datetime.timedelta(days=14)
