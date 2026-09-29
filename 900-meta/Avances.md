@@ -871,7 +871,79 @@ Sin MOC ni superficie propios: las decisiones de DNS ya viven repartidas —reco
 
 `higiene` exit 0.
 
+### 2026-09-27 — Dominio Shells: se saca la reverse shell de adentro de command injection
+
+Segundo dominio de **post-explotación**, hermano de Transferencia de archivos. El conocimiento de shells estaba atrapado y **duplicado** dentro de command injection ([[Command injection impacto - matriz de referencia]] §2/§3) y de [[Webshells - matriz de referencia]], cuando una reverse shell se necesita igual tras file upload, deserialización, SSTI→RCE o una credencial. Se extrajo como dominio transversal propio.
+
+**Ejes fijados** (brainstorming antes de escribir): **dirección de conexión** (reverse / bind / sin socket) y **origen del payload** (one-liner nativo / binario generado con msfvenom, y dentro de éste staged / stageless). A matriz —cambian sintaxis, no decisión—: el lenguaje del one-liner, la plataforma, y la estabilización a TTY (que además no es un "en vez de", es un paso).
+
+**Refinamiento sobre el diseño aprobado:** las dos decisiones de payload (nativo/generado, staged/stageless) **no** se escribieron como tradecraft — piden `opsec`/`probado`/`contexto` y son decisiones, no variantes que se ejecutan. Viven en el árbol del [[MOC - Shells]] (regla 8: el MOC *es* procedimiento de decisión) + [[msfvenom - matriz de referencia]]. El tradecraft de payload quedó como una variante real: [[Payload generado con msfvenom]].
+
+**Notas:** 1 técnica paraguas ([[T1059 - Command and Scripting Interpreter]], la primera con `tacticas: [execution]`), 3 tradecraft ([[Shell - conexión reversa]], [[Shell - conexión bind]], [[Payload generado con msfvenom]]), 1 entidad ([[metasploit]] — msfvenom/msfconsole/Meterpreter), 3 matrices ([[Reverse y bind shells - matriz de referencia]], [[Estabilización de shell - matriz de referencia]], [[msfvenom - matriz de referencia]]) y [[MOC - Shells]]. Matrices en **grid** por preferencia del usuario (cuadros anchos con aviso y `<leader>uw`), con las tuberías escapadas `\|` para no romper la tabla.
+
+**Dedup (regla 6):** las reverse shells y la estabilización de las matrices de command injection y webshells se reemplazaron por punteros a las matrices nuevas — una sola copia que se corrige en un lado. [[Command injection - a shell interactiva]] queda como la vista específica de CI y enlaza al dominio general.
+
+**Cara azul sin telemetría nueva:** reverse reusa [[Sysmon EID 3 - NetworkConnect]] + [[Proceso hijo del servidor web]], que ya tienen consumidor azul. **Huecos declarados, no escondidos:** el puerto en escucha del bind shell no tiene telemetría (mismo hueco de red que Transferencia y Reconocimiento), la reverse no-web genérica no tiene detección propia, y Meterpreter en memoria migra a process injection (`T1055`, sin abrir) sobre EID 7/8 que ninguna detección consume.
+
+`higiene` exit 0, `huecos` cero.
+
+### 2026-09-27 — MOC - Web como hub, e indexación transitiva en higiene
+
+Inicio linkeaba los 34 MOCs de web planos; con el tiempo no escala. Se creó [[MOC - Explotación web]] como **hub** —espejo de [[MOC - Active Directory]]—: árbol de triage *dónde falla la app* que enruta a las seis familias (inyección, identidad, el servidor trae/incluye, cliente, discrepancia de parseo, lógica), más una rama de **reconocimiento de la superficie web** (crawling, fingerprint, fuzzing de subdominios) que antes no tenía casa. La filosofía "web se organiza por mecanismo, no por nombre" migró del cuerpo de Inicio al hub.
+
+**Cambio de infra en `consultas.py higiene`:** la regla "todo MOC debe estar en Inicio.md" asumía un Inicio plano y rompía con cualquier hub. Ahora la indexación es **transitiva**: un MOC cuenta si Inicio lo cita **o** lo cita otro MOC alcanzable (BFS sobre enlaces MOC→MOC, resueltos por nombre o alias). Esto habilita la jerarquía Inicio → hub → MOC de dominio → notas sin listar cada dominio en Inicio.
+
+**Principio que queda fijado:** un MOC es una **vista**, no un contenedor exclusivo —una nota puede vivir en varias—; y una sección de Inicio se colapsa en un hub-MOC cuando pasa de ~6 hijos. Web y AD ya son hubs; el resto (fundamentos, recon, post-ex) son encabezados con pocos MOCs hasta que crezcan.
+
+**Pendiente, decidido dejar para después:** la **reorganización del nivel superior de Inicio**. Se descartó anidar por fase (una superficie cruza todas las fases → duplicaría el hub) y anidar por un `MOC - Post-explotación` wrapper (embolsa cosas heterogéneas sin un árbol común). El eje de anidación será la **superficie**; la fase, orden interno. Falta cerrar cómo quedan las categorías top (superficies vs transversal), y sacar Azul de Inicio. Hasta entonces, la sección Web de Inicio mantiene la lista plana con un aviso de transitoria, ya indexada dentro del hub. La actualización de [[Estructura del vault]] con el patrón de hubs va con esa decisión.
+
+`higiene` exit 0.
+
+### 2026-09-27 — Inicio pasa a capa de fases; los hubs quedan como vista por dominio
+
+Se cerró la reorganización que la entrada anterior dejó pendiente. **Inicio lista solo MOCs de fase**, en orden de recorrido del engagement: [[MOC - Reconocimiento]], [[MOC - Explotación]], [[MOC - Post-explotación]], [[MOC - Movimiento lateral]], [[MOC - Persistencia]], [[MOC - Procedimientos]]. Cada fase es un router por superficie/necesidad hacia los MOCs de dominio.
+
+**Cómo se resolvió la tensión fase vs superficie.** Una superficie cruza todas las fases (web tiene recon y explotación; AD es una kill-chain entera), así que anidar por fase obligaría a duplicar o partir los hubs. La decisión: **un MOC es una vista, no un contenedor exclusivo** — un dominio puede aparecer en varias fases sin problema. Así, [[MOC - Explotación web]] figura en Reconocimiento (su rama de mapeo) y en Explotación; los MOCs de fase de AD figuran en la fase que corresponde y también dentro de [[MOC - Active Directory]], que sigue existiendo como "la cadena contada entera". Los hubs de superficie sobreviven como vista por dominio; las fases son la vista por recorrido.
+
+**Fundamentos y Azul salen de Inicio.** No son fases. La teoría ([[MOC - Red]], [[MOC - HTTP]]) y la cara azul ([[MOC - Fundamentos de detección]], [[MOC - Telemetría de Windows]]) se llegan transitivamente desde los dominios que las usan — Reconocimiento enlaza `MOC - Red`, Web enlaza `MOC - HTTP`, y el hub de AD enlaza las dos de azul.
+
+**Notas:** 6 MOCs de fase nuevos (`dominio: fase`, `tags: [fase]`). Movimiento lateral y Persistencia hoy son casi solo AD: se escribieron como **routers livianos** que enlazan a los MOCs de AD **sin reproducir su árbol** (evita duplicación; regla 6), con el hueco de "lateral/persistencia no-AD" declarado. Procedimientos es un índice naciente (un solo runbook), marcado como tal.
+
+**Regla de escala fijada:** Inicio no crece — nuevas superficies entran bajo la fase que las usa; nuevas fases son excepción. La indexación transitiva de `higiene` (entrada anterior) es lo que lo permite: los ~50 MOCs de dominio ya no se listan en Inicio, se alcanzan por BFS desde las seis fases. Documentado en [[Estructura del vault]].
+
+`higiene` exit 0, `huecos` cero.
+
+### 2026-09-27 — MOC - Servicios de red: el directorio puerto → protocolo → matriz
+
+Faltaba el mapa que junta **todos los servicios/protocolos** que se enumeran tras el escaneo. Se creó [[MOC - Servicios de red]]: tabla por categoría (compartición de archivos, correo, bases de datos, acceso remoto, nombres/directorio, gestión de hardware) con puerto, qué rinde cada uno y su matriz — 17 servicios (SMB, FTP, NFS, rsync, SMTP, IMAP/POP3, MySQL, MSSQL, Oracle, SSH, RDP, WinRM, WMI, R-services, DNS, SNMP, IPMI). Es exactamente la tabla puerto→servicio que [[Estructura del vault]] declara que **no** debe vivir en la matriz de un escáner: ahora tiene casa.
+
+**Dedup:** el catálogo de servicios estaba listado plano dentro de [[MOC - Reconocimiento de red]], mezclado con los escáneres. Se reemplazó por un puntero al MOC nuevo; en recon quedan solo los escáneres (Sondeos, Nmap, Rustscan, Masscan) y el recon web/pasivo. No va en Inicio —no es fase—: se llega desde [[MOC - Reconocimiento]].
+
+`higiene` exit 0.
+
+### 2026-09-27 — Split de MOC - Web: explotación y reconocimiento por separado
+
+El hub `MOC - Web` mezclaba dos fases: una sección de reconocimiento y mapeo, y el grueso —las seis familias de explotación—. Se partió por fase: la parte de recon salió a [[MOC - Reconocimiento web]] (footprinting, subdominios, fingerprint, crawling, rutas sensibles, con su propio árbol pasivo→activo), y el resto quedó como [[MOC - Explotación web]] (el árbol *dónde falla la app* + las 34 familias). Ya no hay un único "MOC - Web".
+
+Encaja con el Inicio por fases: [[MOC - Reconocimiento]] enruta a [[MOC - Reconocimiento web]], [[MOC - Explotación]] a [[MOC - Explotación web]]. Referencias actualizadas en las dos fases, en [[Inicio]] y en [[Estructura del vault]]. Es el primer split de una serie —hay más MOCs que se van a dividir por fase—.
+
+**Decisión de alcance:** los MOCs de la capa nueva (fases, splits, [[MOC - Shells]], [[MOC - Servicios de red]]) van **rojo-only por ahora** — sin sección "Cara azul" ni split rojo/azul. Se les quitó lo que se había escrito. Los MOCs de dominio viejos conservan su cara azul; la fusión con azul de esta capa se hace cuando corresponda, no ahora.
+
+`higiene` exit 0.
+
+### 2026-09-27 — Fase Pre-explotación (weaponización), tomada de una estructura de referencia
+
+Se sumó [[MOC - Pre-explotación]] entre Reconocimiento y Explotación, a partir de una estructura de notas de referencia (rojo puro, por fases) que el usuario tomó como base. Le da un significado concreto a "pre-explotación" —el término que antes se había descartado por difuso—: **weaponización**, preparar el arsenal antes de disparar. Enruta a [[MOC - Shells]] (qué shell recibir) y a la generación de payloads ([[msfvenom - matriz de referencia]], [[Payload generado con msfvenom]]).
+
+**MOC - Shells no se movió ni se borró** — es una vista: [[MOC - Pre-explotación]] decide *cuál* shell preparar, [[MOC - Post-explotación]] *opera* la sesión ya viva. Se reencuadró Post-explotación siguiendo el ejemplo: deja de ser "la sesión" y pasa a ser operar el foothold (estabilizar, **escalar privilegios**, credenciales, transferencia). El privesc local Linux/Windows queda declarado como el hueco más grande.
+
+**Del ejemplo se copió lo útil y se descartó lo que rompe reglas:** se adoptó el corte por fases y "shells/payloads = pre-explotación"; se **rechazó** organizar web por producto (WordPress/Drupal — anti-patrón de organizar por herramienta) y las secciones "Tools" por fase (las herramientas son entidades en `400-entidades/`, no una sección). Huecos que el ejemplo confirma como forma-objetivo: privesc Linux/Windows, acceso inicial client-side, pivoting/tunneling en movimiento lateral, y Procedimientos como playbooks de punta a punta. **Todo 100% rojo, y sigue así.**
+
+`higiene` exit 0.
+
 ## Pendientes
+
+> La estructura roja objetivo, como checklist para tildar de a poco, en [[Roadmap de la estructura por fases]]. Prioridad actual: privesc local Linux/Windows.
 
 ### Inmediatos
 
