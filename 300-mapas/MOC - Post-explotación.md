@@ -20,7 +20,7 @@ El nodo raíz es una necesidad, no una técnica: afianzar el acceso y extraer de
 | Cuándo | Va a | Qué trae |
 |---|---|---|
 | Estabilizar y operar la sesión | [[MOC - Shells]] | TTY y operación (el cuál se decidió en [[MOC - Pre-explotación]]) |
-| Enumerar y escalar privilegios | escalada local — *hueco (Linux/Windows)* | SUID/sudo/capabilities; tokens/servicios |
+| Enumerar y escalar privilegios | [[Enumeración de privesc Linux - matriz de referencia]] · Windows *(hueco)* | SUID, sudo, capabilities, cron, escribibles; en Windows tokens/servicios |
 | Sacar credenciales del host | [[MOC - AD volcado de credenciales]] | LSASS, SAM, NTDS, DCSync |
 | Traer herramientas / sacar datos | [[MOC - Transferencia de archivos]] | ingress y exfiltración |
 

@@ -97,8 +97,9 @@ tags:
 - ✓ SAM & LSA · ✓ LSASS memory · ✓ NTDS
 - ○ Credential Guard bypass · ○ LSA Protection bypass
 
-**Privesc Linux** ○ — ★ el hueco más grande
-- ○ /etc/passwd·shadow (readable shadow, writeable passwd/shadow) · ○ capabilities · ○ cron · ~ NFS `no_root_squash` (está en [[NFS - matriz de referencia]]) · ○ PATH hijacking
+**Privesc Linux** ○ — ★ el hueco más grande  ·  búsquedas de vectores: ✓ [[Enumeración de privesc Linux - matriz de referencia]] (el abuso de cada uno todavía sin tradecraft)
+- ✓ SUID/`cap_setuid` de un intérprete → [[Python SUID y setuid capability - matriz de referencia]]
+- ○ /etc/passwd·shadow (readable shadow, writeable passwd/shadow) · ○ resto de capabilities · ○ cron · ~ NFS `no_root_squash` (está en [[NFS - matriz de referencia]]) · ○ PATH hijacking
 - ○ grupos privilegiados (adm, disk, docker, lxc/lxd, shadow) · ○ PwnKit · ○ Python library hijacking · ○ shared object hijacking
 - ○ sudo abuse (LD_PRELOAD/LD_LIBRARY_PATH, versiones vulnerables) · ○ SUID/SGID · ○ tmux hijack · ○ wildcard injection
 - ○ credential hunting Linux · ○ payloads de privesc
@@ -109,7 +110,7 @@ tags:
 - ○ AlwaysInstallElevated · ○ DLL hijacking (+ proxying) · ○ SCF/LNK maliciosos · ○ scheduled tasks · ○ unquoted service paths · ○ VMDK/VHD/VHDX · ○ weak service permissions
 - ○ credential hunting Windows · ○ payloads · ○ version exploits
 
-**Enumeración local** ○ (Linux y Windows) previa a la escalada
+**Enumeración local** previa a la escalada — ✓ Linux → [[Enumeración de privesc Linux - matriz de referencia]] · ○ Windows
 
 **Evasión (Windows)** ○
 - ○ VBA stomping · ○ AMSI bypass (assembly patch, header corruption, JScript, write raid) · ○ AppLocker & CLM bypass · ○ UAC bypass (FodHelper)
