@@ -76,3 +76,4 @@ La entropía alta en DNS es justo lo que detecta [[Exfiltración por subdominios
 | trozos DNS rechazados | etiqueta > 63 chars | `fold -w32` o menos por etiqueta |
 | ICMP no vuelve | echo saliente filtrado | pasar a DNS |
 | `POST` sin cuerpo en el log | server no guarda body | usar un receptor que lo escriba, no `http.server` |
+

@@ -92,6 +92,7 @@ Con shell en la víctima —o bajándolos por el propio FTP mal permisado—, es
 | `~/.netrc` | Credenciales FTP guardadas en claro — loot directo |
 | `/var/log/vsftpd.log` · `xferlog` | Qué se transfirió y quién |
 
+
 ### Directivas peligrosas en `vsftpd.conf`
 
 | Directiva | Por qué importa |
