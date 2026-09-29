@@ -7,7 +7,7 @@ opsec: quemado
 telemetria: ["[[Proceso hijo del servidor web]]", "[[Consulta DNS saliente]]"]
 requisitos: [ejecucion-confirmada]
 coste: medio
-alternativas: ["[[Webshell]]", "[[Command injection - canal directo]]"]
+alternativas: ["[[Shell - conexión reversa]]", "[[Webshell]]", "[[Command injection - canal directo]]"]
 probado: nunca
 contexto: [php8-linux]
 aliases:
@@ -26,6 +26,8 @@ Cuando ejecutar un comando por petición deja de alcanzar. El umbral es concreto
 Antes de saltar acá hay que preguntarse si el objetivo real no se cumple sin sesión. Enumerar, leer configuración y sacar credenciales se hace perfectamente con [[Command injection - canal directo]], sin abrir una conexión que va a quedar registrada. **La shell interactiva es el paso que convierte una vulnerabilidad web en un incidente visible.**
 
 La alternativa intermedia es [[Webshell]]: mantiene el acceso sin conexión saliente y sin proceso colgando, a cambio de dejar un archivo en disco.
+
+Los mecanismos de la sesión —dirección [[Shell - conexión reversa|reverse]] vs [[Shell - conexión bind|bind]], one-liners por lenguaje, promoción a TTY— son transversales a cualquier RCE y viven en [[MOC - Shells]]. Esta nota es la vista específica de command injection: cuándo, desde una inyección de comandos, conviene cruzar el umbral hacia una sesión.
 
 ## Por qué funciona
 
