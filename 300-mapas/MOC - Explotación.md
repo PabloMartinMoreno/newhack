@@ -15,30 +15,16 @@ tags:
 
 Esta fase no tiene técnica propia: es el **triage por superficie**. El nodo raíz es qué tenés delante; a partir de ahí se entra al mapa del dominio, que ordena internamente por su propio eje (web por mecanismo, AD por lo que tenés).
 
-## Árbol de decisión — ¿qué superficie exploto?
-
-```
-¿Qué tipo de objetivo tengo delante?
-├─ Aplicación web
-│  └─ [[MOC - Explotación web]]   ← enruta por dónde falla la app (las seis familias)
-└─ Active Directory
-   ├─ Sin credencial (solo red)
-   │  ├─ Responder a la escucha            → [[MOC - AD envenenamiento y relay]]
-   │  └─ Cuentas sin preautenticación       → AS-REP roasting, en [[MOC - AD roasting]]
-   ├─ Con una credencial de dominio
-   │  ├─ Cuentas de servicio con SPN        → Kerberoasting, en [[MOC - AD roasting]]
-   │  └─ PKI mal configurada                 → [[MOC - ADCS]]
-   └─ La cadena completa, contada entera     → [[MOC - Active Directory]]
-```
-
-La enumeración de AD **no** vive acá: es reconocimiento ([[MOC - AD enumeración]] en [[MOC - Reconocimiento]]). Acá vive lo que se hace con lo que la enumeración encontró: romper, relayar, abusar la PKI.
-
 ## Adónde enruta
 
-- **Web** — [[MOC - Explotación web]], hub por mecanismo (inyección, identidad, el servidor trae/incluye, cliente, discrepancia de parseo, lógica).
-- **Active Directory** — la parte de acceso/escalada de la cadena: [[MOC - AD envenenamiento y relay]], [[MOC - AD roasting]], [[MOC - ADCS]]. La kill-chain entera, como historia única, en [[MOC - Active Directory]].
+| Cuándo | Va a | Qué trae |
+|---|---|---|
+| Aplicación web | [[MOC - Explotación web]] | las seis familias por mecanismo |
+| AD — sin credencial (solo red) | [[MOC - AD envenenamiento y relay]] · [[MOC - AD roasting]] | primer hash: relay/poisoning; AS-REP roasting |
+| AD — con una credencial de dominio | [[MOC - AD roasting]] · [[MOC - ADCS]] | Kerberoasting; PKI mal configurada |
+| AD — la cadena completa, contada entera | [[MOC - Active Directory]] | el hub |
 
-Un mismo dominio puede aparecer en más de una fase (es una vista, no un contenedor): AD también figura en [[MOC - Reconocimiento]] (enumeración), [[MOC - Post-explotación]] (volcado de credenciales), [[MOC - Movimiento lateral]] y [[MOC - Persistencia]].
+La enumeración de AD **no** vive acá: es reconocimiento ([[MOC - AD enumeración]]). Acá va lo que se hace con lo que encontró: romper, relayar, abusar la PKI. Un dominio aparece en varias fases (es una vista): AD figura también en [[MOC - Reconocimiento]], [[MOC - Post-explotación]], [[MOC - Movimiento lateral]] y [[MOC - Persistencia]].
 
 ## Relación con otras fases
 

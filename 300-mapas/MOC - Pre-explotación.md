@@ -14,20 +14,14 @@ tags:
 > [!abstract] Fase del engagement
 > Weaponización: **fabricar el arsenal antes de disparar**. Va entre [[MOC - Reconocimiento]] y [[MOC - Explotación]]. Todavía no hay ejecución en el objetivo — acá se prepara lo que la explotación va a entregar y lo que se va a operar una vez adentro. Es una vista, no un contenedor: los MOCs que llama existen por sí solos y aparecen también en otras fases.
 
-Con el objetivo ya mapeado, la pregunta es qué munición dejar lista: qué shell vas a recibir, con qué payload, y qué exploit vas a lanzar.
-
 ## Adónde enruta
 
-```
-¿Qué estoy preparando?
-├─ La sesión que voy a recibir
-│  └─ [[MOC - Shells]]   ← reverse / bind / webshell, y el origen del payload (nativo vs generado)
-└─ El binario/payload a entregar
-   └─ [[msfvenom - matriz de referencia]]   ← formatos, staged/stageless, encoders, handler
-```
+| Cuándo | Va a | Qué trae |
+|---|---|---|
+| Preparar la sesión que voy a recibir | [[MOC - Shells]] | reverse/bind/webshell, one-liner nativo vs generado |
+| Fabricar el binario/payload | [[Payload generado con msfvenom]] · [[msfvenom - matriz de referencia]] | cuándo un binario, formatos, staged/stageless, handler |
 
-- **Shells** — [[MOC - Shells]]: la dirección de la conexión (reverse/bind/webshell), la estabilización a TTY y el criterio one-liner nativo vs binario generado. Es el mismo MOC que opera [[MOC - Post-explotación]] una vez que la sesión está viva; acá se decide **cuál preparar**.
-- **Payloads generados** — [[Payload generado con msfvenom]] y [[msfvenom - matriz de referencia]], con [[metasploit]] como entidad: cuándo un binario en vez de un one-liner, y cómo se fabrica.
+Es el mismo [[MOC - Shells]] que opera [[MOC - Post-explotación]] con la sesión viva; acá se decide **cuál preparar**. La herramienta, en [[metasploit]].
 
 ## Relación con otras fases
 

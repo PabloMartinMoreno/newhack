@@ -17,17 +17,12 @@ El nodo raíz es una necesidad, no una técnica: afianzar el acceso y extraer de
 
 ## Adónde enruta
 
-```
-¿Qué necesito del host comprometido?
-├─ Estabilizar y operar la sesión    → [[MOC - Shells]] (el cuál se decidió en [[MOC - Pre-explotación]])
-├─ Enumerar y escalar privilegios     → escalada local (hueco: Linux / Windows)
-├─ Sacar credenciales del host        → [[MOC - AD volcado de credenciales]] (LSASS, SAM, NTDS, DCSync)
-└─ Traer herramientas / sacar datos   → [[MOC - Transferencia de archivos]]
-```
-
-- **Sesión** — [[MOC - Shells]]: estabilización a TTY y operación. El *cuál* se decidió en [[MOC - Pre-explotación]]; acá se opera.
-- **Credenciales locales** — [[MOC - AD volcado de credenciales]]: memoria (LSASS), disco (SAM) y el directorio (NTDS, DCSync). Es la bisagra hacia el movimiento lateral.
-- **Transferencia** — [[MOC - Transferencia de archivos]]: ingress y exfiltración, por el canal más abierto que el entorno permita.
+| Cuándo | Va a | Qué trae |
+|---|---|---|
+| Estabilizar y operar la sesión | [[MOC - Shells]] | TTY y operación (el cuál se decidió en [[MOC - Pre-explotación]]) |
+| Enumerar y escalar privilegios | escalada local — *hueco (Linux/Windows)* | SUID/sudo/capabilities; tokens/servicios |
+| Sacar credenciales del host | [[MOC - AD volcado de credenciales]] | LSASS, SAM, NTDS, DCSync |
+| Traer herramientas / sacar datos | [[MOC - Transferencia de archivos]] | ingress y exfiltración |
 
 ## Relación con otras fases
 

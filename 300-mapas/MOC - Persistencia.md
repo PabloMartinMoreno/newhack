@@ -18,17 +18,13 @@ tags:
 
 ## Adónde enruta
 
-```
-¿Qué tan profundo quiero sobrevivir?
-├─ Forjar identidad con el secreto del dominio
-│  └─ [[MOC - AD persistencia]]   ← golden ticket, SID history
-├─ Un acceso que sobrevive al cambio de contraseña
-│  └─ [[MOC - ADCS]]   ← certificado de larga vida (no se invalida rotando credenciales)
-└─ Cruzar el límite de confianza
-   └─ [[MOC - AD confianzas]]   ← del dominio a la raíz del bosque, y entre bosques
-```
+| Cuándo | Va a | Qué trae |
+|---|---|---|
+| Forjar identidad con el secreto del dominio | [[MOC - AD persistencia]] | golden ticket, SID history |
+| Acceso que sobrevive al cambio de contraseña | [[MOC - ADCS]] | certificado de larga vida |
+| Cruzar el límite de confianza | [[MOC - AD confianzas]] | dominio → raíz del bosque, entre bosques |
 
-El certificado es la peor persistencia porque no se invalida cambiando la contraseña: vale por años y sobrevive a la respuesta a incidentes que rota credenciales y cierra el caso. La cadena de AD entera, en [[MOC - Active Directory]].
+El certificado es la peor persistencia: no se invalida cambiando la contraseña, vale por años y sobrevive a la respuesta a incidentes. La cadena de AD entera, en [[MOC - Active Directory]].
 
 ## Relación con otras fases
 

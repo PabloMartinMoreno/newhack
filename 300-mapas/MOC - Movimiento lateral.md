@@ -13,19 +13,16 @@ tags:
 > Moverse de un host a otro con el material sacado en [[MOC - Post-explotación]]. Precede a [[MOC - Persistencia]]. Enruta **por el material que tengo** para autenticarme como otro.
 
 > [!note] Hoy es casi todo Active Directory
-> El movimiento lateral con contenido en el vault vive en AD (pass-the-hash/ticket, delegaciones). Esta fase es hoy un router hacia esos MOCs; su árbol de decisión real —*qué material tengo*— está en [[MOC - AD movimiento lateral]] y no se reproduce acá para no mantener dos copias. Lateral no-AD (reutilización de SSH, pivoting/túneles) entra cuando exista como dominio.
+> El movimiento lateral con contenido en el vault vive en AD. El árbol real —*qué material tengo*, con la lógica de NTLM contra Kerberos— está en [[MOC - AD movimiento lateral]] y no se reproduce acá. Lateral no-AD (reutilización de SSH, pivoting/túneles) entra cuando exista como dominio.
 
 ## Adónde enruta
 
-```
-¿Qué material tengo del objetivo?
-├─ Hash NTLM o ticket de Kerberos
-│  └─ [[MOC - AD movimiento lateral]]   ← pass-the-hash / pass-the-ticket; NTLM contra Kerberos
-└─ Puedo actuar en nombre de otro (delegación)
-   └─ [[MOC - AD delegaciones]]   ← sin restricciones, restringida, RBCD
-```
+| Cuándo | Va a | Qué trae |
+|---|---|---|
+| Tengo hash NTLM o ticket Kerberos | [[MOC - AD movimiento lateral]] | pass-the-hash / pass-the-ticket; NTLM contra Kerberos |
+| Puedo actuar en nombre de otro (delegación) | [[MOC - AD delegaciones]] | sin restricciones, restringida, RBCD |
 
-El árbol completo *qué material → qué técnica*, con la lógica de NTLM contra Kerberos y su consecuencia defensiva, está en [[MOC - AD movimiento lateral]]. La cadena de AD entera, en [[MOC - Active Directory]].
+La cadena de AD entera, en [[MOC - Active Directory]].
 
 ## Relación con otras fases
 
