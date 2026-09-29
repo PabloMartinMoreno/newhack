@@ -105,6 +105,20 @@ Por eso `opsec:`, `probado:` y `contexto:` son innegociables en tradecraft. Ver 
 
 Los MOCs se escriben **ordenados por dependencia conceptual**, no por tema suelto. Así sirven a la vez como procedimiento de decisión en engagement, como temario de un módulo de clase (cada zettel enlazado = una diapositiva o un ejercicio) y como radiografía de los huecos propios.
 
+## Capas de MOCs: fases, hubs y vistas
+
+Un MOC es una **vista, no un contenedor exclusivo**. Una nota vive una sola vez en su carpeta, pero puede indexarse desde varios MOCs con ejes distintos. De ahí las tres capas:
+
+- **[[Inicio]] lista solo MOCs de _fase_** —Reconocimiento, Explotación, Post-explotación, Movimiento lateral, Persistencia, Procedimientos—, en orden de recorrido del engagement. Cada fase es un router por superficie o necesidad. No van en Inicio ni la teoría (`050-teoria/`) ni la cara azul: no son fases, se llegan desde los dominios que las usan.
+- **Hubs de superficie** —[[MOC - Explotación web]], [[MOC - Active Directory]]— son la vista por dominio: el dominio contado entero, con su propio eje interno (web por mecanismo, AD por lo que tenés). Sobreviven en paralelo a las fases.
+- **MOCs de dominio/tema** cuelgan de los hubs o de las fases, y de ellos las notas.
+
+Por qué dos juegos de vistas superpuestos y no un árbol único: una **superficie cruza todas las fases** (web tiene recon y explotación; AD es una kill-chain entera). Anidar por fase obligaría a duplicar o partir el hub; anidar por superficie escondería el recorrido. Se aceptan las dos vistas y la repetición de un MOC en varias: es lo que evita romper cualquiera de los dos ejes.
+
+**Regla de escala:** Inicio no crece. Una superficie nueva entra bajo la fase que la usa; una sección que junta muchos MOCs se colapsa en un hub (así nació `MOC - Web`, que sacó 34 enlaces de Inicio). Una fase nueva es la excepción, no la regla.
+
+Esto lo hace cumplible `higiene`, que indexa **transitivamente**: un MOC cuenta como indexado si Inicio lo cita o lo cita otro MOC alcanzable (BFS sobre enlaces MOC→MOC). Sin eso, la regla "todo MOC en Inicio" forzaría un Inicio plano.
+
 ## Relacionadas
 
 [[Esquema de frontmatter]] · [[Convenciones de nombres]] · [[Consultas del vault]] · [[Puesta a punto de Obsidian]] · [[Avances]]
