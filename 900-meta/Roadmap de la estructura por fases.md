@@ -32,10 +32,10 @@ tags:
 
 **Enumeración de infraestructura**
 - ~ Identificación pasiva → [[Footprinting pasivo - matriz de referencia]] · [[Enumeración pasiva de subdominios - matriz de referencia]]
-- ○ GitHub dorking · ○ Google dorking · ○ CanaryTokens (entidad)
+- ✓ Google dorking → [[Google dorking - matriz de referencia]] · ✓ GitHub dorking → [[GitHub dorking - matriz de referencia]] · ○ CanaryTokens (entidad)
 
-**Reverse engineering**
-- ○ Deofuscación de JavaScript
+**Reverse engineering** (no amerita MOC: RE de binarios fuera de alcance)
+- ✓ Deofuscación de JavaScript → [[JavaScript deobfuscation - matriz de referencia]] (vive en recon web, no en un MOC de RE)
 
 **Enumeración de servicios** → [[MOC - Servicios de red]]
 - ✓ FTP(21) · SSH(22) · SMTP(25) · DNS(53) · POP3(110/995) · NFS(2049) · SMB(139/445) · IMAP(143/993) · SNMP(161) · LDAP(389) · IPMI(623) · rsync(873) · MSSQL(1433) · Oracle(1521) · MySQL(3306) · RDP(3389)

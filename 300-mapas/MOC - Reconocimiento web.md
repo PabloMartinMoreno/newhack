@@ -20,11 +20,14 @@ Recon de red y recon de superficie no son lo mismo: el de red ubica el servidor;
 ¿Cuánto puedo tocar el objetivo?
 ├─ Nada (pasivo, sin un paquete al objetivo)
 │  ├─ La organización y su huella  → [[Footprinting pasivo - matriz de referencia]]
-│  └─ Activos por fuentes de terceros → [[Enumeración pasiva de subdominios - matriz de referencia]]
+│  ├─ Activos por fuentes de terceros → [[Enumeración pasiva de subdominios - matriz de referencia]]
+│  ├─ Lo que quedó indexado (archivos, paneles, fugas) → [[Google dorking - matriz de referencia]]
+│  └─ Secretos en repos públicos → [[GitHub dorking - matriz de referencia]]
 └─ Activo (mando peticiones)
    ├─ Descubrir más nombres         → [[Fuzzing de subdominios y vhosts - matriz de referencia]]
    ├─ Identificar el stack           → [[Fingerprinting - matriz de referencia]]
-   └─ Mapear rutas y parámetros      → [[Crawling web - matriz de referencia]]
+   ├─ Mapear rutas y parámetros      → [[Crawling web - matriz de referencia]]
+   └─ Entender el JS del cliente     → [[JavaScript deobfuscation - matriz de referencia]]
 ```
 ## Matrices
 
@@ -32,10 +35,13 @@ Recon de red y recon de superficie no son lo mismo: el de red ubica el servidor;
 |---|---|---|
 | Pasivo — organización | whois, ASN/netblocks, `shodan host`, buckets | [[Footprinting pasivo - matriz de referencia]] |
 | Pasivo — activos | subdominios por certificate transparency, DNS histórico, archivos web | [[Enumeración pasiva de subdominios - matriz de referencia]] |
+| Pasivo — indexado | archivos/paneles/fugas expuestos, por operadores de búsqueda | [[Google dorking - matriz de referencia]] |
+| Pasivo — código | secretos/claves en repos públicos y su historial | [[GitHub dorking - matriz de referencia]] |
 | Activo — más nombres | brute de subdominios (capa DNS) y vhosts (capa HTTP) con ffuf/gobuster | [[Fuzzing de subdominios y vhosts - matriz de referencia]] |
 | Activo — stack | SO, servidor web, framework, CMS, WAF (versión → CVE) | [[Fingerprinting - matriz de referencia]] |
 | Activo — mapeo | URLs, endpoints, JS, parámetros siguiendo enlaces | [[Crawling web - matriz de referencia]] |
 | Activo — rutas a mano | checklist: robots, `.git`, `.env`, actuator, swagger, paneles | [[Rutas web sensibles - matriz de referencia]] |
+| Activo — código cliente | volver legible el JS ofuscado y extraer endpoints/secretos/sinks | [[JavaScript deobfuscation - matriz de referencia]] |
 
 
 ## Relación con otras fases y dominios
