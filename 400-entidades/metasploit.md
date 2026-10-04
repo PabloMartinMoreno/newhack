@@ -25,6 +25,7 @@ Framework de explotación. Tres piezas importan para el dominio de shells y payl
 
 - Payload y sesión: [[Payload generado con msfvenom]]
 - Sintaxis de generación y handler: [[msfvenom - matriz de referencia]]
+- Manejo del framework (consola, sesiones, Meterpreter, post, pivoting): [[Metasploit - matriz de referencia]]
 - Transferencia integrada (Meterpreter): [[Traer herramientas al objetivo]]
 
 ## Cuándo NO usarla
@@ -37,4 +38,4 @@ Mantenida y activa, y por eso mismo **fuertemente firmada**: los payloads y enco
 
 ## Notas relacionadas
 
-[[MOC - Shells]] · [[Payload generado con msfvenom]] · [[msfvenom - matriz de referencia]]
+[[MOC - Shells]] · [[Payload generado con msfvenom]] · [[msfvenom - matriz de referencia]] · [[Metasploit - matriz de referencia]]
