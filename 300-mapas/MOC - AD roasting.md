@@ -38,6 +38,7 @@ Las dos rompen offline: **no hay nada que ver mientras se rompe**, la única ven
 
 - [[AS-REP roasting]] · [[Kerberoasting]]
 - Comandos: [[AD roasting - matriz de referencia]] — pedir, formatos de hash, modos de hashcat, silver ticket como atajo.
+- Romper el hash: [[Cracking offline - matriz de referencia]] (`-m 13100` TGS, `-m 18200` AS-REP) — el dominio, en [[MOC - Ataques de contraseña]].
 
 ## Cara azul
 

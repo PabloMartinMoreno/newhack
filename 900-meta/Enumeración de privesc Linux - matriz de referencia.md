@@ -70,7 +70,7 @@ Si un script de cron corriendo como root es **escribible** por vos, o usa un com
 | `/etc/passwd` / `/etc/shadow` escribibles | `ls -la /etc/passwd /etc/shadow` |
 | `/etc/sudoers` o `sudoers.d` escribibles | `ls -la /etc/sudoers /etc/sudoers.d/ 2>/dev/null` |
 
-`/etc/passwd` escribible → agregar un usuario root con hash propio (`openssl passwd`). `/etc/shadow` legible → crackear offline.
+`/etc/passwd` escribible → agregar un usuario root con hash propio (`openssl passwd`). `/etc/shadow` legible → crackear offline ([[Cracking offline - matriz de referencia]], `-m 1800` para `$6$`).
 
 ## PATH y variables
 

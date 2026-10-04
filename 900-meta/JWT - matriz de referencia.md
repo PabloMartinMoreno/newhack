@@ -116,7 +116,7 @@ hashcat -a 0 -m 16500 token.jwt rockyou.txt
 john --format=HMAC-SHA256 --wordlist=rockyou.txt token.jwt
 ```
 
-Vale la pena cuando el servicio es interno o hecho a medida, donde el secreto suele ser una cadena elegida a mano. Con secretos generados no llega a nada.
+Vale la pena cuando el servicio es interno o hecho a medida, donde el secreto suele ser una cadena elegida a mano. Con secretos generados no llega a nada. Reglas y máscaras para exprimir la wordlist, en [[Cracking offline - matriz de referencia]].
 
 **No genera una sola petición al objetivo**: es el ataque más silencioso del dominio.
 

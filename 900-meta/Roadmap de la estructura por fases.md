@@ -54,7 +54,7 @@ tags:
 ## 🟠 Pre-explotación — [[MOC - Pre-explotación]] ✓  (weaponización)
 
 - ✓ Shells (reverse/bind/webshell) → [[MOC - Shells]]
-- ✓ Payloads → [[msfvenom - matriz de referencia]] · [[Payload generado con msfvenom]] · [[metasploit]]
+- ✓ Payloads → [[msfvenom - matriz de referencia]] · [[Payload generado con msfvenom]] · [[metasploit]] · [[Metasploit - matriz de referencia]]
 - ○ Cross-compiling de exploits
 - ○ Búsqueda/adaptación de exploits (searchsploit — entidad)
 - ○ Preparación anti-AV real (Shellter — entidad; más allá de encoders)
@@ -115,7 +115,9 @@ tags:
 **Evasión (Windows)** ○
 - ○ VBA stomping · ○ AMSI bypass (assembly patch, header corruption, JScript, write raid) · ○ AppLocker & CLM bypass · ○ UAC bypass (FodHelper)
 
-**Herramientas de cracking** ○ (entidades): Hashcat · John the Ripper (+ conversiones JtR)
+**Ataques de contraseña** (transversal) → [[MOC - Ataques de contraseña]]
+- ✓ Cracking offline → [[Cracking offline - matriz de referencia]] con [[hashcat]] / [[john]] (+ `*2john`)
+- ✓ online enrutado (spraying/stuffing en [[MOC - Autenticación]], brute por servicio); ○ fuerza bruta online consolidada · ○ generación de wordlists (cewl/crunch)
 
 ---
 
@@ -129,7 +131,7 @@ tags:
 - ○ Pass-the-ticket Linux (CCache files, KeyTab files)
 
 **Pivoting** ○
-- ○ recon de pivoting · ○ local/dynamic/reverse port forwarding · ○ proxy chaining
+- ~ vía Metasploit (autoroute/portfwd/socks) → [[Metasploit - matriz de referencia]] § pivoting · ○ nota dedicada (recon de pivoting, port forwarding, proxy chaining) sin herramienta
 
 **Tunneling** ○
 - ~ DNS tunneling (existe [[Exfiltración por canal encubierto]], no como túnel de sesión) · ○ HTTP tunneling

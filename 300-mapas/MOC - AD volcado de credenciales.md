@@ -41,6 +41,7 @@ La decisión clave: **DCSync no necesita ejecutar nada en un DC** —pide la rep
 
 - [[LSASS - volcado vía comsvcs.dll MiniDump]] · [[DCSync]]
 - Comandos: [[AD volcado de credenciales - matriz de referencia]] — LSASS, SAM, LSA Secrets, NTDS, DPAPI, y qué permite cada formato.
+- Romper los hashes NTLM que salen: [[Cracking offline - matriz de referencia]] (`-m 1000`) — el dominio, en [[MOC - Ataques de contraseña]].
 
 ## Cara azul
 

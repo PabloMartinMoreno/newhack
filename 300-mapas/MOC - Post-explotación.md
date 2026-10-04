@@ -22,6 +22,7 @@ El nodo raíz es una necesidad, no una técnica: afianzar el acceso y extraer de
 | Estabilizar y operar la sesión | [[MOC - Shells]] | TTY y operación (el cuál se decidió en [[MOC - Pre-explotación]]) |
 | Enumerar y escalar privilegios | [[Enumeración de privesc Linux - matriz de referencia]] · Windows *(hueco)* | SUID, sudo, capabilities, cron, escribibles; en Windows tokens/servicios |
 | Sacar credenciales del host | [[MOC - AD volcado de credenciales]] | LSASS, SAM, NTDS, DCSync |
+| Romper lo capturado (hashes/tickets) | [[MOC - Ataques de contraseña]] | offline con hashcat/john; online spray/brute |
 | Traer herramientas / sacar datos | [[MOC - Transferencia de archivos]] | ingress y exfiltración |
 
 ## Relación con otras fases
