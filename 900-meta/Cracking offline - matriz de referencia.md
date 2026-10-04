@@ -21,9 +21,11 @@ Tres pasos: **identificar** el hash → **elegir el ataque** (wordlist / regla /
 
 | Cómo | Comando |
 |---|---|
-| Por forma (heurística) | `hashid 'HASH'` · `name-that-hash -t 'HASH'` |
+| Identificar | `hashid 'HASH'` · `name-that-hash -t 'HASH'` |
 | Ejemplos de hashcat | `hashcat --example-hashes \| less` (buscar la forma) |
 | Formatos que lee john | `john --list=formats` |
+
+`hashid -m` suma el modo `-m` de hashcat, y `-j` el formato de john: el atajo directo al paso 2.
 
 El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`=Kerberoast, `aad3b…`=LM/NTLM del SAM.
 
@@ -45,6 +47,7 @@ El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`
 | KeePass | `13400` | loot |
 | ZIP / Office / PDF | `13600` / `9x00` / `10x00` | archivos protegidos |
 
+
 ## 3. Ataques de hashcat (`-a`)
 
 | Ataque | Flag | Ejemplo |
@@ -60,7 +63,6 @@ El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`
 **Reglas** que más rinden: `best64.rule` (rápida), `rockyou-30000.rule`, `OneRuleToRuleThemAll.rule` (lenta, exhaustiva). Mutan la wordlist (mayúsculas, leet, sufijos).
 
 ## 4. John the Ripper
-
 Cuando el formato es raro o hay que **extraer** el hash de un archivo con los `*2john`.
 
 | Tarea | Comando |
@@ -69,9 +71,12 @@ Cuando el formato es raro o hay que **extraer** el hash de un archivo con los `*
 | Con reglas | `john --wordlist=rockyou.txt --rules=Jumbo hash.txt` |
 | Forzar formato | `john --format=krb5tgs hash.txt` |
 | Ver crackeados | `john --show hash.txt` |
+| Modo single (login/GECOS) | `john --single --format=raw-md5 passwd.txt` — usa el nombre de usuario y variaciones; **lo primero que conviene probar** |
 | Modo incremental (brute) | `john --incremental hash.txt` |
 
-Extraer el hash de un archivo (`*2john`): `zip2john f.zip > h` · `ssh2john id_rsa > h` · `keepass2john f.kdbx > h` · `office2john f.docx > h` · `rar2john` · `pdf2john`.
+El modo **single** prueba el propio usuario y mutaciones (de la columna login/GECOS del formato `user:hash`); es barato y pega seguido contra contraseñas tipo `nombre2024`. Por eso va antes que el diccionario.
+
+Extraer el hash de un archivo (`*2john`): `zip2john f.zip > h` · `ssh2john id_rsa > h` · `keepass2john f.kdbx > h` · `office2john f.docx > h` · `rar2john` · `pdf2john`. Para ver **todos** los que trae el sistema: `locate '*2john*'` (o `ls /usr/share/john/*2john* 2>/dev/null`).
 
 ## 5. Gestión del crackeo
 
@@ -84,6 +89,7 @@ Extraer el hash de un archivo (`*2john`): `zip2john f.zip > h` · `ssh2john id_r
 | Rendimiento | `-O` (optimizado) · `-w 3` (workload) · `-b` (benchmark) | hilos con `--fork=N` |
 | Estado en vivo | tecla `s` | tecla cualquiera |
 
+
 ## Errores / notas
 
 | Síntoma | Causa | Salida |
@@ -93,3 +99,4 @@ Extraer el hash de un archivo (`*2john`): `zip2john f.zip > h` · `ssh2john id_r
 | Lentísimo | bcrypt/sha512crypt son lentos por diseño | GPU, wordlist curada + reglas; no brute puro |
 | `Separator unmatched` (john) | formato mal | `--format=` explícito |
 | Salteó un hash salado | cada salt multiplica el trabajo | igual corre; priorizar wordlist chica + reglas |
+
