@@ -17,6 +17,8 @@ tags:
 
 Tres pasos: **identificar** el hash → **elegir el ataque** (wordlist / regla / máscara) → correr. `hash.txt` = el/los hash; `rockyou.txt`/`lista.txt` = wordlist. Sin datos de objetivo real.
 
+Ejemplo completo end-to-end (OSINT → wordlist base → reglas → filtrar por política → crack): [[Cracking dirigido por OSINT - ejemplo]].
+
 ## 1. Identificar el hash
 
 | Cómo | Comando |
@@ -49,6 +51,7 @@ El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`
 
 
 ## 3. Ataques de hashcat (`-a`)
+`-a` es el **modo de ataque**: de dónde saca hashcat las contraseñas candidatas que prueba. Es ortogonal a `-m` (que dice el tipo de hash) — `-m` *qué* rompés, `-a` *cómo* generás los intentos. La lista es un conjunto fijo; la máscara los construye por patrón; el híbrido combina ambos.
 
 | Ataque | Flag | Ejemplo |
 |---|---|---|
@@ -60,7 +63,7 @@ El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`
 
 **Máscaras:** `?l` minúscula · `?u` mayúscula · `?d` dígito · `?s` símbolo · `?a` todo · `?b` byte. Charset propio: `-1 ?l?d` y después `?1?1?1?1`.
 
-**Reglas** que más rinden: `best64.rule` (rápida), `rockyou-30000.rule`, `OneRuleToRuleThemAll.rule` (lenta, exhaustiva). Mutan la wordlist (mayúsculas, leet, sufijos).
+**Reglas** que más rinden: `best64.rule` (rápida), `rockyou-30000.rule`, `OneRuleToRuleThemAll.rule` (lenta, exhaustiva). Mutan la wordlist (mayúsculas, leet, sufijos). Para **escribir reglas propias** —el lenguaje de funciones, probarlas con `--stdout`, armarlas de la política del objetivo—: [[Hashcat rules - matriz de referencia]].
 
 ## 4. John the Ripper
 Cuando el formato es raro o hay que **extraer** el hash de un archivo con los `*2john`.
