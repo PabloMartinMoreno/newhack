@@ -10,7 +10,7 @@ tags:
 # MOC - AD roasting
 
 > [!abstract] Fase de la kill chain de AD
-> Credenciales que se rompen **fuera de línea**, sin tocar la cuenta. Hub: [[MOC - Active Directory]]. Cheatsheet: [[AD roasting - matriz de referencia]]. Clases: [[T1558.004 - AS-REP Roasting]] · [[T1558.003 - Kerberoasting]].
+> Credenciales que se rompen **fuera de línea**, sin tocar la cuenta. Hub: [[MOC - Active Directory]]. Cheatsheet: [[AD roasting - matriz de referencia]]. Clases: [[T1558.004 - AS-REP Roasting]] · [[T1558.003 - Kerberoasting]]. La teoría del protocolo —por qué cada ticket se cifra con qué clave—: [[Kerberos - el flujo de tickets]].
 
 Kerberos entrega material cifrado con la contraseña de una cuenta a quien lo pida. Si esa contraseña es débil, se rompe sin conexión y sin bloqueo.
 

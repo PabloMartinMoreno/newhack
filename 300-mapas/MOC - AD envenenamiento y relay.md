@@ -10,7 +10,7 @@ tags:
 # MOC - AD envenenamiento y relay
 
 > [!abstract] Fase de la kill chain de AD
-> El primer material sin tener **ninguna** credencial. Hub del dominio: [[MOC - Active Directory]]. Cheatsheet: [[AD envenenamiento y relay - matriz de referencia]]. Clase: [[T1557.001 - LLMNR NBT-NS Poisoning and SMB Relay]].
+> El primer material sin tener **ninguna** credencial. Hub del dominio: [[MOC - Active Directory]]. Cheatsheet: [[AD envenenamiento y relay - matriz de referencia]]. Clase: [[T1557.001 - LLMNR NBT-NS Poisoning and SMB Relay]]. La teoría: [[NTLM - desafío y respuesta]] (por qué el net-NTLM se relaya o crackea, no se pasa) y [[SMB - dialectos y firma]] (por qué la firma habilita el relay).
 
 Sin credencial y en la red, el AD todavía habla. Dos vías, y la segunda no depende de la primera.
 
