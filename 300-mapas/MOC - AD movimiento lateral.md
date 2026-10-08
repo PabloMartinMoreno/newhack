@@ -27,7 +27,7 @@ Lo que tengo del objetivo decide con qué me muevo, y **qué protocolo genera** 
 └─ Certificado  → [[MOC - ADCS]]   ← el que sobrevive al cambio de contraseña
 ```
 
-**NTLM contra Kerberos no es solo sintaxis.** Pasar el hash genera NTLM donde el dominio usa Kerberos, y ese desajuste es una señal. Pasar el ticket es Kerberos, o sea invisible a nivel de protocolo. La elección tiene consecuencia defensiva directa.
+**NTLM contra Kerberos no es solo sintaxis.** Pasar el hash genera NTLM donde el dominio usa Kerberos, y ese desajuste es una señal. Pasar el ticket es Kerberos, o sea invisible a nivel de protocolo. La elección tiene consecuencia defensiva directa. De dónde sale ese material y por qué LSASS lo tiene: [[Windows - proceso de autenticación]].
 
 ## Orden de aprendizaje
 

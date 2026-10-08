@@ -10,7 +10,7 @@ tags:
 # MOC - AD volcado de credenciales
 
 > [!abstract] Fase de la kill chain de AD
-> Sacar credenciales de donde estén: memoria, disco, o el propio directorio. Hub: [[MOC - Active Directory]]. Cheatsheet: [[AD volcado de credenciales - matriz de referencia]]. Clases: [[T1003.001 - LSASS Memory]] · [[T1003.006 - DCSync]].
+> Sacar credenciales de donde estén: memoria, disco, o el propio directorio. Hub: [[MOC - Active Directory]]. Cheatsheet: [[AD volcado de credenciales - matriz de referencia]]. Clases: [[T1003.001 - LSASS Memory]] · [[T1003.006 - DCSync]]. La teoría de **dónde viven** (SAM, NTDS, LSASS, Credential Manager): [[Windows - almacenamiento de credenciales]].
 
 Dónde viven las credenciales decide cómo se sacan y qué privilegio hace falta. La distinción grande: **en un host** (admin local) contra **en el dominio** (derechos de replicación).
 
