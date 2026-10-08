@@ -49,6 +49,8 @@ El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`
 | KeePass | `13400` | loot |
 | ZIP / Office / PDF | `13600` / `9x00` / `10x00` | archivos protegidos |
 
+Qué **son** estos hashes y por qué se rompen offline: net-NTLM vs NT hash en [[NTLM - desafío y respuesta]]; los tickets de roast (`13100`/`18200`), en [[Kerberos - el flujo de tickets]]. De **dónde salen**, en [[MOC - Ataques de contraseña]].
+
 
 ## 3. Ataques de hashcat (`-a`)
 `-a` es el **modo de ataque**: de dónde saca hashcat las contraseñas candidatas que prueba. Es ortogonal a `-m` (que dice el tipo de hash) — `-m` *qué* rompés, `-a` *cómo* generás los intentos. La lista es un conjunto fijo; la máscara los construye por patrón; el híbrido combina ambos.
