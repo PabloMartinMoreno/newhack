@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo se instala y se filtra. Qué ve cada evento y qué cuesta está en [[MOC - Telemetría de Windows]], una nota por identificador.
+> Ver también: [[KQL - matriz de referencia]] · [[La fidelidad se paga en volumen]] · [[Sigma - matriz de referencia]].
 
 ## 1. Instalar
 
@@ -154,7 +155,3 @@ Lo último da la distribución por identificador, que es el diagnóstico de volu
 | Se pierden eventos bajo carga | Registro chico. Subirlo con `wevtutil sl /ms:` |
 | Sysmon instalado y sin eventos | El servicio está detenido, o el driver no cargó. `sc query sysmon64` |
 | El nombre del ejecutable no matchea | Sysmon se puede instalar renombrado. El nombre del driver también cambia |
-
-## Relacionadas
-
-[[MOC - Telemetría de Windows]] · [[Sigma - matriz de referencia]] · [[KQL - matriz de referencia]] · [[Acceso a LSASS desde proceso no firmado]] · [[La fidelidad se paga en volumen]]

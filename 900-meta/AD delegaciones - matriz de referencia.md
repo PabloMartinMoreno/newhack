@@ -14,6 +14,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Los comandos de los tres tipos de delegación. El criterio está en [[Delegación sin restricciones]], [[Delegación restringida]] y [[Delegación basada en recursos]]; encontrarlas, en [[AD enumeración - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - Active Directory]]. Ver también: [[AD movimiento lateral - matriz de referencia]].
 
 ## 0. Cuál es cuál — decidir antes de tocar
 
@@ -142,7 +143,3 @@ Ver [[Delegación basada en recursos]].
 | El TGT capturado no sirve | Caducó (>10h), o el objetivo no se autenticó realmente |
 | La coacción no dispara | Parche de PetitPotam / spooler deshabilitado; probar otro método de coacción |
 | `altservice` rechazado | El KDC valida el servicio en esa versión; usar el SPN permitido directo |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[AD enumeración - matriz de referencia]] · [[AD movimiento lateral - matriz de referencia]] · [[Delegación basada en recursos]]

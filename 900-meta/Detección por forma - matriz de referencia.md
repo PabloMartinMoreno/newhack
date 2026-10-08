@@ -11,6 +11,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > `forma:` es el campo propio del vault. Acá está la traducción de cada valor a una consulta concreta. El concepto está en [[La detección vive en el agregado, no en el evento]]; la sintaxis suelta, en [[KQL - matriz de referencia]] y [[Sigma - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - Fundamentos de detección]]. Ver también: [[Esquema de frontmatter]].
 
 ## 0. Las cuatro, de un vistazo
 
@@ -158,7 +159,3 @@ El error caro es empezar por 3 cuando alcanzaba 1: un agregado cuesta estado, ve
 | Sigma no traduce la regla | Si es `invariante`, no hay forma. Reescribir en KQL |
 | `higiene` marca `forma=agregado sin ventana` | Falta el campo. No es opcional: sin él la regla no está especificada |
 | El umbral funciona en un cliente y no en otro | Umbral absoluto donde hacía falta línea base. Ver [[Sin línea base no hay anomalía]] |
-
-## Relacionadas
-
-[[MOC - Fundamentos de detección]] · [[KQL - matriz de referencia]] · [[Sigma - matriz de referencia]] · [[La detección vive en el agregado, no en el evento]] · [[Esquema de frontmatter]]

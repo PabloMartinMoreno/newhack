@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué construir una vez que se tiene el esquema. Sacarlo es el paso previo, en [[GraphQL - matriz de reconocimiento]]; el criterio, en las cuatro notas de `600-tradecraft/`.
+> El criterio y la decisión, en [[MOC - GraphQL]]. Ver también: [[SQLi contextos - matriz de referencia]].
 
 ## 1. Autorización — pedir lo que no se ofrece
 
@@ -150,7 +151,3 @@ Este sondeo decide qué ramas están abiertas antes de invertir en cada una.
 | `max depth exceeded` | Límite de profundidad activo |
 | La inyección no dispara | El argumento se parametriza; probar otro |
 | El OTP no se agota | Se invalida al primer fallo, o hay límite por operación |
-
-## Relacionadas
-
-[[MOC - GraphQL]] · [[GraphQL - matriz de reconocimiento]] · [[Control de acceso - matriz de pruebas]] · [[SQLi contextos - matriz de referencia]]

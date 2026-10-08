@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Los caracteres disparadores y las fórmulas por aplicación. El criterio está en las dos notas de `600-tradecraft/`; el modelo, en [[MOC - CSV injection]].
+> Ver también: [[Command injection evasión - matriz de referencia]].
 
 Dominio compacto: una matriz cubre disparadores, exfiltración, ejecución y mitigación.
 
@@ -128,7 +129,3 @@ Del lado de la **exportación**, no de la entrada:
 | DDE no ejecuta | Deshabilitado (lo normal hoy). Queda la exfiltración |
 | El `=` se filtra en la entrada | Probar `+`, `-`, `@`, o tabulación previa |
 | No encuentro el valor en el export | Ese campo no se exporta; probar otro |
-
-## Relacionadas
-
-[[MOC - CSV injection]] · [[CSV - fuga de datos por fórmula]] · [[CSV - ejecución de comandos por fórmula]] · [[Command injection evasión - matriz de referencia]]

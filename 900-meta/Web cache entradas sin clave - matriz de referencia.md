@@ -120,7 +120,3 @@ Cada par caché/servidor cae con un subconjunto distinto. Se prueban en orden co
 | El fat GET no toma el cuerpo | El servidor ignora el cuerpo del `GET`. Rama cerrada |
 | El sufijo de engaño da `404` | El servidor no ignora ese sufijo. Probar otro de § 7 |
 | El engaño no cachea | La caché mira `Content-Type`. Buscar un recurso realmente servido como estático |
-
-## Relacionadas
-
-[[MOC - Web cache]] · [[Web cache - matriz de sondeo]] · [[Web cache - envenenamiento por entrada sin clave]] · [[Web cache - engaño de caché]]

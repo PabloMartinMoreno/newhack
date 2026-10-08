@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Los comandos de captura y retransmisión. El criterio está en [[Envenenamiento de resolución de nombres]] y [[Relay de NTLM]]; el modelo, en [[MOC - Active Directory]].
+> Ver también: [[AD delegaciones - matriz de referencia]] · [[AD persistencia - matriz de referencia]].
 
 ## 0. Decidir: capturar o retransmitir
 
@@ -120,7 +121,3 @@ La coacción hace que `OBJETIVO` (a menudo un DC) se autentique a `ATACANTE`, qu
 | El relay reflexivo falla | Mitigado por Microsoft; relay a un host distinto |
 | PetitPotam anónimo no funciona | Parcheado; usar con credencial o probar otro coercer |
 | ntlmrelayx recibe pero no reenvía | SMB/HTTP de Responder siguen encendidos, capturan en vez de ceder |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[Envenenamiento de resolución de nombres]] · [[Relay de NTLM]] · [[AD delegaciones - matriz de referencia]] · [[AD persistencia - matriz de referencia]]

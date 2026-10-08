@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > ¿Se puede encuadrar el objetivo? La superposición está en [[Clickjacking - superposición - matriz de referencia]]; el criterio, en [[MOC - Clickjacking]].
+> Ver también: [[CORS bypass de origen - matriz de referencia]] · [[XSS bypass de CSP - matriz de referencia]].
 
 La primera pregunta del dominio: si no se puede encuadrar, no hay clickjacking. Esto es cómo comprobarlo y cómo sortear defensas débiles.
 
@@ -85,7 +86,3 @@ Otras vías contra frame-busters:
 | `ALLOW-FROM` presente | Obsoleto: probablemente encuadrable igual |
 | `frame-ancestors 'self'` | Solo mismo origen; buscar un subdominio si hay comodín |
 | Encuadra pero el clic no pasa | Ver la superposición, [[Clickjacking - superposición - matriz de referencia]] |
-
-## Relacionadas
-
-[[MOC - Clickjacking]] · [[Clickjacking - superposición - matriz de referencia]] · [[XSS bypass de CSP - matriz de referencia]] · [[CORS bypass de origen - matriz de referencia]]

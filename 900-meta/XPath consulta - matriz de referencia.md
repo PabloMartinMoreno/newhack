@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > La sintaxis de XPath y los payloads de manipulación. La extracción ciega está en [[XPath extracción ciega - matriz de referencia]]; el criterio, en [[MOC - XPath injection]].
+> Ver también: [[SQLi contextos - matriz de referencia]] · [[XPath - manipulación de la consulta]].
 
 ## 0. La sintaxis, en una tabla
 
@@ -142,7 +143,3 @@ Recomendar consultas XPath parametrizadas (variables enlazadas) por sobre el esc
 | `and` no se puede neutralizar | Probar `') or ('1'='1` con paréntesis |
 | `doc()` no existe | Es XPath 1.0, sin lectura externa |
 | Todo escapado | Escape correcto o parametrizado. Buena mitigación |
-
-## Relacionadas
-
-[[MOC - XPath injection]] · [[XPath extracción ciega - matriz de referencia]] · [[XPath - manipulación de la consulta]] · [[SQLi contextos - matriz de referencia]]

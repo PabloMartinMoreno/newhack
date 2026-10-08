@@ -27,7 +27,3 @@ Cuando hay GPU y el formato es común (NTLM, Kerberoast, sha512crypt): [[hashcat
 ## Estado
 
 Mantenido (la edición Jumbo de la comunidad es la que trae todos los formatos y scripts).
-
-## Notas relacionadas
-
-[[Cracking offline - matriz de referencia]] · [[MOC - Ataques de contraseña]] · [[hashcat]]

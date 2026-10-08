@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Reconocer un flujo SAML, decodificar la aserción y saber qué campo tocar. Los patrones de envoltura están en [[SAML XSW - matriz de referencia]]; el criterio, en [[MOC - SAML]].
+> Ver también: [[OAuth - matriz de reconocimiento]] · [[XXE payloads - matriz de referencia]].
 
 ## 1. Reconocer que es SAML
 
@@ -132,7 +133,3 @@ Una por rama, en orden de coste.
 | `Assertion expired` | Se valida `NotOnOrAfter`. Hace falta una fresca |
 | La envoltura no cambia la identidad | El patrón no coincide con cómo resuelve la referencia. Probar otro |
 | El comentario no parte el NameID | La biblioteca concatena todos los nodos de texto. Rama cerrada |
-
-## Relacionadas
-
-[[MOC - SAML]] · [[SAML XSW - matriz de referencia]] · [[OAuth - matriz de reconocimiento]] · [[XXE payloads - matriz de referencia]]

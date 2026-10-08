@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Dónde viven las ventanas y qué se saca de cada una. Cómo disparar la colisión está en [[Race - matriz de disparo]]; el criterio, en las tres notas de `600-tradecraft/`.
+> El criterio y la decisión, en [[MOC - Race conditions]].
 
 El dominio no se busca con un payload sino reconociendo **patrones de lógica** que dejan ventana. Este es el catálogo de dónde mirar.
 
@@ -95,7 +96,3 @@ Reportar el impacto real, no "hay una condición de carrera": duplicar un like y
 | El doble efecto no sirve de nada | El límite superado no tiene impacto. Buscar otro |
 | Parece carrera pero es token predecible | Es § 4, no una carrera. Otra técnica |
 | Colisiona pero la base rechaza | Hay restricción de datos. Buena mitigación; no hay hallazgo |
-
-## Relacionadas
-
-[[MOC - Race conditions]] · [[Race - matriz de disparo]] · [[Sesión - token predecible]] · [[La latencia como canal de datos]]

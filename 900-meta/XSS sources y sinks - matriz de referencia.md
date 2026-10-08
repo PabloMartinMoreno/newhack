@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > El mapa de [[XSS - DOM-based]]: qué **source** controla el atacante y qué **sink** ejecuta. La explotación es encontrar un flujo `source → sink` sin sanitización en el medio. `yi``  ` copia el fragmento.
+> El criterio y la decisión, en [[MOC - Cross-site scripting]]. Ver también: [[XSS contextos - matriz de referencia]].
 
 ## Sources — lo que controla el atacante
 
@@ -80,7 +81,3 @@ El esquema `javascript:` ejecuta al navegar.
 ```
 
 `sources & sinks` de DevTools o extensiones como DOM Invader (Burp) automatizan el paso 1-4.
-
-## Relacionadas
-
-[[XSS - DOM-based]] · [[MOC - Cross-site scripting]] · [[XSS contextos - matriz de referencia]]

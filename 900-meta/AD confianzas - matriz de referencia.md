@@ -14,6 +14,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Enumerar las confianzas y cruzarlas. El criterio está en [[Escalada intra-bosque por SID History]] y [[Movimiento entre bosques por la clave de confianza]]; el modelo, en [[MOC - Active Directory]].
+> Ver también: [[AD enumeración - matriz de referencia]] · [[AD persistencia - matriz de referencia]].
 
 ## 0. Los conceptos que deciden todo
 
@@ -145,7 +146,3 @@ La cuenta no aparece en `Get-ADGroupMember 'Domain Admins'` pero tiene sus privi
 | Cruzo pero no accedo a nada | El usuario forjado no tiene permisos en el destino |
 | `KDC_ERR_S_PRINCIPAL_UNKNOWN` en inter-reino | SPN o dominio destino mal escrito en la forja |
 | El `-extra-sid` no escala | El SID de la raíz está mal; verificar con `Get-DomainSID` |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[Escalada intra-bosque por SID History]] · [[Movimiento entre bosques por la clave de confianza]] · [[AD persistencia - matriz de referencia]] · [[AD enumeración - matriz de referencia]]

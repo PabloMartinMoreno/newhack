@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Confirmar que se puede contaminar, y por dónde. Los gadget están en [[Prototype pollution gadgets - matriz de referencia]]; el criterio, en [[MOC - Prototype pollution]].
+> Ver también: [[CWE-1321 - Prototype Pollution]] · [[Control de acceso - matriz de pruebas]].
 
 Contaminar es la mitad barata y hay que confirmarla antes de pensar en impacto. Cinco minutos acá ahorran una tarde probando gadget contra una aplicación que no era vulnerable.
 
@@ -150,7 +151,3 @@ Extensión **DOM Invader** de Burp con la opción de prototype pollution: contam
 | `JSON.parse` y no contamina | Correcto: parsear no contamina, copiar sí. Buscar dónde se mezcla |
 | El fragmento no llega al servidor | Es esperado. El fragmento es solo del lado del cliente |
 | Todo bloqueado | Puede haber `Object.freeze(Object.prototype)`. Verificar con `Object.isFrozen(Object.prototype)` |
-
-## Relacionadas
-
-[[MOC - Prototype pollution]] · [[Prototype pollution gadgets - matriz de referencia]] · [[CWE-1321 - Prototype Pollution]] · [[Control de acceso - matriz de pruebas]]

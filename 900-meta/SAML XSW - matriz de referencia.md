@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Los ocho patrones de envoltura de firma XML, en orden de prueba. El criterio está en [[SAML - envoltura de firma XML]]; decodificar la aserción, en [[SAML - matriz de identificación]].
+> El criterio y la decisión, en [[MOC - SAML]].
 
 La envoltura funciona cuando **el verificador y el lector miran elementos distintos**. Cada patrón coloca la aserción firmada donde el verificador la encuentra y una aserción falsa donde el lector busca los datos. Cuál funciona depende de cómo la biblioteca resuelve la referencia de la firma, y por eso se prueban en orden.
 
@@ -109,7 +110,3 @@ Los `ID` duplicados son el corazón de la mitad de los patrones y la razón por 
 | `Duplicate ID` | La biblioteca los rechaza. Probar los patrones con `ID` distintos |
 | Funciona en XSW3 y no en XSW1 | La firma cubre la Assertion, no la Response. Esperable |
 | Ninguno funciona | Biblioteca moderna que valida y lee el mismo nodo. Reportar que la firma se valida bien |
-
-## Relacionadas
-
-[[MOC - SAML]] · [[SAML - envoltura de firma XML]] · [[SAML - matriz de identificación]]

@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Confirmar la inyección y qué procesador es. Los payloads por procesador están en [[XSLT payloads - matriz de referencia]]; el criterio, en [[MOC - XSLT injection]].
+> Ver también: [[XXE payloads - matriz de referencia]].
 
 Identificar el procesador va antes que cualquier payload, igual que en [[SSTI - matriz de identificación]]: la capacidad —lectura, SSRF, ejecución— y la sintaxis dependen de cuál sea.
 
@@ -95,7 +96,3 @@ Si llega la petición al servidor propio, hay inyección con `document()` habili
 | `document()` da error de acceso | Recursos externos deshabilitados. Solo queda lo que no los use |
 | `unparsed-text()` no existe | Es XSLT 1.0; usar `document()` |
 | Nada se refleja | Inyección ciega; ir a canal fuera de banda, § 6 |
-
-## Relacionadas
-
-[[MOC - XSLT injection]] · [[XSLT payloads - matriz de referencia]] · [[SSTI - matriz de identificación]] · [[XXE payloads - matriz de referencia]]

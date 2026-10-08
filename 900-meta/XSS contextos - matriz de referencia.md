@@ -14,6 +14,7 @@ tags:
 > **Dónde cae tu input** decide cómo romper. Es el eje central de XSS: el mismo payload no sirve en todos los contextos. `yi``  ` copia el payload.
 >
 > Para saber en qué contexto estás: inyectá un marcador único (`zzq123`), buscalo en el HTML de la respuesta y mirá qué lo rodea.
+> El criterio y la decisión, en [[MOC - Cross-site scripting]]. Ver también: [[XSS evasión - matriz de referencia]] · [[XSS impacto - matriz de referencia]].
 
 ## 0. Identificar el contexto
 
@@ -114,7 +115,3 @@ Legacy (IE). No corre en navegadores actuales — documentado por completitud.
 | `<` sale como `&lt;` | Codifican HTML: no hay inyección de tag, probar contexto atributo/JS |
 | El payload aparece pero no corre | Contexto equivocado — reidentificar con el marcador |
 | Corre una vez y después no | Probable CSP o el navegador bloqueó — ver [[XSS - CSP]] |
-
-## Relacionadas
-
-[[MOC - Cross-site scripting]] · [[XSS evasión - matriz de referencia]] · [[XSS impacto - matriz de referencia]]

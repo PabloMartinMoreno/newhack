@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > La mecánica, los sinks vulnerables y cómo encontrarlos. El criterio está en las dos notas de `600-tradecraft/`; el modelo, en [[MOC - Tabnabbing]].
+> Ver también: [[Clickjacking - encuadre - matriz de referencia]] · [[Sesión - matriz de referencia]].
 
 Dominio compacto: una sola matriz cubre la mecánica, el reconocimiento y la mitigación.
 
@@ -102,7 +103,3 @@ Mitigación: `rel="noopener noreferrer"` o `Referrer-Policy`.
 | El sitio no abre en pestaña nueva | Sin `target="_blank"` no hay opener |
 | El markdown agrega `noopener` | Renderizador moderno. Buscar un campo que no lo haga |
 | La víctima nota el cambio de URL | El phishing depende de que no mire la barra; techo de la técnica |
-
-## Relacionadas
-
-[[MOC - Tabnabbing]] · [[Tabnabbing - secuestro por enlace saliente]] · [[Clickjacking - encuadre - matriz de referencia]] · [[Sesión - matriz de referencia]]

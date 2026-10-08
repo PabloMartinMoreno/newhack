@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué pegar una vez identificado el motor. Identificarlo es el paso previo, en [[EL injection - matriz de identificación]]; el criterio, en [[MOC - EL injection]].
+> Ver también: [[Command injection evasión - matriz de referencia]].
 
 ## 1. SpEL — Spring
 
@@ -134,7 +135,3 @@ Es el escalón intermedio del dominio: menos que RCE, más que leer el contexto.
 | Nada vuelve | Evaluación ciega. Confirmar con § 5 antes de dar por muerto |
 | El payload de Struts no funciona | Versión equivocada. El payload es específico del CVE |
 | `Runtime` bloqueado pero se instancian clases | Ir a `ProcessBuilder`, y si no, a lectura de archivos § 6 |
-
-## Relacionadas
-
-[[MOC - EL injection]] · [[EL injection - matriz de identificación]] · [[SSTI payloads - matriz de referencia]] · [[Command injection evasión - matriz de referencia]]

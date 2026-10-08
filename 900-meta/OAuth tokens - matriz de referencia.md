@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué se toca en el `id_token`, en el canje y en PKCE. El criterio está en [[OAuth - validación del id_token]] y [[OAuth - PKCE ausente o degradado]]; la mecánica de firmar JWT, en [[JWT - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - OAuth]]. Ver también: [[Sesión - matriz de referencia]].
 
 ## 1. Anatomía del `id_token`
 
@@ -160,7 +161,3 @@ La respuesta del canje devuelve `scope` con lo realmente concedido. Si concede m
 | `nonce mismatch` | Se valida. No hay repetición posible |
 | El token de otro cliente funciona | No se comprueba `aud`. Hallazgo serio |
 | `userinfo` devuelve otra identidad que la sesión | El cliente no deriva la identidad del token |
-
-## Relacionadas
-
-[[MOC - OAuth]] · [[OAuth - validación del id_token]] · [[OAuth - PKCE ausente o degradado]] · [[JWT - matriz de referencia]] · [[Sesión - matriz de referencia]]

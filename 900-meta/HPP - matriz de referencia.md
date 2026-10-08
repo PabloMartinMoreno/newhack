@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo resuelve cada tecnología un parámetro duplicado, y cómo explotar la discrepancia. El criterio está en las dos notas de `600-tradecraft/`; el modelo, en [[MOC - HTTP parameter pollution]].
+> Ver también: [[Request smuggling - matriz de sondeo]].
 
 Dominio compacto: una matriz cubre la tabla de resolución, la codificación y los escenarios.
 
@@ -134,7 +135,3 @@ El `#` o un parámetro repetido que gane en la resolución del backend sobrescri
 | El duplicado se rechaza | El borde normaliza; no hay dominio |
 | El backend ignora el parámetro inyectado | No espera ese param; probar sobrescribir uno que sí usa |
 | `%26` no separa | Esa capa no lo decodifica; probar `&` literal o `;` |
-
-## Relacionadas
-
-[[MOC - HTTP parameter pollution]] · [[HPP - bypass por discrepancia de parseo]] · [[HPP - inyección de parámetros]] · [[Request smuggling - matriz de sondeo]]

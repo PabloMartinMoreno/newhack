@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué propiedad contaminar para conseguir algo, una vez confirmada la contaminación en [[Prototype pollution - matriz de identificación]]. El criterio está en [[MOC - Prototype pollution]].
+> Ver también: [[Deserialización gadgets - matriz de referencia]].
 
 Un gadget es un lugar del código que **lee una propiedad que normalmente no existe** y hace algo con ella. Contaminar sin gadget no es un hallazgo explotable, y encontrar el gadget es la mitad cara del dominio.
 
@@ -171,7 +172,3 @@ Fijar presupuesto en el paso 4. Es donde se va la tarde, igual que en [[SSTI - e
 | Funciona intermitentemente | Varios procesos. La contaminación quedó en uno solo |
 | El sanitizador sigue bloqueando | La configuración se pasa explícita en cada llamada. El gadget no aplica |
 | `data:` bloqueado en el `src` | La política de contenido lo prohíbe. Ir a § 7 |
-
-## Relacionadas
-
-[[MOC - Prototype pollution]] · [[Prototype pollution - matriz de identificación]] · [[Deserialización gadgets - matriz de referencia]] · [[XSS evasión - matriz de referencia]] · [[Control de acceso - matriz de pruebas]]

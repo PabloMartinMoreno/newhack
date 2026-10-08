@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Los operadores y cómo se inyectan según el contexto de entrada. La extracción ciega está en [[NoSQL extracción ciega - matriz de referencia]]; el criterio, en [[MOC - NoSQL injection]].
+> Ver también: [[SQLi contextos - matriz de referencia]].
 
 Los ejemplos son de MongoDB, el motor más común. Otros —Couch, Elasticsearch— cambian sintaxis, no idea.
 
@@ -131,7 +132,3 @@ Es el vector más discreto: parece un parámetro con corchetes, no un payload de
 | El corchete no parsea a objeto | El framework no soporta corchetes anidados. Ir a cuerpo JSON |
 | Todo devuelve el mismo documento | `$ne` con dos campos trae el primero; refinar con `$regex` |
 | Clave `$` rechazada | Hay validación de esquema. Buena mitigación |
-
-## Relacionadas
-
-[[MOC - NoSQL injection]] · [[NoSQL extracción ciega - matriz de referencia]] · [[NoSQL - inyección de operador]] · [[SQLi contextos - matriz de referencia]]

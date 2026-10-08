@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Los wrappers de PHP convierten una LFI de lectura en lectura de fuente y en RCE. Solo aplican cuando la ruta va a `include`/`require`/`file_get_contents` de PHP. Criterio en [[LFI - inclusión local]]. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - File inclusion]]. Ver también: [[LFI - de lectura a RCE]].
 
 ## Leer código fuente — `php://filter`
 
@@ -63,7 +64,3 @@ Igual con phar. `phar://` además dispara **deserialización** al abrirse — v�
 | LFI a `include`, sin subir nada | filter chains |
 | `allow_url_include=On` | `data://` o `php://input` |
 | Puedo subir un archivo (aunque no ejecute) | `zip://` / `phar://` + [[MOC - File upload]] |
-
-## Relacionadas
-
-[[LFI - inclusión local]] · [[LFI - de lectura a RCE]] · [[MOC - File inclusion]]

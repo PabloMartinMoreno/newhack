@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cuando un filtro bloquea el payload básico. Las primitivas se combinan. `yi``  ` copia. Para CSP, que es su propio mundo, ver [[XSS bypass de CSP - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - Cross-site scripting]]. Ver también: [[XSS contextos - matriz de referencia]].
 
 ## Palabras/tags bloqueados
 
@@ -109,7 +110,3 @@ Filtran `script`, `onerror` en minúsculas y paréntesis:
 
 > [!tip] Método antes que payload
 > Identificá qué normaliza el filtro (case, encoding, qué keyword busca) y atacá ese hueco. Burp Intruder con una lista de payloads XSS, o el escáner de DOM Invader, automatizan la búsqueda.
-
-## Relacionadas
-
-[[MOC - Cross-site scripting]] · [[XSS contextos - matriz de referencia]] · [[XSS bypass de CSP - matriz de referencia]]

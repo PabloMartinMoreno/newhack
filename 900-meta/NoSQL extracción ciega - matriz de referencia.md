@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo sacar datos carácter por carácter cuando no se reflejan. Los operadores base están en [[NoSQL operadores - matriz de referencia]]; el criterio, en [[NoSQL - extracción ciega]] y [[NoSQL - inyección de JavaScript]].
+> El criterio y la decisión, en [[MOC - NoSQL injection]].
 
 Estructura paralela a [[SQLi ciego - matriz de referencia]]: lo único que cambia entre canales es el oráculo. Todo lo demás es la misma búsqueda.
 
@@ -132,7 +133,3 @@ print(extraido)
 | La extracción es lentísima | Hay límite de tasa, o cada consulta es cara. Medir si vale la pena |
 | `sleep` no existe | Versión de Mongo sin `sleep`; usar un bucle que consuma tiempo |
 | Se traba a mitad de un campo | Carácter fuera del conjunto probado. Ampliar el alfabeto |
-
-## Relacionadas
-
-[[MOC - NoSQL injection]] · [[NoSQL operadores - matriz de referencia]] · [[NoSQL - extracción ciega]] · [[SQLi ciego - matriz de referencia]]

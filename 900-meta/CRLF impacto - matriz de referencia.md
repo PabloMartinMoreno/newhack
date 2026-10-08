@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué inyectar una vez que el `\r\n` pasa. Cómo hacerlo pasar está en [[CRLF inyección - matriz de referencia]]; el criterio, en las dos notas de `600-tradecraft/`.
+> Ver también: [[Web cache entradas sin clave - matriz de referencia]] · [[XSS contextos - matriz de referencia]].
 
 Todos los payloads llevan el `\r\n` como `%0d%0a`; ajustar la codificación según [[CRLF inyección - matriz de referencia]] § 2.
 
@@ -101,7 +102,3 @@ Inserta una entrada de log falsa. Sirve para **ocultar** el ataque real entre l�
 | El `Set-Cookie` no fija | La app fija otra cookie después; probar el nombre exacto de sesión |
 | La caché no guarda | El recurso no es cacheable; buscar uno que lo sea |
 | El XSS no ejecuta | La CSP lo bloquea; el split no la evade si viene por cabecera propia |
-
-## Relacionadas
-
-[[MOC - CRLF injection]] · [[CRLF inyección - matriz de referencia]] · [[XSS contextos - matriz de referencia]] · [[Web cache entradas sin clave - matriz de referencia]]

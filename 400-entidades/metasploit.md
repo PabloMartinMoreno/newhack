@@ -23,6 +23,7 @@ Framework de explotación. Tres piezas importan para el dominio de shells y payl
 
 ## Qué técnicas implementa
 
+- El dominio: [[MOC - Shells]]
 - Payload y sesión: [[Payload generado con msfvenom]]
 - Sintaxis de generación y handler: [[msfvenom - matriz de referencia]]
 - Manejo del framework (consola, sesiones, Meterpreter, post, pivoting): [[Metasploit - matriz de referencia]]
@@ -35,7 +36,3 @@ Cuando alcanza un one-liner nativo. Un `bash -i >& /dev/tcp/...` o un `python -c
 ## Estado
 
 Mantenida y activa, y por eso mismo **fuertemente firmada**: los payloads y encoders default (`shikata_ga_nai`) los detecta cualquier AV moderno. Es herramienta de laboratorio, CTF y demostración; en un engagement con EDR real, o se evade en serio (fuera del alcance de `-e`) o se usa otra cosa.
-
-## Notas relacionadas
-
-[[MOC - Shells]] · [[Payload generado con msfvenom]] · [[msfvenom - matriz de referencia]] · [[Metasploit - matriz de referencia]]

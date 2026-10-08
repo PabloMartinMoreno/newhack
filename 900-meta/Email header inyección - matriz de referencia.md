@@ -95,7 +95,3 @@ Si no se puede recibir la copia:
 | Llega pero sin la cabecera inyectada | El sink escapa; buscar otro campo |
 | El `From` inyectado no cambia el remitente | El servidor lo fija; queda la inyección de cuerpo |
 | Nada funciona | Biblioteca con escape correcto. Buena mitigación |
-
-## Relacionadas
-
-[[MOC - Email header injection]] · [[Email header impacto - matriz de referencia]] · [[CRLF inyección - matriz de referencia]]

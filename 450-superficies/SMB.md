@@ -15,6 +15,8 @@ tags:
 
 Protocolo detrás de casi toda la cadena de AD. La teoría: [[SMB - dialectos y firma]] y [[SMB - sesión nula e IPC$]]. Los ataques viven en [[MOC - Active Directory]] y [[MOC - Transferencia de archivos]] — esta nota es la puerta de entrada, no el mapa de decisión.
 
+Enumeración y ataque por fase: [[MOC - AD enumeración]] · [[MOC - AD envenenamiento y relay]] · [[MOC - AD movimiento lateral]]. Comandos: [[SMB - matriz de referencia]].
+
 ## Qué es y qué expone
 
 Compartición de archivos y canalizaciones RPC sobre TCP 445 (Windows nativo; Samba en Linux). No expone una vulnerabilidad puntual sino una **superficie de servicio**: recursos compartidos, sesiones autenticadas reutilizables, y el canal de RPC (IPC$) por el que se administran servicios remotos. Es el transporte del que cuelgan enumeración, movimiento lateral y transferencia.
@@ -37,9 +39,3 @@ Conexión a 445 en [[Sysmon EID 3 - NetworkConnect]]; el logon en [[Windows 4624
 ## Controles habituales
 
 Firma SMB **requerida** (corta el relay — ver [[SMB - dialectos y firma]]), SMB1 deshabilitado, `RestrictAnonymous`/`RestrictAnonymousSAM` (cortan la sesión nula), segmentación de 445, y permisos mínimos sobre los shares.
-
-## Notas relacionadas
-
-- Teoría: [[SMB - dialectos y firma]] · [[SMB - sesión nula e IPC$]]
-- Ataque: [[MOC - AD envenenamiento y relay]] · [[MOC - AD enumeración]] · [[MOC - AD movimiento lateral]] · [[MOC - Transferencia de archivos]]
-- Cheatsheet: [[SMB - matriz de referencia]] — nxc/smbclient/smbmap/rpcclient por tarea

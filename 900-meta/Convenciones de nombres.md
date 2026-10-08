@@ -11,6 +11,8 @@ tags:
 
 El nombre de archivo es el identificador del enlace. Cambiarlo después cuesta; elegirlo bien la primera vez es gratis.
 
+Ver también: [[Esquema de frontmatter]] · [[Estructura del vault]].
+
 ## Patrones por carpeta
 
 | Carpeta | Patrón | Ejemplo |
@@ -79,7 +81,3 @@ Los tags no reemplazan carpetas ni frontmatter. Se usan solo para cortes transve
 ```
 
 Nada de `#red` / `#blue`: eso ya lo dice el `tipo:`.
-
-## Relacionadas
-
-[[Estructura del vault]] · [[Esquema de frontmatter]]

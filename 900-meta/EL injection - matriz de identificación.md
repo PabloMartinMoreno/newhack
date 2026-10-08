@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Confirmar que hay evaluación de EL y de qué motor. Los payloads por motor están en [[EL injection payloads - matriz de referencia]]; el criterio, en [[MOC - EL injection]].
+> Ver también: [[CWE-917 - Expression Language Injection]].
 
 Identificar va antes que cualquier payload, igual que en [[SSTI - matriz de identificación]]. La diferencia es que acá la evaluación suele ser ciega, así que la identificación también.
 
@@ -108,7 +109,3 @@ Los que no parecen campo de datos —nombre de parámetro, cabecera— son los q
 | Nada vuelve nunca | Evaluación indirecta. Montar canal fuera de banda, § 5 |
 | El payload da error de acceso a miembro | Sandbox activo. Ver el escape en la matriz de payloads |
 | Struts pero el payload no funciona | Versión parcheada, o el CVE es de otro punto de entrada |
-
-## Relacionadas
-
-[[MOC - EL injection]] · [[EL injection payloads - matriz de referencia]] · [[SSTI - matriz de identificación]] · [[CWE-917 - Expression Language Injection]]

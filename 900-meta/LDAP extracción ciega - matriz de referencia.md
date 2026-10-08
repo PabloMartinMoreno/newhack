@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo sacar atributos carácter por carácter con el comodín cuando no se reflejan. La sintaxis y los payloads de bypass están en [[LDAP filtro - matriz de referencia]]; el criterio, en [[LDAP - extracción ciega]].
+> El criterio y la decisión, en [[MOC - LDAP injection]].
 
 Estructura paralela a [[NoSQL extracción ciega - matriz de referencia]] y [[SQLi ciego - matriz de referencia]]: lo único que cambia entre las inyecciones hermanas es la sintaxis del oráculo. Acá el oráculo es el comodín `*`.
 
@@ -112,7 +113,3 @@ El cierre del payload (`admin)(mail=...`) depende de la forma del filtro origina
 | La extracción es lentísima | Sin canal temporal es inevitable; bisecar con `>=`/`<=`, § 6 |
 | Se traba a mitad del valor | Carácter fuera del alfabeto probado. Ampliarlo |
 | El límite de tasa corta | Cientos de consultas por atributo; medir si vale la pena |
-
-## Relacionadas
-
-[[MOC - LDAP injection]] · [[LDAP filtro - matriz de referencia]] · [[LDAP - extracción ciega]] · [[NoSQL extracción ciega - matriz de referencia]]

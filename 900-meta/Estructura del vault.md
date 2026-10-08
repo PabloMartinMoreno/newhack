@@ -11,6 +11,8 @@ tags:
 
 Vault único **rojo + azul**. No hay carpetas `red/` ni `blue/`: los tipos de nota ya cubren ambos lados y la fusión ocurre en dos bisagras.
 
+Ver también: [[Avances]] · [[Convenciones de nombres]] · [[Esquema de frontmatter]] · [[Puesta a punto de Obsidian]].
+
 ## Las dos bisagras
 
 ```mermaid
@@ -118,7 +120,3 @@ Por qué dos juegos de vistas superpuestos y no un árbol único: una **superfic
 **Regla de escala:** Inicio no crece. Una superficie nueva entra bajo la fase que la usa; una sección que junta muchos MOCs se colapsa en un hub (así nació `MOC - Web`, que sacó 34 enlaces de Inicio). Una fase nueva es la excepción, no la regla.
 
 Esto lo hace cumplible `higiene`, que indexa **transitivamente**: un MOC cuenta como indexado si Inicio lo cita o lo cita otro MOC alcanzable (BFS sobre enlaces MOC→MOC). Sin eso, la regla "todo MOC en Inicio" forzaría un Inicio plano.
-
-## Relacionadas
-
-[[Esquema de frontmatter]] · [[Convenciones de nombres]] · [[Consultas del vault]] · [[Puesta a punto de Obsidian]] · [[Avances]]

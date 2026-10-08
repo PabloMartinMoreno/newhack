@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué hacer con un socket abierto: manipular mensajes, probar autorización, inyectar hacia sinks. El reconocimiento está en [[WebSocket - matriz de reconocimiento]]; el criterio, en [[WebSocket - confianza del canal]].
+> El criterio y la decisión, en [[MOC - WebSocket]].
 
 Con el socket abierto —propio o secuestrado— y el protocolo de mensajes mapeado, se edita cada mensaje. Burp intercepta y edita los mensajes de WebSocket como cualquier petición.
 
@@ -97,7 +98,3 @@ Es [[XSS - DOM-based]] con la fuente en el WebSocket, y se detecta buscando cóm
 | El mensaje repetido no duplica | Hay control de unicidad. Probar carrera igual |
 | El socket se cierra al editar | Puede haber una firma o secuencia; revisar el protocolo |
 | Burp no muestra los mensajes | Es un binario o socket.io con framing propio; decodificar |
-
-## Relacionadas
-
-[[MOC - WebSocket]] · [[WebSocket - matriz de reconocimiento]] · [[WebSocket - confianza del canal]] · [[Control de acceso - matriz de pruebas]]

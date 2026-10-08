@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Los `Origin` que vencen cada tipo de validación, y cómo leer la respuesta. El criterio está en las tres notas de `600-tradecraft/`; el modelo, en [[MOC - CORS]].
+> Ver también: [[CSRF entrega - matriz de referencia]].
 
 Dominio legítimo supuesto: `objetivo.com`. Origen del atacante: `atacante.com`.
 
@@ -149,7 +150,3 @@ Robar el token anti-CSRF es la combinación que más rinde: CORS mal configurado
 | El endpoint autentica por `Authorization` | El navegador no manda esa cabecera solo. Sin cookies no hay robo |
 | El prefijo no funciona con barra | El servidor ancló con `/`. Probar sufijo |
 | La respuesta llega vacía | El endpoint necesita la cookie y no viajó, o exige otra cabecera |
-
-## Relacionadas
-
-[[MOC - CORS]] · [[CORS - reflejo del origen con credenciales]] · [[OAuth redirect_uri - matriz de referencia]] · [[CSRF entrega - matriz de referencia]]

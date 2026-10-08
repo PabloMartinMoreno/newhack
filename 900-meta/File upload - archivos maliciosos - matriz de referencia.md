@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Contenido de los archivos que se suben para XSS almacenado (SVG servido) o XXE (XML parseado). Criterio en [[File upload - SVG y XSS almacenado]] y [[File upload - XXE por archivo]]. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - File upload]].
 
 ## SVG con XSS
 
@@ -83,7 +84,3 @@ Apuntar la entidad a un servicio interno o al metadata de cloud.
 ## DOCX / XLSX / ODT
 
 Son ZIP de XML. Se descomprime, se inyecta la entidad en `word/document.xml` (o `content.xml` en ODT), se recomprime y se sube. El parser ofimático del server la resuelve al procesar.
-
-## Relacionadas
-
-[[File upload - SVG y XSS almacenado]] · [[File upload - XXE por archivo]] · [[MOC - File upload]]

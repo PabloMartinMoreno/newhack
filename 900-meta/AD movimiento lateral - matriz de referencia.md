@@ -14,6 +14,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo se convierte material de autenticación en ejecución en otra máquina. El criterio está en [[Pass-the-hash]] y [[Pass-the-ticket]].
+> El criterio y la decisión, en [[MOC - Active Directory]]. Ver también: [[AD volcado de credenciales - matriz de referencia]] · [[Windows 4624 - Successful logon]].
 
 ## 0. Qué tengo y qué protocolo me habilita
 
@@ -117,7 +118,3 @@ Tres salidas, en orden de preferencia:
 | El ticket no se usa y sigue pidiendo contraseña | `KRB5CCNAME` mal exportado, o el `.kirbi` no se convirtió a `.ccache` |
 | Filtro de UAC en cuentas locales | Solo el `Administrador` real (RID 500) tiene privilegio completo en remoto. Las otras cuentas locales van filtradas |
 | `Access denied` desde una sesión remota hacia una tercera máquina | El doble salto. Ver arriba |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[Pass-the-hash]] · [[Pass-the-ticket]] · [[AD volcado de credenciales - matriz de referencia]] · [[Windows 4624 - Successful logon]]

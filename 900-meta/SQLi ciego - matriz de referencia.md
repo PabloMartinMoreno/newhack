@@ -14,6 +14,7 @@ tags:
 > Cubre los dos canales inferenciales: [[SQLi - canal booleano ciego]] y [[SQLi - canal temporal ciego]]. Comparten toda la lógica de extracción; **solo cambia el oráculo** —diferencia en la respuesta vs. retardo—, así que va una sola matriz.
 >
 > Confirmación de inyección y cierre: comunes, ver [[SQLi UNION - matriz de referencia]] pasos 0-2. `yi``  ` copia el payload.
+> El criterio y la decisión, en [[MOC - SQL injection]]. Ver también: [[Dialectos SQL - matriz de referencia]].
 
 ## El oráculo — lo único que cambia entre los dos canales
 
@@ -89,7 +90,3 @@ Extraer un hash a mano son cientos de peticiones: en la práctica esto se corre 
 | Temporal + binaria | ~7 | 3 s por pregunta verdadera |
 
 Un hash de 60 caracteres: ~420 peticiones. Por eso el árbol prueba fuera de banda antes que esto.
-
-## Relacionadas
-
-[[SQLi - canal booleano ciego]] · [[SQLi - canal temporal ciego]] · [[MOC - SQL injection]] · [[Dialectos SQL - matriz de referencia]]

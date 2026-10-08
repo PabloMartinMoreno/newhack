@@ -13,6 +13,7 @@ tags:
 > El criterio de cuándo usar este canal está en [[SQLi - canal basado en errores]]. Acá la sintaxis. Confirmación de inyección y descubrimiento del cierre: comunes a todo SQLi, ver [[SQLi UNION - matriz de referencia]] pasos 0-2.
 >
 > `yi``  ` copia el payload de la línea. Ejemplos MySQL salvo donde se indica.
+> El criterio y la decisión, en [[MOC - SQL injection]]. Ver también: [[Dialectos SQL - matriz de referencia]].
 
 ## 1. La primitiva por motor
 
@@ -99,7 +100,3 @@ MySQL, la app filtra el error en un `500` visible.
 | Mensaje genérico sin `~` | Errores suprimidos → pasar a booleano ciego |
 | El dato sale cortado a 32 chars | Normal — usar `substring` y correr la ventana |
 | `XPATH syntax error: '~'` sin nada más | La subconsulta no devolvió filas |
-
-## Relacionadas
-
-[[SQLi - canal basado en errores]] · [[MOC - SQL injection]] · [[Dialectos SQL - matriz de referencia]]

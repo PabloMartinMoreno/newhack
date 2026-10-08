@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > **Dónde cae el input** decide cómo romper para inyectar — es ortogonal al canal. Esta matriz resuelve *"el payload está bien pero no funciona"*: casi siempre es que estás en un contexto que no acepta esa sintaxis. `yi``  ` copia el payload.
+> El criterio y la decisión, en [[MOC - SQL injection]]. Ver también: [[Dialectos SQL - matriz de referencia]] · [[SQLi UNION - matriz de referencia]].
 
 ## Identificar el contexto
 
@@ -101,7 +102,3 @@ Cerrar el valor, agregar la subconsulta en el siguiente campo del `VALUES`.
 Concatenar la subconsulta dentro del mismo campo string.
 
 El resultado casi nunca vuelve en la respuesta —un `INSERT` no imprime filas—, así que este contexto tiende a resolverse por error-based, ciego, o [[SQLi - inyección de segundo orden]].
-
-## Relacionadas
-
-[[MOC - SQL injection]] · [[SQLi UNION - matriz de referencia]] · [[Dialectos SQL - matriz de referencia]]

@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > La sintaxis del formato en el que se escriben las detecciones de `logica: sigma`. Qué forma de detección soporta y cuál no está en [[Detección por forma - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - Fundamentos de detección]]. Ver también: [[KQL - matriz de referencia]] · [[Sysmon - matriz de configuración]].
 
 ## 1. Esqueleto
 
@@ -172,7 +173,3 @@ correlation:
 | El backend rechaza `re:` | No todos soportan expresiones regulares. Reescribir con `contains` |
 | Payload codificado que no aparece | Falta `base64offset|contains` |
 | `count() > N` no traduce | El backend no soporta agregación. Es el límite real de Sigma |
-
-## Relacionadas
-
-[[Detección por forma - matriz de referencia]] · [[KQL - matriz de referencia]] · [[Sysmon - matriz de configuración]] · [[MOC - Fundamentos de detección]]

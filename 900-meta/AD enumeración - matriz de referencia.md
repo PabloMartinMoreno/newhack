@@ -14,6 +14,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué se pregunta al directorio y con qué. El criterio —cuándo conviene enumerar y qué pierde el que se saltea este paso— está en [[Enumeración LDAP del directorio]]. Las herramientas SMB (nxc/smbclient/smbmap/rpcclient) por tarea, en [[SMB - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - Active Directory]]. Ver también: [[AD roasting - matriz de referencia]] · [[Autenticación - matriz de referencia]].
 
 ## 0. Qué tengo
 
@@ -155,7 +156,3 @@ Marcar como `owned` cada cuenta que vas comprometiendo es lo que hace útil la p
 | `data 775` | Contraseña correcta, cuenta bloqueada |
 | `strongerAuthRequired` | El DC exige firma o canal cifrado. Usar `ldaps://` en el 636 |
 | BloodHound sin aristas de sesión | Recolectaste con `DCOnly`. Sin sesiones no hay rutas de movimiento lateral |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[Enumeración LDAP del directorio]] · [[AD roasting - matriz de referencia]] · [[Autenticación - matriz de referencia]]

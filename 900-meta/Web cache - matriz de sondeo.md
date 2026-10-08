@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Detectar la caché, medir qué guarda y encontrar el hueco, sin envenenar a nadie. Las entradas y payloads están en [[Web cache entradas sin clave - matriz de referencia]]; el criterio, en [[MOC - Web cache]].
+> Ver también: [[CWE-349 - Acceptance of Extraneous Untrusted Data With Trusted Data]].
 
 > [!danger] Sondear mal envenena a usuarios reales
 > Una respuesta envenenada se sirve a **todos** los que pidan ese recurso hasta que expira. Usar siempre un **cache buster** —un parámetro único— mientras se prueba, de modo que solo se toque una entrada propia. Solo envenenar la entrada real con un payload inocuo y de forma acordada.
@@ -108,7 +109,3 @@ Sufijos a probar en el paso 1: en [[Web cache entradas sin clave - matriz de ref
 | Envenené y no se sirve a la segunda petición | El buster sigue puesto, o la entrada ya expiró. Revisar la ventana |
 | El engaño devuelve `404` con el sufijo | El servidor no ignora el sufijo. Probar otro delimitador |
 | El engaño no cachea la página privada | La caché mira el `Content-Type`, no la extensión. Buena mitigación |
-
-## Relacionadas
-
-[[MOC - Web cache]] · [[Web cache entradas sin clave - matriz de referencia]] · [[CWE-349 - Acceptance of Extraneous Untrusted Data With Trusted Data]]

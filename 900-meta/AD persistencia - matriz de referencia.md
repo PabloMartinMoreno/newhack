@@ -14,6 +14,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué se hace con acceso de administrador de dominio para no perderlo. El criterio está en [[Golden ticket]] y [[ADCS - certificado con SAN arbitrario]].
+> El criterio y la decisión, en [[MOC - Active Directory]]. Ver también: [[DCSync]].
 
 ## 0. Qué sobrevive a qué
 
@@ -111,7 +112,3 @@ Es la única acción defensiva del vault donde **hacerla mal es peor que no hace
 | `certipy` no encuentra plantillas vulnerables | La CA está bien configurada, o falta permiso de lectura sobre el contenedor de plantillas |
 | `certipy auth` devuelve `KDC_ERR_CLIENT_NAME_MISMATCH` | Falta la extensión de mapeo fuerte (KB5014754). El dominio ya no acepta el mapeo implícito por UPN |
 | `dacledit` devuelve acceso denegado | Falta `WriteDacl` sobre el objeto raíz. Se necesita admin de dominio, no solo admin local |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[Golden ticket]] · [[ADCS - certificado con SAN arbitrario]] · [[DCSync]] · [[Ticket de servicio sin ticket inicial previo]]

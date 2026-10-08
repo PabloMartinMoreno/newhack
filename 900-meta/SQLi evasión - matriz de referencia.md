@@ -14,6 +14,7 @@ tags:
 > La rama de obstáculos de [[MOC - SQL injection]] entra acá. Cada sección es una primitiva: se **combinan** según lo que filtre el objetivo. `yi``  ` copia el payload.
 >
 > Se elige por lo que bloquea el filtro, no por gusto. Si filtra comillas, sección "sin comillas"; si filtra espacios, "sin espacios"; y así.
+> Ver también: [[Dialectos SQL - matriz de referencia]] · [[sqlmap]].
 
 ## Sin comillas
 
@@ -91,7 +92,3 @@ Filtra comillas, espacios y `UNION` en mayúsculas:
 '/**/UnIoN/**/SeLeCt/**/1,2,3-- -  espacios por comentario + case mixto
 '/**/UnIoN/**/SeLeCt/**/1,0x61,3-- -  y el string 'a' como 0x61 por si filtra comillas
 ```
-
-## Relacionadas
-
-[[MOC - SQL injection]] · [[sqlmap]] · [[Dialectos SQL - matriz de referencia]]

@@ -13,6 +13,7 @@ tags:
 > El criterio está en [[SQLi - canal fuera de banda]]. Acá la sintaxis por motor. Reemplazá `atacante.com` por tu dominio de Collaborator/interactsh.
 >
 > `yi``  ` copia el payload.
+> El criterio y la decisión, en [[MOC - SQL injection]]. Ver también: [[Consulta DNS saliente]] · [[Dialectos SQL - matriz de referencia]].
 
 ## 1. La primitiva de red por motor
 
@@ -66,7 +67,3 @@ Hex evita caracteres inválidos en DNS. Si excede el largo, iterar con `substrin
 | No llega ninguna consulta | Sin egress, o la primitiva está bloqueada → bajar a temporal ciego |
 | Llega la DNS pero sin el dato | El dato tiene caracteres inválidos para DNS → usar hex |
 | Subdominio truncado | Superó el largo de etiqueta → trocear con `substring` |
-
-## Relacionadas
-
-[[SQLi - canal fuera de banda]] · [[MOC - SQL injection]] · [[Dialectos SQL - matriz de referencia]] · [[Consulta DNS saliente]]

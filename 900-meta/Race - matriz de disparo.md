@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo hacer que N peticiones lleguen dentro de la ventana. Dónde buscar las ventanas está en [[Race - superficies y sub-estados]]; el criterio, en [[MOC - Race conditions]].
+> Ver también: [[Race - superación de límite]] · [[Request smuggling - matriz de sondeo]].
 
 El dominio no tiene payload: tiene una técnica de sincronización. Todo esto es cómo vencer el jitter de la red para que las peticiones colisionen.
 
@@ -105,7 +106,3 @@ Confirmar que la operación no es atómica sin dañar nada:
 | El servidor rechaza la ráfaga | Demasiadas peticiones; bajar el número |
 | El efecto ocurre una vez de más y no más | La ventana deja pasar dos, no veinte. Puede alcanzar igual |
 | Nada colisiona nunca | Probablemente hay atomicidad real. El dominio no aplica acá |
-
-## Relacionadas
-
-[[MOC - Race conditions]] · [[Race - superficies y sub-estados]] · [[Race - superación de límite]] · [[Request smuggling - matriz de sondeo]]

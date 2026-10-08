@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > El HTML que dispara la petición. Qué defensa hay que romper primero está en [[MOC - CSRF]]; los bypass, en [[CSRF bypass - matriz de referencia]].
+> Ver también: [[CWE-352 - Cross-Site Request Forgery]] · [[Sesión - matriz de referencia]].
 
 ## 0. Qué se puede mandar sin permiso del servidor
 
@@ -150,7 +151,3 @@ Cerrar la sesión y volver a atacar sirve para dos cosas: reiniciar el reloj de 
 | El JSON llega malformado | Falta el campo de relleno que absorbe el `=` de `text/plain` |
 | Funciona en el navegador de prueba y no en otro | Diferencia de `SameSite` entre navegadores. Reconfirmar contra el objetivo |
 | La cookie no viaja en el `fetch` | Falta `credentials: 'include'` |
-
-## Relacionadas
-
-[[MOC - CSRF]] · [[CSRF bypass - matriz de referencia]] · [[CWE-352 - Cross-Site Request Forgery]] · [[Sesión - matriz de referencia]]

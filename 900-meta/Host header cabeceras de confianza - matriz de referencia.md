@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Las cabeceras que el cliente controla y las aplicaciones confían, y contra qué probarlas. Cómo inyectar el Host está en [[Host header inyección - matriz de referencia]]; el criterio, en [[Host header - bypass de acceso por confianza]].
+> El criterio y la decisión, en [[MOC - Host header]]. Ver también: [[Control de acceso - matriz de pruebas]].
 
 ## 1. El catálogo de cabeceras de reenvío
 
@@ -111,7 +112,3 @@ El frente ve `/permitido` y lo deja pasar; el back procesa `/admin`. Es primo de
 | `X-Original-URL` no cambia la ruta | El back no lo respeta; probar `X-Rewrite-URL` |
 | El primer/último valor no funciona | Probar el otro orden en el `X-Forwarded-For` con lista |
 | El proxy borra la cabecera | Configuración correcta: la sobrescribe. No hay bypass por acá |
-
-## Relacionadas
-
-[[MOC - Host header]] · [[Host header inyección - matriz de referencia]] · [[Host header - bypass de acceso por confianza]] · [[Control de acceso - matriz de pruebas]]

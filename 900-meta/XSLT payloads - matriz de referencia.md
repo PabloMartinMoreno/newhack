@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué inyectar una vez identificado el procesador. Identificarlo es el paso previo, en [[XSLT - matriz de identificación]]; el criterio, en las dos notas de `600-tradecraft/`.
+> El criterio y la decisión, en [[MOC - XSLT injection]]. Ver también: [[XXE payloads - matriz de referencia]].
 
 ## 1. Divulgación de información
 
@@ -147,7 +148,3 @@ Exfiltra el resultado por la URL de un `document()` saliente. Mismo criterio que
 | `unparsed-text` no existe | XSLT 1.0; usar `document()` |
 | Ejecuta y no vuelve nada | Salida no reflejada; canal ciego, § 8 |
 | `exsl:document` no escribe | Sin permiso de escritura, o la extensión off |
-
-## Relacionadas
-
-[[MOC - XSLT injection]] · [[XSLT - matriz de identificación]] · [[SSTI payloads - matriz de referencia]] · [[XXE payloads - matriz de referencia]]

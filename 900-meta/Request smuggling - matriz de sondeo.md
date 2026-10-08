@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo detectar y confirmar la desincronización, sin romper el tráfico de otros. Qué se hace después está en [[Request smuggling - matriz de explotación]]; el criterio, en [[MOC - Request smuggling]].
+> Ver también: [[CWE-444 - Inconsistent Interpretation of HTTP Requests]].
 
 > [!danger] Sondear puede afectar a usuarios reales
 > Una petición de confirmación mal calibrada antepone bytes a la petición de la **siguiente** persona en esa conexión. Usar siempre las pruebas de **tiempo** para detectar —no dañan a nadie— y solo pasar a las de confirmación con el sobrante apuntado a algo inocuo. Nunca sondear producción sin acordar la ventana.
@@ -158,7 +159,3 @@ Si la conexión reutilizada devuelve `404` en la petición siguiente, el endpoin
 | Retardo pero sin confirmación por diferencia | Hay ambigüedad de tiempo pero el sobrante no se antepone. Revisar reutilización |
 | H2 crudo rechazado por el cliente | El cliente corrige las cabeceras. Hace falta una herramienta que las deje malformadas |
 | CL.0 no reproduce | El endpoint sí lee el cuerpo. Probar otro manejador que no espere cuerpo |
-
-## Relacionadas
-
-[[MOC - Request smuggling]] · [[Request smuggling - matriz de explotación]] · [[CWE-444 - Inconsistent Interpretation of HTTP Requests]]

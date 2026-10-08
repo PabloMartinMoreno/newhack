@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cada capa de validación tiene su bypass; se prueban en orden hasta que uno pasa. Criterio en [[File upload - bypass de validación]]. La webshell que subís está en [[Webshells - matriz de referencia]]. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - File upload]].
 
 ## Extensión — lista negra
 
@@ -79,7 +80,3 @@ Si el nombre no se sanitiza, elige **dónde** cae el archivo — sacarlo de un d
 3. shell.php + Content-Type: image/png → "el archivo no es una imagen" (validan contenido)
 4. GIF89a;<?php ... ?> como shell.php.jpg + doble ext → sube y ejecuta
 ```
-
-## Relacionadas
-
-[[File upload - bypass de validación]] · [[Webshells - matriz de referencia]] · [[MOC - File upload]]

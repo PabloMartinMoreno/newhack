@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > De dónde sale material de autenticación una vez que hay admin local. El criterio está en [[LSASS - volcado vía comsvcs.dll MiniDump]] y [[DCSync]].
+> El criterio y la decisión, en [[MOC - Active Directory]]. Ver también: [[AD movimiento lateral - matriz de referencia]] · [[Sysmon EID 10 - ProcessAccess]].
 
 ## 0. Dónde vive cada cosa
 
@@ -125,7 +126,3 @@ MSCache2 es la trampa: parece un hash aprovechable y no lo es. Solo se rompe, y 
 | `STATUS_ACCESS_DENIED` en `secretsdump` remoto | No hay admin local en el objetivo, o falta el recurso `ADMIN$` |
 | DCSync devuelve `rpc_s_access_denied` | Faltan los derechos de replicación. Verificar la ACL en BloodHound antes de insistir |
 | `reg save` falla en `SECURITY` | Falta ejecutar como SYSTEM, no alcanza con administrador |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[LSASS - volcado vía comsvcs.dll MiniDump]] · [[DCSync]] · [[AD movimiento lateral - matriz de referencia]] · [[Sysmon EID 10 - ProcessAccess]]

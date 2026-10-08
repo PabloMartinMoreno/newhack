@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué se hace con una desincronización confirmada. Confirmarla es el paso previo, en [[Request smuggling - matriz de sondeo]]; el criterio, en [[MOC - Request smuggling]].
+> Ver también: [[Control de acceso - matriz de pruebas]].
 
 Confirmada la desincronización, el sobrante controlado se antepone a la siguiente petición. Lo que se consigue depende de a qué se antepone y de qué se pide. En orden de impacto creciente.
 
@@ -115,7 +116,3 @@ La siguiente petición del navegador a ese origen —con las cookies de la víct
 | La respuesta envenenada se sirve a uno mismo | El desfase quedó en la propia conexión. Es esperable al calibrar |
 | La caché no guarda | El recurso no era cacheable, o falta la cabecera que lo hace |
 | Del lado del cliente no antepone | El navegador no reutilizó la conexión al origen. Forzarla con varias peticiones |
-
-## Relacionadas
-
-[[MOC - Request smuggling]] · [[Request smuggling - matriz de sondeo]] · [[MOC - Cross-site scripting]] · [[Control de acceso - matriz de pruebas]]

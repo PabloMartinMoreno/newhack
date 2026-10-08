@@ -125,7 +125,3 @@ Antes de manipular, entender qué habla la aplicación por el socket. Observar e
 | Valida el origen exacto | Probar bypass de cadena, § 4; si no, rama cerrada |
 | El JS no muestra `new WebSocket` | Puede usar una biblioteca (socket.io); buscar su patrón |
 | socket.io en vez de WebSocket puro | Tiene su propio handshake y reconexión; el origen se prueba igual |
-
-## Relacionadas
-
-[[MOC - WebSocket]] · [[WebSocket - matriz de manipulación]] · [[WebSocket - secuestro entre sitios]] · [[CORS bypass de origen - matriz de referencia]]

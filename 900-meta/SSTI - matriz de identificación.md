@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Confirmar la inyección y averiguar qué motor es. Los payloads por motor están en [[SSTI payloads - matriz de referencia]]; el criterio, en [[MOC - SSTI]].
+> Ver también: [[CWE-1336 - Improper Neutralization of Special Elements Used in a Template Engine]] · [[XSS contextos - matriz de referencia]].
 
 Identificar va **antes** que cualquier payload. Cuatro peticiones bien elegidas resuelven el motor; tirar payloads a ciegas gasta veinte y ensucia el registro de errores.
 
@@ -127,7 +128,3 @@ El segundo caso es el equivalente a la ruptura del contexto en [[MOC - Command i
 | `500` sin cuerpo | Los errores están suprimidos. Identificar por canal fuera de banda |
 | Funciona en un parámetro y no en otro | Solo uno construye la plantilla. Es lo normal |
 | `7777777` con Twig esperado | Es Jinja2. Reidentificar antes de seguir |
-
-## Relacionadas
-
-[[MOC - SSTI]] · [[SSTI payloads - matriz de referencia]] · [[CWE-1336 - Improper Neutralization of Special Elements Used in a Template Engine]] · [[XSS contextos - matriz de referencia]]

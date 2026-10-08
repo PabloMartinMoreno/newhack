@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué probar contra cada defensa, en orden de coste. Los payloads están en [[CSRF entrega - matriz de referencia]]; el criterio, en las cuatro notas de `600-tradecraft/`.
+> El criterio y la decisión, en [[MOC - CSRF]]. Ver también: [[Control de acceso - matriz de pruebas]] · [[Sesión - matriz de referencia]].
 
 ## 0. Identificar la defensa antes de atacarla
 
@@ -146,7 +147,3 @@ En orden de retorno, no de esfuerzo:
 4. **Reautenticación** en las acciones críticas —cambio de correo, de contraseña, transferencias—. Es lo único que sobrevive a un XSS en el mismo origen.
 
 El punto 4 es el que más veces falta y el que convierte un CSRF de severidad media en uno de toma de cuenta.
-
-## Relacionadas
-
-[[MOC - CSRF]] · [[CSRF entrega - matriz de referencia]] · [[Sesión - matriz de referencia]] · [[Control de acceso - matriz de pruebas]]

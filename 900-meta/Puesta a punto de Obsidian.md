@@ -14,6 +14,8 @@ tags:
 >
 > Consecuencia dura: **sin Dataview no hay consultas**. Las cinco consultas cruzadas rojo/azul se implementan como script CLI sobre el frontmatter — ver [[Consultas del vault]]. Ese script no es un accesorio: es lo único que hace que fusionar los dos lados rinda.
 
+Ver también: [[Avances]] · [[Estructura del vault]].
+
 ## Setup en nvim — hecho
 
 LazyVim. Specs en `~/.config/nvim/lua/plugins/obsidian.lua` y `render-markdown.lua`. Instalado y verificado el 2026-08-05 con `obsidian.nvim` v3.16.6 y nvim 0.12.4.
@@ -119,7 +121,3 @@ Ese grafo es el que hay que mirar: si los nodos de telemetría no tienen aristas
 
 - Este vault: repo privado. Es tradecraft anotado por OPSEC — no se publica.
 - Vault de engagements: **nunca** en el mismo remoto, cifrado en disco.
-
-## Relacionadas
-
-[[Estructura del vault]] · [[Consultas del vault]] · [[Avances]]

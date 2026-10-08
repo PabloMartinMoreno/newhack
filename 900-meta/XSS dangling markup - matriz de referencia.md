@@ -11,6 +11,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Exfil por HTML injection sin JS. Criterio en [[XSS - dangling markup injection]]. `atacante.com` es tu recolector. `yi``  ` copia.
+> El criterio y la decisión, en [[MOC - Cross-site scripting]]. Ver también: [[XSS - CSP]].
 
 ## Captura por atributo sin cerrar
 
@@ -51,7 +52,3 @@ Sin comillas: el navegador consume hasta el próximo espacio o `>`. Captura meno
 | Captura HTML de más | No había comilla de cierre cercana; ajustar el tag o el atributo |
 | El dato no aparece | Está **antes** de la inyección: dangling markup solo captura lo que sigue |
 | La imagen no carga con newlines | Mitigación del navegador; evitar saltos crudos en la URL |
-
-## Relacionadas
-
-[[XSS - dangling markup injection]] · [[XSS - CSP]] · [[MOC - Cross-site scripting]]

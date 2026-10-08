@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Encontrar el endpoint, sacar el esquema, y reconstruirlo cuando la introspección está apagada. La explotación está en [[GraphQL - matriz de explotación]]; el criterio, en [[MOC - GraphQL]].
+> Ver también: [[Control de acceso - matriz de pruebas]].
 
 ## 1. Encontrar el endpoint
 
@@ -121,7 +122,3 @@ Probar si acepta GET y si acepta lotes es parte del reconocimiento: los dos habi
 | `{"data":{"__typename":"Query"}}` | Confirmado GraphQL |
 | El lote devuelve un solo resultado | No soporta lotes; probar alias en su lugar |
 | GET rechazado | Solo POST; no hay cruce con caché |
-
-## Relacionadas
-
-[[MOC - GraphQL]] · [[GraphQL - matriz de explotación]] · [[GraphQL - introspección del esquema]] · [[Control de acceso - matriz de pruebas]]

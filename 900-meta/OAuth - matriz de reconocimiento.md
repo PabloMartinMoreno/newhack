@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Identificar el flujo y los parámetros antes de atacar nada. Los payloads están en [[OAuth redirect_uri - matriz de referencia]] y [[OAuth tokens - matriz de referencia]]; el criterio, en [[MOC - OAuth]].
+> Ver también: [[JWT - matriz de referencia]].
 
 ## 1. El documento de descubrimiento
 
@@ -131,7 +132,3 @@ El paso 4 es el que decide si el cliente es confidencial o público. Si el canje
 | El código no canjea desde otro contexto | Está atado al cliente y a la dirección |
 | `.well-known` devuelve `404` | Proveedor sin descubrimiento. Sacar los endpoints del tráfico |
 | Todo funciona con `state` cambiado | No se valida. Rama abierta |
-
-## Relacionadas
-
-[[MOC - OAuth]] · [[OAuth redirect_uri - matriz de referencia]] · [[OAuth tokens - matriz de referencia]] · [[JWT - matriz de referencia]]

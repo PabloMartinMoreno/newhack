@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Las variantes que vencen la comparación de la dirección de redirección. El criterio está en [[OAuth - redirect_uri mal validado]]; identificar el flujo, en [[OAuth - matriz de reconocimiento]].
+> El criterio y la decisión, en [[MOC - OAuth]]. Ver también: [[SSRF evasión - matriz de referencia]].
 
 Dirección registrada supuesta en todos los ejemplos: `https://cliente.com/callback`
 
@@ -138,7 +139,3 @@ Y si no hay ejecución, sirve una redirección abierta que preserve el fragmento
 | Funciona en el navegador y no con `curl` | La diferencia está en el analizador. Es exactamente lo que abusa § 6 |
 | El fragmento no llega | Falta el reenvío de § 10 |
 | El código llega una vez y después no | Se consumió. Los códigos son de un solo uso |
-
-## Relacionadas
-
-[[MOC - OAuth]] · [[OAuth - redirect_uri mal validado]] · [[CWE-601 - URL Redirection to Untrusted Site]] · [[Path traversal - matriz de referencia]] · [[SSRF evasión - matriz de referencia]]

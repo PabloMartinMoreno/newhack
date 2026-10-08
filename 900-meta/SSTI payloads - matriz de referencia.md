@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué pegar una vez identificado el motor. Identificarlo es el paso previo y va en [[SSTI - matriz de identificación]]; el criterio, en [[MOC - SSTI]].
+> Ver también: [[Command injection evasión - matriz de referencia]].
 
 ## 1. Ejecución directa — motores sin entorno restringido
 
@@ -198,7 +199,3 @@ Mismo criterio que [[Command injection - canal fuera de banda]]: si el egress es
 | El payload no entra por largo | Usar el objeto de configuración, o encadenar dos inyecciones |
 | Ejecuta y no vuelve nada | Renderizado asíncrono. Ir a canal fuera de banda, § 8 |
 | `500` limpio con todo | Errores suprimidos. No implica que no funcione: confirmar por fuera de banda |
-
-## Relacionadas
-
-[[MOC - SSTI]] · [[SSTI - matriz de identificación]] · [[SSTI - ejecución directa]] · [[SSTI - escape del entorno restringido]] · [[Command injection evasión - matriz de referencia]]

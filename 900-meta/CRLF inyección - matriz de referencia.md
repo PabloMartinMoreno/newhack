@@ -16,7 +16,8 @@ tags:
 
 ## 0. El átomo y sus codificaciones
 
-`\r` = retorno de carro = `%0d` = ``
+`\r` = retorno de carro = `%0d` = `
+`
 `\n` = salto de línea = `%0a` = `
 `
 `\r\n` = `%0d%0a` — la secuencia que separa cabeceras.
@@ -88,7 +89,3 @@ Saber qué parte de la cabecera se controla decide si se puede solo agregar cabe
 | El filtro quita el salto de línea | Doble codificación, o unicode |
 | La cabecera inyectada aparece pero rota | El servidor la re-escapa parcialmente; ajustar |
 | Funciona en un parámetro y no en otro | Solo uno cae en una cabecera. Es lo normal |
-
-## Relacionadas
-
-[[MOC - CRLF injection]] · [[CRLF impacto - matriz de referencia]] · [[Path traversal - matriz de referencia]] · [[CWE-601 - URL Redirection to Untrusted Site]]

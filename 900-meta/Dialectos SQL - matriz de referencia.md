@@ -11,6 +11,7 @@ tags:
 
 > [!info] Esto es referencia pura, no un zettel
 > Se consulta, no se lee. No responde "cuándo elijo esto en vez de la alternativa" — por eso vive en `900-meta/` y no en `600-tradecraft/`. La decisión vive en [[MOC - SQL injection]]; la sintaxis vive acá.
+> Ver también: [[CWE-89 - SQL Injection]].
 
 ## Concatenación y comentarios
 
@@ -50,7 +51,3 @@ tags:
 | PostgreSQL | `pg_read_file()` (superusuario) | `COPY ... TO` / `COPY ... FROM PROGRAM` |
 | Oracle | `UTL_FILE` | `UTL_FILE` |
 | SQLite | `readfile()` (solo CLI) | `writefile()` (solo CLI) |
-
-## Relacionadas
-
-[[MOC - SQL injection]] · [[CWE-89 - SQL Injection]]

@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Qué inyectar una vez que el `\r\n` pasa al correo. Cómo hacerlo pasar está en [[Email header inyección - matriz de referencia]]; el criterio, en las dos notas de `600-tradecraft/`.
+> El criterio y la decisión, en [[MOC - Email header injection]]. Ver también: [[Autenticación - abuso de recuperación de contraseña]] · [[CRLF impacto - matriz de referencia]].
 
 Todos los payloads llevan el `\r\n` como `%0d%0a`; ajustar la codificación según [[Email header inyección - matriz de referencia]] § 4.
 
@@ -95,7 +96,3 @@ Si el `Subject` original se anexa después, se puede reescribir para que el corr
 | El `From` falso va a spam | SPF/DKIM/DMARC del objetivo; sigue siendo hallazgo, menor impacto |
 | El MIME no arma el adjunto | Boundary mal cerrado; revisar los `--X` |
 | El asunto no cambia | Se fija del lado del servidor; probar otra cabecera |
-
-## Relacionadas
-
-[[MOC - Email header injection]] · [[Email header inyección - matriz de referencia]] · [[CRLF impacto - matriz de referencia]] · [[Autenticación - abuso de recuperación de contraseña]]

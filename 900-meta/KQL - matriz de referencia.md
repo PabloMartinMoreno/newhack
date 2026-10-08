@@ -12,6 +12,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > La sintaxis del lenguaje en el que están escritas las detecciones de `logica: kql`. Qué construcción corresponde a cada forma de detección está en [[Detección por forma - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - Fundamentos de detección]]. Ver también: [[La detección vive en el agregado, no en el evento]] · [[Sigma - matriz de referencia]].
 
 ## 1. Tablas — dónde está cada cosa
 
@@ -194,7 +195,3 @@ let sospechosos = dynamic(["cmd.exe","powershell.exe","wscript.exe"]);
 | `Query exceeds allowed result size` | Falta `summarize` o `take` |
 | El regex no matchea nada | Falta `(?i)`, o falta el `@` que evita interpretar las barras |
 | Comparación de cadenas que falla sin motivo | `==` es sensible a mayúsculas. Usar `=~` |
-
-## Relacionadas
-
-[[Detección por forma - matriz de referencia]] · [[Sigma - matriz de referencia]] · [[MOC - Fundamentos de detección]] · [[La detección vive en el agregado, no en el evento]]

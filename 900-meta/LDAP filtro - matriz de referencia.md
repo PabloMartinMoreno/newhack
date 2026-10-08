@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > La sintaxis del filtro y los payloads por contexto. La extracción ciega está en [[LDAP extracción ciega - matriz de referencia]]; el criterio, en [[MOC - LDAP injection]].
+> Ver también: [[AD enumeración - matriz de referencia]] · [[LDAP - manipulación del filtro]].
 
 ## 0. La sintaxis, en una tabla
 
@@ -148,7 +149,3 @@ Si la aplicación escapa estos, el dominio se cierra. Recomendar el escape **o**
 | El bypass funciona pero no da admin | Devolvió el primer usuario, no admin. Afinar con `uid=admin*` |
 | `*)(uid=*` no cierra bien | Contar los paréntesis del filtro original; probar variantes de § 2 |
 | Todo devuelve error | Puede haber validación de formato del `uid`. Buena mitigación |
-
-## Relacionadas
-
-[[MOC - LDAP injection]] · [[LDAP extracción ciega - matriz de referencia]] · [[LDAP - manipulación del filtro]] · [[AD enumeración - matriz de referencia]]

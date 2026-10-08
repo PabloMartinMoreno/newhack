@@ -14,6 +14,7 @@ tags:
 > Se consulta, no se lee. La decisión —cuándo elegir este canal y cuándo no— vive en [[SQLi - canal UNION]]. Acá está el procedimiento completo, en orden de ejecución.
 >
 > Cada payload va en su propia línea entre backticks: parado encima, `yi``  ` lo copia al portapapeles. Ejemplos en MySQL; el cierre, el comentario y las funciones cambian por motor — ver [[Dialectos SQL - matriz de referencia]].
+> El criterio y la decisión, en [[MOC - SQL injection]].
 
 ## 0. Confirmar que hay inyección
 
@@ -181,7 +182,3 @@ Objetivo ficticio, parámetro reflejado, MySQL. Los pasos 4 en adelante llevan `
 | `Illegal mix of collations` | Choque de codificaciones — envolver en `CONVERT(col USING utf8)` |
 | Página normal, sin datos tuyos | Faltó `AND 1=2`, o la columna elegida no se imprime |
 | `--secure-file-priv option` | E/S de archivos restringida o deshabilitada |
-
-## Relacionadas
-
-[[SQLi - canal UNION]] · [[MOC - SQL injection]] · [[Dialectos SQL - matriz de referencia]]

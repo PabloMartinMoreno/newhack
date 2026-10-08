@@ -14,6 +14,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Las dos técnicas que piden material cifrado al KDC y lo rompen fuera de línea. El criterio está en [[Kerberoasting]] y [[AS-REP roasting]].
+> El criterio y la decisión, en [[MOC - Active Directory]]. Ver también: [[AD persistencia - matriz de referencia]].
 
 ## 0. Cuál de las dos
 
@@ -106,7 +107,3 @@ Sirve para ese servicio y nada más, y por eso mismo no toca al controlador de d
 | Hash con `$18$` | AES-256. Cambiar a `-m 19700` o buscar forzar RC4 |
 | Hashcat no rompe nada en horas | Contraseña de cuenta de servicio generada al azar. Es el caso normal en un dominio bien administrado; seguir por otra rama |
 | `KDC_ERR_ETYPE_NOSUPP` | El dominio ya no acepta RC4. No hay atajo, el hash sale en AES |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[Kerberoasting]] · [[AS-REP roasting]] · [[AD enumeración - matriz de referencia]] · [[AD persistencia - matriz de referencia]]

@@ -21,5 +21,3 @@ cuando la herramienta muere o cambia de API, el conocimiento no muere con ella.
 ## Estado
 
 Mantenida / abandonada / firmada por AV. Alternativas si cayó.
-
-## Notas relacionadas

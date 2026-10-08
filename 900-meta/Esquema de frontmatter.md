@@ -11,6 +11,8 @@ tags:
 
 Un solo esquema para todo el vault. La fusión rojo/azul depende de que **ambos lados apunten a los mismos destinos con el mismo nombre de campo**.
 
+Ver también: [[Consultas del vault]] · [[Convenciones de nombres]] · [[Estructura del vault]].
+
 > [!important] Campo unificado
 > El campo se llama `telemetria:` en los dos lados. No `huella:` en rojo y `fuentes-log:` en azul. Simplifica toda consulta que se escriba después.
 
@@ -184,7 +186,3 @@ fase: post-explotacion
 | `telemetria: ["[[Sysmon EID 10]]"]` | `telemetria: ["[[Sysmon EID 10]]"]` | `550-telemetria/` |
 | `opsec: quemado` | `estado: produccion` | — |
 | `probado: 2026-06-02` | `validada: 2026-06-02` | — |
-
-## Relacionadas
-
-[[Estructura del vault]] · [[Convenciones de nombres]] · [[Consultas del vault]]

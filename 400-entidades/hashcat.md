@@ -25,7 +25,3 @@ Cuando el formato no está entre sus modos, o no hay GPU que la haga valer la pe
 ## Estado
 
 Mantenido y estándar. Lo que un informe da por sentado para medir la fuerza de una contraseña.
-
-## Notas relacionadas
-
-[[Cracking offline - matriz de referencia]] · [[MOC - Ataques de contraseña]] · [[john]]

@@ -14,6 +14,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > El catálogo de configuraciones abusables de la CA de AD y el comando de cada una. El criterio está en [[ADCS - certificado con SAN arbitrario]] (ESC1), [[ADCS - plantilla abusable por propósito o ACL]] y [[ADCS - abuso de la configuración de la CA]]; el modelo, en [[MOC - Active Directory]].
+> Ver también: [[AD persistencia - matriz de referencia]].
 
 ## 0. Encontrar todo — Certipy
 
@@ -167,7 +168,3 @@ Rubeus.exe asktgt /user:usuario /certificate:cert.pfx /ptt  # desde Windows
 | ESC8 relay no recibe | Coacción no dispara, o el endpoint exige HTTPS con binding |
 | `on-behalf-of` rechazado | La plantilla no tiene EKU de agente; no es ESC3 |
 | El cert autentica pero sin privilegio | El sujeto no era el objetivo; revisar el UPN/SAN puesto |
-
-## Relacionadas
-
-[[MOC - Active Directory]] · [[ADCS - certificado con SAN arbitrario]] · [[ADCS - abuso de la configuración de la CA]] · [[AD persistencia - matriz de referencia]] · [[Relay de NTLM]]

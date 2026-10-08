@@ -11,6 +11,8 @@ tags:
 
 Las consultas que **solo existen porque los dos lados están en el mismo vault**. Son la única razón válida para fusionar.
 
+Ver también: [[Estructura del vault]] · [[Validación de tradecraft en laboratorio]].
+
 > [!important] Sin estas consultas, la fusión es nominal
 > Son la única razón válida para tener rojo y azul en el mismo vault. Se corren con `consultas.py`, no se leen: en nvim no hay Dataview.
 
@@ -45,10 +47,6 @@ rg -l '^opsec: quemado' 600-tradecraft/
 rg -l '^probado: nunca' 600-tradecraft/                  # todo lo que falta pasar por laboratorio
 rg -l 'Sysmon EID 10' 600-tradecraft/ 650-detecciones/   # los dos lados de una bisagra
 ```
-
-## Relacionadas
-
-[[Esquema de frontmatter]] · [[Estructura del vault]] · [[Validación de tradecraft en laboratorio]]
 
 ## Apéndice: las mismas preguntas en Dataview
 
@@ -157,4 +155,3 @@ SORT file.cday ASC
 ### Nota sobre el desreferenciado de enlaces
 
 Las consultas 3 y 4 dependen de que Dataview resuelva `t.file.inlinks` sobre un enlace del frontmatter. Funciona si el valor está escrito como `"[[Nota]]"` (comillas incluidas) y el destino existe. Si el enlace está roto, la nota se cae silenciosamente del resultado — otra razón para no tener links a notas inexistentes fuera de los MOCs.
-

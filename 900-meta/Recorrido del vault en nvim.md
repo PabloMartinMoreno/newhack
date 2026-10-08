@@ -151,7 +151,3 @@ Si estás trabajando desde un MOC al que volvés todo el tiempo, fijalo y limpi�
 - **`indice`** — nombre, tipo y aliases de cada nota. Acepta un término y filtra por nombre **o** alias: `consultas.py indice handshake`. Es la vista de terminal de lo que busca `<leader>oq`, y sirve para ver de una si a un lote de notas nuevas le falta el alias del otro idioma.
 
 `<leader>om` apaga el render para ver el markdown crudo. `<leader>oz` es modo zen para escribir largo.
-
-## Relacionadas
-
-[[Puesta a punto de Obsidian]] · [[Estructura del vault]] · [[Convenciones de nombres]] · [[Consultas del vault]]

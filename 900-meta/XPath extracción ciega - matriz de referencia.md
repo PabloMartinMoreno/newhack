@@ -13,6 +13,7 @@ tags:
 
 > [!info] Referencia pura, no un zettel
 > Cómo sacar el documento carácter por carácter cuando no se refleja. La sintaxis y los payloads de bypass están en [[XPath consulta - matriz de referencia]]; el criterio, en [[XPath - extracción ciega]].
+> El criterio y la decisión, en [[MOC - XPath injection]].
 
 Estructura paralela a [[SQLi ciego - matriz de referencia]], [[NoSQL extracción ciega - matriz de referencia]] y [[LDAP extracción ciega - matriz de referencia]]. XPath es la que más se parece a SQLi, porque tiene `substring()` y `string-length()` como SQL.
 
@@ -126,7 +127,3 @@ print(extraido)
 | Lentísimo | Sin canal temporal es inevitable; bisecar con `>`, § 4 |
 | La comilla del payload rompe | Balancear como en la matriz de consulta, § 3 de aquella |
 | `string-to-codepoints` no existe | Es 1.0; bisecar con `>` sobre el carácter directo |
-
-## Relacionadas
-
-[[MOC - XPath injection]] · [[XPath consulta - matriz de referencia]] · [[XPath - extracción ciega]] · [[SQLi ciego - matriz de referencia]]
