@@ -23,7 +23,8 @@ Dónde viven las credenciales decide cómo se sacan y qué privilegio hace falta
 │  │   ├─ sale hash NTLM  → [[MOC - AD movimiento lateral]] (pass-the-hash)
 │  │   └─ sale ticket     → [[MOC - AD movimiento lateral]] (pass-the-ticket)
 │  ├─ hashes locales en disco       → SAM + LSA Secrets (matriz)
-│  └─ secretos DPAPI del usuario    → matriz
+│  ├─ secretos DPAPI del usuario    → matriz
+│  └─ credenciales que el usuario guardó → [[Credential Manager de Windows - matriz de referencia]]
 └─ Admin de dominio (o derechos de replicación delegados)
    └─ los secretos de TODO el dominio, sin tocar un endpoint  → [[DCSync]]
       ├─ el hash de krbtgt   → [[MOC - AD persistencia]] (golden)
@@ -42,6 +43,7 @@ La decisión clave: **DCSync no necesita ejecutar nada en un DC** —pide la rep
 - [[LSASS - volcado vía comsvcs.dll MiniDump]] · [[DCSync]]
 - Comandos: [[AD volcado de credenciales - matriz de referencia]] — LSASS, SAM, LSA Secrets, NTDS, DPAPI, y qué permite cada formato.
 - Romper los hashes NTLM que salen: [[Cracking offline - matriz de referencia]] (`-m 1000`) — el dominio, en [[MOC - Ataques de contraseña]].
+- Credenciales que el usuario ya guardó, sin crackear nada: [[Credential Manager de Windows - matriz de referencia]] (`cmdkey` + `runas /savecred`).
 
 ## Cara azul
 

@@ -1,6 +1,6 @@
 ---
 tipo: teoria
-habilita: ["[[LSASS - volcado vía comsvcs.dll MiniDump]]", "[[DCSync]]", "[[MOC - AD volcado de credenciales]]"]
+habilita: ["[[LSASS - volcado vía comsvcs.dll MiniDump]]", "[[DCSync]]", "[[MOC - AD volcado de credenciales]]", "[[Credential Manager de Windows - matriz de referencia]]"]
 relacionadas: ["[[Windows - proceso de autenticación]]"]
 aliases:
   - SAM
@@ -39,6 +39,7 @@ Todo lo que el sistema guarda para no re-pedir la contraseña es volcable con el
 ## Qué habilita
 - **[[LSASS - volcado vía comsvcs.dll MiniDump]]** — la memoria de LSASS trae los hashes/tickets de las sesiones activas.
 - **SAM / NTDS** — los hashes locales y los de todo el dominio; **[[DCSync]]** pide la replicación en vez de tocar el disco del DC. Todo el árbol de opciones, en [[MOC - AD volcado de credenciales]].
+- **Credential Manager** — las credenciales que el usuario guardó se enumeran con `cmdkey`, se reusan con `runas /savecred` sin crackear, o se extraen con DPAPI; todo en [[Credential Manager de Windows - matriz de referencia]].
 - El formato (LM/NTLM) decide el modo de [[Cracking offline - matriz de referencia]] (`-m 1000` NTLM, `-m 3000` LM).
 
 ## Cómo se ve en la práctica

