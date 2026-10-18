@@ -6,6 +6,7 @@ aliases:
   - SAM
   - NTDS
   - Credential Manager
+  - Administrador de credenciales
   - SYSKEY
 tags: []
 ---
