@@ -29,7 +29,7 @@ Ejemplo completo end-to-end (OSINT → wordlist base → reglas → filtrar por 
 
 `hashid -m` suma el modo `-m` de hashcat, y `-j` el formato de john: el atajo directo al paso 2.
 
-El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`=Kerberoast, `aad3b…`=LM/NTLM del SAM.
+El prefijo delata: `$6$`=sha512crypt, `$5$`=sha256crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$y$`=yescrypt, `$krb5tgs$`=Kerberoast, `aad3b…`=LM/NTLM del SAM. La tabla completa de prefijos de `/etc/shadow`, en [[Linux - almacenamiento de credenciales]].
 
 ## 2. Modos comunes de hashcat (`-m`)
 
@@ -43,13 +43,16 @@ El prefijo delata: `$6$`=sha512crypt, `$1$`=md5crypt, `$2b$`=bcrypt, `$krb5tgs$`
 | Kerberoast (TGS-REP) | `13100` | roasting |
 | AS-REP roast | `18200` | roasting sin preauth |
 | sha512crypt `$6$` | `1800` | `/etc/shadow` |
+| sha256crypt `$5$` | `7400` | `/etc/shadow` |
 | md5crypt `$1$` | `500` | shadow/IOS viejo |
 | bcrypt `$2*$` | `3200` | apps web |
 | JWT (HS256) | `16500` | secreto de firma |
 | KeePass | `13400` | loot |
 | ZIP / Office / PDF | `13600` / `9x00` / `10x00` | archivos protegidos |
 
-Qué **son** estos hashes y por qué se rompen offline: net-NTLM vs NT hash en [[NTLM - desafío y respuesta]]; los tickets de roast (`13100`/`18200`), en [[Kerberos - el flujo de tickets]]. De **dónde salen**, en [[MOC - Ataques de contraseña]].
+Qué **son** estos hashes y por qué se rompen offline: net-NTLM vs NT hash en [[NTLM - desafío y respuesta]]; los tickets de roast (`13100`/`18200`), en [[Kerberos - el flujo de tickets]]; passwd/shadow y sus prefijos, en [[Linux - almacenamiento de credenciales]]. De **dónde salen**, en [[MOC - Ataques de contraseña]].
+
+**yescrypt** (`$y$`), el default de Debian/Ubuntu modernos, **no tiene modo de hashcat** estable: se rompe con [[john]] (formato `crypt`). Mismo caso para `$sha1$` y `$7$`.
 
 
 ## 3. Ataques de hashcat (`-a`)
@@ -82,6 +85,12 @@ Cuando el formato es raro o hay que **extraer** el hash de un archivo con los `*
 El modo **single** prueba el propio usuario y mutaciones (de la columna login/GECOS del formato `user:hash`); es barato y pega seguido contra contraseñas tipo `nombre2024`. Por eso va antes que el diccionario.
 
 Extraer el hash de un archivo (`*2john`): `zip2john f.zip > h` · `ssh2john id_rsa > h` · `keepass2john f.kdbx > h` · `office2john f.docx > h` · `rar2john` · `pdf2john`. Para ver **todos** los que trae el sistema: `locate '*2john*'` (o `ls /usr/share/john/*2john* 2>/dev/null`).
+
+**Hashes de Linux** (`/etc/shadow`): `unshadow` fusiona `passwd` + `shadow` en el formato `user:hash` que espera el crackeo —y que alimenta el single mode—:
+
+`unshadow /etc/passwd /etc/shadow > unshadowed.hashes`
+
+Después `john unshadowed.hashes` o `hashcat -m 1800 -a 0 unshadowed.hashes rockyou.txt`. Qué son esos archivos y qué prefijo de hash traen: [[Linux - almacenamiento de credenciales]].
 
 ## 5. Gestión del crackeo
 

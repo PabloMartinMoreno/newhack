@@ -38,7 +38,7 @@ El offline casi nunca empieza en esta nota: el hash llega de otro dominio. El ma
 | AS-REP roasting | AS-REP | `-m 18200` | [[MOC - AD roasting]] |
 | SAM / LSASS / NTDS | NTLM | `-m 1000` | [[MOC - AD volcado de credenciales]] |
 | Responder / relay | NetNTLMv2 | `-m 5600` | [[Envenenamiento de resolución de nombres]] |
-| `/etc/shadow` | sha512crypt `$6$` | `-m 1800` | [[Enumeración de privesc Linux - matriz de referencia]] |
+| [[Linux - almacenamiento de credenciales\|/etc/shadow]] | sha512crypt `$6$`, yescrypt `$y$` | `-m 1800` / john | [[Enumeración de privesc Linux - matriz de referencia]] |
 | Secreto de JWT | HMAC | `-m 16500` | [[JWT - matriz de referencia]] |
 | Archivos (ZIP/SSH/KeePass/Office) | según `*2john` | varios | loot local |
 

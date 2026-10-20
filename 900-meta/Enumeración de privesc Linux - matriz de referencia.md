@@ -70,7 +70,7 @@ Si un script de cron corriendo como root es **escribible** por vos, o usa un com
 | `/etc/passwd` / `/etc/shadow` escribibles | `ls -la /etc/passwd /etc/shadow` |
 | `/etc/sudoers` o `sudoers.d` escribibles | `ls -la /etc/sudoers /etc/sudoers.d/ 2>/dev/null` |
 
-`/etc/passwd` escribible → agregar un usuario root con hash propio (`openssl passwd`). `/etc/shadow` legible → crackear offline ([[Cracking offline - matriz de referencia]], `-m 1800` para `$6$`).
+`/etc/passwd` escribible → dos caminos: agregar un usuario root con hash propio (`openssl passwd`), o **blanquear** el campo de contraseña de root (`root::0:0:...`) para que `su` entre sin pedir nada. `/etc/shadow` legible → crackear offline ([[Cracking offline - matriz de referencia]], `-m 1800` para `$6$`). Qué son estos archivos y qué prefijo trae cada hash: [[Linux - almacenamiento de credenciales]].
 
 ## PATH y variables
 
@@ -106,6 +106,7 @@ Si un script de cron corriendo como root es **escribible** por vos, o usa un com
 | Claves SSH y config | `find / -name id_rsa -o -name id_dsa -o -name authorized_keys 2>/dev/null` |
 | Config con secretos | `grep -rniE 'password\|passwd\|secret\|api_key' /var/www /opt /home /etc 2>/dev/null` |
 | Archivos `.env` / config | `find / -name ".env" -o -name "*.conf" 2>/dev/null` |
+| Contraseñas viejas de PAM | `sudo cat /etc/security/opasswd` — hashes reusados/patrones (ver [[Linux - almacenamiento de credenciales]]) |
 | Montajes y fstab | `mount` · `cat /etc/fstab` | credenciales de montaje, NFS (ver [[NFS - matriz de referencia]]) |
 
 ## Grupos peligrosos
