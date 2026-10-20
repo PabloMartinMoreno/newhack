@@ -100,6 +100,8 @@ Si un script de cron corriendo como root es **escribible** por vos, o usa un com
 
 ## Credenciales en disco
 
+El barrido exhaustivo (config/db/notas/scripts, logs, memoria, navegador, keyrings) tiene matriz propia: [[Búsqueda de credenciales en Linux - matriz de referencia]]. Acá, los quick hits de la enumeración:
+
 | Busco | Comando |
 |---|---|
 | Historial de shell | `cat ~/.bash_history ~/.zsh_history 2>/dev/null` |

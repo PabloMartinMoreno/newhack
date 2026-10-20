@@ -87,7 +87,6 @@ El modo **single** prueba el propio usuario y mutaciones (de la columna login/GE
 Extraer el hash de un archivo (`*2john`): `zip2john f.zip > h` · `ssh2john id_rsa > h` · `keepass2john f.kdbx > h` · `office2john f.docx > h` · `rar2john` · `pdf2john`. Para ver **todos** los que trae el sistema: `locate '*2john*'` (o `ls /usr/share/john/*2john* 2>/dev/null`).
 
 **Hashes de Linux** (`/etc/shadow`): `unshadow` fusiona `passwd` + `shadow` en el formato `user:hash` que espera el crackeo —y que alimenta el single mode—:
-
 `unshadow /etc/passwd /etc/shadow > unshadowed.hashes`
 
 Después `john unshadowed.hashes` o `hashcat -m 1800 -a 0 unshadowed.hashes rockyou.txt`. Qué son esos archivos y qué prefijo de hash traen: [[Linux - almacenamiento de credenciales]].
